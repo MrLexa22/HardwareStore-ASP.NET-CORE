@@ -1,0 +1,134 @@
+﻿@using KursovoiProject_ElShop.Controllers.Validation
+@*@model ShopMagazin.Models.IndexPageModel*@
+@model IndexPageModel
+@{
+    ViewData["Title"] = "Главная страница";
+}
+
+<main class="content-main">
+    <div class="con-man">
+        <div class="main-div-left">
+            @if (Model.MainAdds != null)
+            {
+                <div class="slide2">
+                    <button type="button" class="sl-pw prew1">
+                        <svg class="icon-strelka" viewBox="0 0 25 25">
+                            <path d="M17.38,24.8a.5.5,0,0,0,.68,0l2.44-2.26a.5.5,0,0,0,0-.71l0,0-9.65-8.94a.5.5,0,0,1,0-.71l0,0L20.5,3.19a.48.48,0,0,0,0-.7l0,0L18.06.2a.5.5,0,0,0-.68,0L4.5,12.13a.5.5,0,0,0,0,.71l0,0L17.38,24.8Z"></path>
+                        </svg>
+                    </button>
+                    <div class="slider adds1">
+                        @foreach (var a in Model.MainAdds)
+                        {
+                            <div>
+                                <a href="@a.Href"><img style="width: 100%;" src="@a.FtppathImage" alt=""></a>
+                            </div>
+                        }
+                    </div>
+                    <button type="button" class="sl-nx next1">
+                        <svg class="icon-strelka" viewBox="0 0 25 25">
+                            <path d="M7.62,24.8,20.5,12.87l0,0a.5.5,0,0,0,0-.71L7.62.2a.5.5,0,0,0-.68,0L4.5,2.46l0,0a.48.48,0,0,0,0,.7l9.65,8.94,0,0a.5.5,0,0,1,0,.71L4.5,21.81l0,0a.5.5,0,0,0,0,.71L6.94,24.8a.5.5,0,0,0,.68,0Z"></path>
+                        </svg>
+                    </button>
+                </div>
+            }
+            @if (Model.goodsRandom != null)
+            {
+                <div class="slide2">
+                    <button type="button" class="sp">
+                        <svg class="icon-strelka" viewBox="0 0 25 25">
+                            <path d="M17.38,24.8a.5.5,0,0,0,.68,0l2.44-2.26a.5.5,0,0,0,0-.71l0,0-9.65-8.94a.5.5,0,0,1,0-.71l0,0L20.5,3.19a.48.48,0,0,0,0-.7l0,0L18.06.2a.5.5,0,0,0-.68,0L4.5,12.13a.5.5,0,0,0,0,.71l0,0L17.38,24.8Z"></path>
+                        </svg>
+                    </button>
+                    <div class="slider single-item1">
+                        @foreach (var item in Model.goodsRandom)
+                        {
+                            <div class="card-tovar-slide">
+                                <a asp-action="Tovar" asp-controller="Categori" asp-route-id="@item.IdGood" class="ssilka-tovar-slide">
+                                    <p class="name-tovar-slide"><b class="name-tovar-model">@item.NameManufacture</b> @item.Name</p>
+                                    <div class="img-sl">
+                                        <img style="max-width: 174px; max-height: 212px;" class="img-tovar-slide" src="@item.FtppathImage">
+                                    </div>
+                                    <p class="cena-slide">@item.Cost ₽</p>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                    <button type="button" class="sn">
+                        <svg class="icon-strelka" viewBox="0 0 25 25">
+                            <path d="M7.62,24.8,20.5,12.87l0,0a.5.5,0,0,0,0-.71L7.62.2a.5.5,0,0,0-.68,0L4.5,2.46l0,0a.48.48,0,0,0,0,.7l9.65,8.94,0,0a.5.5,0,0,1,0,.71L4.5,21.81l0,0a.5.5,0,0,0,0,.71L6.94,24.8a.5.5,0,0,0,.68,0Z"></path>
+                        </svg>
+                    </button>
+                </div>
+            }
+            <div class="name-magazin">Интернет-магазин бытовой техники и товаров для дома</div>
+            <div class="blocks-category">
+                @foreach (var item in Model.Categories)
+                {
+                    <div class="block-main" style="height: auto;">
+                        <div class="categories">
+                            <a asp-controller="Categori" asp-action="Index" asp-route-id="@item.IdCategori" class="zagolovok-cat" style="text-decoration: none;">@item.NameCategori</a>
+                        </div>
+                    </div>
+                }
+            </div>
+            <p class="info-in-main">
+                Современный дом сложно представить без бытовой техники. Она дарит удобство и комфорт и значительно облегчает нашу жизнь. Однако, чтобы приобрести то, что нужно, нам приходится тратить время, а его, подчас, не хватает. Интернет-магазин
+                бытовой техники Vasko.ru поможет вам сделать покупки быстрыми и приятными. Ведь чтобы купить стиральную машину или пылесос вам достаточно просто сделать заказ через наш онлайн магазин!
+            </p>
+        </div>
+        <div class="notmain-div-right">
+            <div class="right-image">
+                @if (Model.Right1Adds != null)
+                {
+                    <div class="slide2">
+                        <button type="button" class="sl-pw prew2">
+                            <svg class="icon-strelka" viewBox="0 0 25 25">
+                                <path d="M17.38,24.8a.5.5,0,0,0,.68,0l2.44-2.26a.5.5,0,0,0,0-.71l0,0-9.65-8.94a.5.5,0,0,1,0-.71l0,0L20.5,3.19a.48.48,0,0,0,0-.7l0,0L18.06.2a.5.5,0,0,0-.68,0L4.5,12.13a.5.5,0,0,0,0,.71l0,0L17.38,24.8Z"></path>
+                            </svg>
+                        </button>
+                        <div class="slider adds2">
+                            @foreach (var a in Model.Right1Adds)
+                            {
+                                <div>
+                                    <a href="@a.Href"><img style="width: 100%;" src="@a.FtppathImage" alt=""></a>
+                                </div>
+                            }
+                        </div>
+                        <button type="button" class="sl-nx next2">
+                            <svg class="icon-strelka" viewBox="0 0 25 25">
+                                <path d="M7.62,24.8,20.5,12.87l0,0a.5.5,0,0,0,0-.71L7.62.2a.5.5,0,0,0-.68,0L4.5,2.46l0,0a.48.48,0,0,0,0,.7l9.65,8.94,0,0a.5.5,0,0,1,0,.71L4.5,21.81l0,0a.5.5,0,0,0,0,.71L6.94,24.8a.5.5,0,0,0,.68,0Z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                }
+            </div>
+                <div class="work-right">
+                    @if(Model.Right2Adds != null)
+                    {
+                        <div class="slide2">
+                            <button type="button" class="sl-pw prew3">
+                                <svg class="icon-strelka" viewBox="0 0 25 25">
+                                    <path d="M17.38,24.8a.5.5,0,0,0,.68,0l2.44-2.26a.5.5,0,0,0,0-.71l0,0-9.65-8.94a.5.5,0,0,1,0-.71l0,0L20.5,3.19a.48.48,0,0,0,0-.7l0,0L18.06.2a.5.5,0,0,0-.68,0L4.5,12.13a.5.5,0,0,0,0,.71l0,0L17.38,24.8Z"></path>
+                                </svg>
+                            </button>
+                            <div class="slider adds3">
+                                @foreach(var a in Model.Right2Adds)
+                                {
+                                    <div>
+                                        <a href="@a.Href"><img style="width: 100%;" src="@a.FtppathImage" alt=""></a>
+                                    </div>
+                                }
+                            </div>
+                            <button type="button" class="sl-nx next3">
+                                <svg class="icon-strelka" viewBox="0 0 25 25">
+                                    <path d="M7.62,24.8,20.5,12.87l0,0a.5.5,0,0,0,0-.71L7.62.2a.5.5,0,0,0-.68,0L4.5,2.46l0,0a.48.48,0,0,0,0,.7l9.65,8.94,0,0a.5.5,0,0,1,0,.71L4.5,21.81l0,0a.5.5,0,0,0,0,.71L6.94,24.8a.5.5,0,0,0,.68,0Z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
