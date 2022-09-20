@@ -1,0 +1,72 @@
+﻿@model TovariCategoryModel
+@addTagHelper *, KursovoiProject_ElShop  
+<nav class="breadcrumbs">
+                <span class="breadcrumbs__items" itemscope="" itemtype="https://schema.org/BreadcrumbList">
+                    <a href="/" class="breadcrumbs__item">Главная</a>
+                    <a asp-action="TovariCategory" asp-controller="Categori" asp-route-IDCategory="@Model.IDCategory" class="breadcrumbs__item" title="Бытовая техника для кухни" itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
+                        @Model.NameCategory
+                    </a>
+                </span>
+                <a href="javascript:history.back()" class="breadcrumbs__back btn btn_transparent">
+                    🠔Назад
+                </a>
+            </nav>
+            <h1 class="header-name-podcateg">@Model.NameCategory</h1>
+                <div class="card catalog catalog_list">
+                    <div class="catalog__header">
+                        <div>Всего товаров в категории: <b>@Model.CountTovar</b></div>
+                    </div>
+                    <div class="catalog-list">
+                        @foreach (var item in Model.list_tovaris)
+                        {
+                            <div class="catalog-list__row">
+                                <div class="catalog-list__col catalog-list__col_image">
+                                    <a asp-action="Tovar" asp-controller="Categori" asp-route-id="@item.IdGood">
+                                        <img src="@item.FtppathImage" alt="product image" style=" max-width: 120px; max-height: 220px;">
+                                        <span class="catalog-list__col-budges"></span>
+                                    </a>
+                                </div>
+
+                                <div class="catalog-list__col catalog-list__col_info">
+                                    <h2 class="catalog-list__name">
+                                        <a asp-action="Tovar" asp-controller="Categori" asp-route-id="@item.IdGood">
+                                            <b>@item.NameManufacture</b> @item.Name
+                                        </a>
+                                    </h2>
+                                </div>
+                                <div class="catalog-list__col catalog-list__col_actions">
+                                    <div class="catalog-list__price">
+                                        <div class="price">
+                                            <span class="title">Цена:</span> @item.Cost<span class="rubble">₽</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        @if (User.Identity.IsAuthenticated == false)
+                                        {
+                                            <a asp-controller="Home" asp-action="AuthenticateUser" style="height: auto; padding: 7px;" class="lklk btn_fullwidth btn_primary catalog-list__action">В корзину</a>
+                                        }
+                                        else
+                                        {
+                                            if (item.IsInCart == 0)
+                                            {
+                                            <a asp-controller="Korzina" asp-route-id="@item.IdGood" asp-action="AddToCart" style="height: auto; padding: 7px;" class="btn_fullwidth btn_primary catalog-list__action">В корзину</a>
+                                            }
+                                            else if (item.IsInCart > 0)
+                                            {
+                                            <a asp-controller="Korzina" asp-action="Index" style="height: auto; padding: 7px; background-color: #44c523; border-color: #44c523; color: #fff;" class="btn_fullwidth btn_primary catalog-list__action">В корзине</a>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+
+                            </div>
+                        }
+                    </div>
+                </div>
+            <page-link page-model="Model.PageViewModel" page-action="GetSpisokTovari"
+                       page-url-name="@Convert.ToString("fffff")"
+                       page-url-IDCategory="@Model.IDCategory"></page-link>
+            <p class="info-in-main">
+                Современный дом сложно представить без бытовой техники. Она дарит удобство и комфорт и значительно облегчает нашу жизнь. Однако, чтобы приобрести то, что нужно, нам приходится тратить время, а его, подчас, не хватает. Интернет-магазин
+                бытовой техники Vasko.ru поможет вам сделать покупки быстрыми и приятными. Ведь чтобы купить стиральную машину или пылесос вам достаточно просто сделать заказ через наш онлайн магазин!
+            </p>

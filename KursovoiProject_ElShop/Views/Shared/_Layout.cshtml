@@ -14,8 +14,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="~/Slick-plugin/slick.css" />
     <link rel="stylesheet" type="text/css" href="~/Slick-plugin/slick-theme.css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" defer></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/js/script_main.js" defer></script>
     <title>@ViewData["Title"]</title>
 </head>
@@ -58,19 +60,19 @@
                 </svg>
             </a>
             <div class="poisk">
-                <form class="form-poisk" asp-controller="Categorii" asp-action="resultPoiska" method="post">
+                <form class="form-poisk" asp-controller="Categori" asp-action="SearchResult" method="get">
                     <input class="input-poisk" name="search" type="text" placeholder="Введите название товара">
                     <button class="btn-poisk" type="submit"></button>
                 </form>
             </div>
-            <button class="dostavka">
+@*            <button class="dostavka">
                 Доставка
             </button>
             <a href="" class="vopros">
                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M16 1C7.72913 1 1 7.72913 1 16C1 24.2709 7.72913 31 16 31C24.2709 31 31 24.2709 31 16C31 7.72913 24.2709 1 16 1ZM17.172 23.7837C17.172 23.9246 17.078 24.0172 16.9385 24.0172H15.1607C15.0191 24.0172 14.9265 23.9239 14.9265 23.7837V21.7724C14.9265 21.6322 15.0198 21.5389 15.1607 21.5389H16.9385C17.0787 21.5389 17.172 21.6328 17.172 21.7724V23.7837ZM19.2296 14.8704L17.6624 17.0226C17.1948 17.6539 17.0539 17.9813 17.0539 18.7763V19.5243C17.0539 19.6646 16.9607 19.7578 16.8204 19.7578H15.2767C15.1365 19.7604 15.0433 19.6665 15.0433 19.5263V18.5676C15.0433 17.6311 15.2533 17.1407 15.7443 16.4617L17.3122 14.3096C18.13 13.1872 18.4104 12.6491 18.4104 11.8535C18.4104 10.5204 17.4752 9.67848 16.1415 9.67848C14.832 9.67848 13.99 10.4735 13.7096 11.9004C13.6861 12.0407 13.5928 12.1111 13.452 12.0876L11.9787 11.83C11.8378 11.8065 11.768 11.7133 11.7909 11.5724C12.1424 9.32696 13.7565 7.85304 16.1891 7.85304C18.7143 7.85304 20.4217 9.51348 20.4217 11.8293C20.4217 12.9524 20.0252 13.7709 19.2296 14.8704Z" fill="#C4C4C4" />
                 </svg>
-            </a>
+            </a>*@
             <div class="phones">
                 <a class="telefon" href="tel:+74957752767">+7 (495) 775-27-67</a>
                 <button class="phone-open">
@@ -102,7 +104,7 @@
                     }
                     else
                     {
-                        <a asp-controller="Categorii" asp-action="Korzina" style="text-decoration: none;">
+                        <a asp-controller="Korzina" asp-action="Index" style="text-decoration: none;">
                             <div class="knopka-korzina" style="color: black; background: #F8F8F8; border: 1.5px solid #E1E1E1; box-sizing: border-box; border-radius: 5px; cursor: pointer; padding: 8px; ">
                                 <svg class="korzinka" width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M14.1492 6.21821H15.7271L13.388 2.32797C13.1995 2.01274 12.7819 1.90527 12.4567 2.09154C12.1315 2.27424 12.0207 2.67902 12.2128 2.99425L14.1492 6.21821Z" fill="#C62306" />
@@ -186,7 +188,7 @@
         <div class="nv conte">
             <div class="navbar-nav">
                 <menu id="nav_bar_menu" class="navbar-menu">
-                    <li class="navbar-item"><a class="navbar-link" href="/Categori">Все категории</a></li>
+                    <li class="navbar-item"><a class="navbar-link" asp-controller="Categori" asp-action="Index">Все категории</a></li>
                 </menu>
             </div>
         </div>
@@ -312,7 +314,7 @@
             let name = document.createElement('a');
             li.classList.add("navbar-item");
             name.classList.add("navbar-link");
-            name.href = "@Convert.ToString(BaseAddresse.Address)Categori/"+author.idCategori;
+            name.href = "@Convert.ToString(BaseAddresse.Address)Categori/TovariCategory?IDCategory="+author.idCategori;
             name.innerHTML = `${author.nameCategori}`;
             li.appendChild(name);
             list.appendChild(li);

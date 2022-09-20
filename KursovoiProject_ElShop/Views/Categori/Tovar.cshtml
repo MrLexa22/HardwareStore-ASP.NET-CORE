@@ -1,0 +1,162 @@
+﻿<link rel="stylesheet" href="~/css/styletovarilist.css">
+@model TovariUsersModel
+@{
+    ViewData["Title"] = Model.NameWithManufacture;
+}
+
+<main class="content-main">
+    <div class="con-man">
+        <div class="main-div-left">
+            <nav class="breadcrumbs">
+                <span class="breadcrumbs__items" itemscope="" itemtype="https://schema.org/BreadcrumbList">
+                    <a href="/" class="breadcrumbs__item">Главная</a>
+                    <a asp-action="TovariCategory" asp-controller="Categori" asp-route-IDCategory="@Model.CategoriId" class="breadcrumbs__item" title="Бытовая техника для кухни" itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
+                        @Model.NameCategory
+                    </a>
+                </span>
+                <a href="javascript:history.back()" class="breadcrumbs__back btn btn_transparent">
+                    🠔Назад
+                </a>
+            </nav>
+            <div class="product-detail">
+                <header class="product-detail__header">
+                    <h1 class="product-detail__title">@Model.NameManufacture @Model.Name</h1>
+
+                    <div class="product-detail__row product-detail__row_header">
+                        @*<div class="product-detail__vendor-code">Артикул: @Model.tovar.articul</div>*@
+                        <div class="product-detail__price">
+                            <div class="price">
+                                <span class="title">Цена:</span> @Model.Cost<span class="rubble">₽</span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+                <section class="product-detail__section">
+                    <div class="product-detail__row">
+                        <div class="product-detail__images product-images">
+                            <div class="product-images__detail-slider">
+                                <div id="detailImageSlider" class="slick-initialized slick-slider">
+                                    <div class="slick-list">
+                                        <div class="slick-track" style="opacity: 1; width: 309px;">
+                                            <div class="slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false" style="width: 309px; position: relative; left: 0px; top: 0px; z-index: 999; opacity: 1;">
+                                                <div>
+                                                    <div style="width: 100%; display: inline-block;">
+                                                        <a href="@Model.FtppathImage" class="product-images__detail-image" target="_blank" data-index="0" tabindex="0">
+                                                            <img style="max-width: 95%; max-height: 340px;" src="@Model.FtppathImage" alt="product image">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-detail__preview-text">
+                            <ul class="ul ul_inline-bullets">
+                                <li>Производитель:&nbsp;<b>@Model.NameManufacture</b></li>
+                                <li>Наименование товара:&nbsp;<b>@Model.Name</b></li>
+                                <li>Категория:&nbsp;<b>@Model.NameCategory</b></li>
+                                <li>Описание:&nbsp;<br /><b>@Model.Description</b></li>
+                            </ul>
+                            <div class="product-detail__buttons">
+                                @if (Model.IsAvaliable)
+                                {
+                                    @if (User.Identity.IsAuthenticated == false)
+                                    {
+                                        <a asp-controller="Home" asp-action="AuthenticateUser" style="height: auto; padding: 7px;" class="lklk btn_fullwidth btn_primary catalog-list__action">В корзину</a>
+                                    }
+                                    else
+                                    {
+                                        if (Model.IsInCart == 0)
+                                        {
+                                            <a asp-controller="Korzina" asp-route-id="@Model.IdGood" asp-action="AddToCart" style="height: auto; padding: 7px;" class="btn_fullwidth btn_primary catalog-list__action">В корзину</a>
+                                        }
+                                        else if (Model.IsInCart > 0)
+                                        {
+                                            <a asp-controller="Categorii" asp-action="Korzina" style="height: auto; padding: 7px; background-color: #44c523; border-color: #44c523; color: #fff;" class="btn_fullwidth btn_primary catalog-list__action">В корзине</a>
+                                        }
+                                    }
+                                }
+                                else
+                                {<b><p style="font-size:24px; line-height: 1;">Товар временно недоступен для покупки</p></b>}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="product-detail">
+                <header class="product-detail__header">
+                    <h1 class="product-detail__title">Наличие в филиалах</h1>
+                </header>
+                <section class="product-detail__section">
+                    @foreach(var a in Model.filials)
+                    {
+                        <div style="margin-bottom: 45px;">
+                            <b><p style="line-height:0;">@a.NameFilial</p></b>
+                            <a target="_blank" href="https://yandex.ru/maps/213/moscow/search/@a.AddressFilial"><p style="line-height:0;">@a.AddressFilial</p></a>
+                            <p style="line-height:0;@if(a.CountSklad <= 0){<text>color: red;</text>}else{<text>color:green;</text>}">Наличие: @a.Nalich</p>
+                        </div>
+                    }
+                </section>
+            </div>
+            <div class="alert">
+                Производитель на свое усмотрение и без дополнительных уведомлений оставляет за собой право на внесение изменений в конструкцию, комплектацию, дизайн, страну производства и технические характеристики модели.<br>
+                <b>Во избежание недоразумений проверяйте интересующие Вас свойства товара при его осмотре, перед оплатой и подписанием договора купли-продажи.</b> Вся информация на сайте носит справочный характер и не является публичной офертой.
+            </div>
+        </div>
+        <div class="notmain-div-right">
+            <div class="right-image">
+                @if (Model.Right1Adds != null)
+                {
+                    <div class="slide2">
+                        <button type="button" class="sl-pw prew2">
+                            <svg class="icon-strelka" viewBox="0 0 25 25">
+                                <path d="M17.38,24.8a.5.5,0,0,0,.68,0l2.44-2.26a.5.5,0,0,0,0-.71l0,0-9.65-8.94a.5.5,0,0,1,0-.71l0,0L20.5,3.19a.48.48,0,0,0,0-.7l0,0L18.06.2a.5.5,0,0,0-.68,0L4.5,12.13a.5.5,0,0,0,0,.71l0,0L17.38,24.8Z"></path>
+                            </svg>
+                        </button>
+                        <div class="slider adds2">
+                            @foreach (var a in Model.Right1Adds)
+                            {
+                                <div>
+                                    <a href="@a.Href"><img style="width: 100%;" src="@a.FtppathImage" alt=""></a>
+                                </div>
+                            }
+                        </div>
+                        <button type="button" class="sl-nx next2">
+                            <svg class="icon-strelka" viewBox="0 0 25 25">
+                                <path d="M7.62,24.8,20.5,12.87l0,0a.5.5,0,0,0,0-.71L7.62.2a.5.5,0,0,0-.68,0L4.5,2.46l0,0a.48.48,0,0,0,0,.7l9.65,8.94,0,0a.5.5,0,0,1,0,.71L4.5,21.81l0,0a.5.5,0,0,0,0,.71L6.94,24.8a.5.5,0,0,0,.68,0Z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                }
+            </div>
+                <div class="work-right">
+                    @if(Model.Right2Adds != null)
+                    {
+                        <div class="slide2">
+                            <button type="button" class="sl-pw prew3">
+                                <svg class="icon-strelka" viewBox="0 0 25 25">
+                                    <path d="M17.38,24.8a.5.5,0,0,0,.68,0l2.44-2.26a.5.5,0,0,0,0-.71l0,0-9.65-8.94a.5.5,0,0,1,0-.71l0,0L20.5,3.19a.48.48,0,0,0,0-.7l0,0L18.06.2a.5.5,0,0,0-.68,0L4.5,12.13a.5.5,0,0,0,0,.71l0,0L17.38,24.8Z"></path>
+                                </svg>
+                            </button>
+                            <div class="slider adds3">
+                                @foreach(var a in Model.Right2Adds)
+                                {
+                                    <div>
+                                        <a href="@a.Href"><img style="width: 100%;" src="@a.FtppathImage" alt=""></a>
+                                    </div>
+                                }
+                            </div>
+                            <button type="button" class="sl-nx next3">
+                                <svg class="icon-strelka" viewBox="0 0 25 25">
+                                    <path d="M7.62,24.8,20.5,12.87l0,0a.5.5,0,0,0,0-.71L7.62.2a.5.5,0,0,0-.68,0L4.5,2.46l0,0a.48.48,0,0,0,0,.7l9.65,8.94,0,0a.5.5,0,0,1,0,.71L4.5,21.81l0,0a.5.5,0,0,0,0,.71L6.94,24.8a.5.5,0,0,0,.68,0Z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+    </div>
+</main>
+

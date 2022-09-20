@@ -10,8 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
-/*builder.Services.AddScoped<DbContext, ElShopContext>();*/
-/*builder.Services.AddScoped<ControllerBase, UsersController>();*/
 builder.Services
     .AddAuthentication(o =>
     {
@@ -36,6 +34,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthorization();
 app.UseAuthorization();
 
 //app.UseHttpsRedirection();

@@ -6,6 +6,44 @@
     font-display: swap;
 }
 
+.pagination {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    margin-bottom: 20px;
+    border-radius: 0.25rem;
+}
+
+.page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #c62306;
+    border-color: #c62306;
+}
+
+.page-link {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #007bff;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+}
+
+.page-item:first-child .page-link {
+    margin-left: 0;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+}
+
+.page-link:not(:disabled):not(.disabled) {
+    cursor: pointer;
+}
+
 .dropbtn_ssilkaA {
     font-weight: 700;
     color: white;
@@ -85,7 +123,7 @@ li {
 
 .form-poisk {
     position: relative;
-    width: 300px;
+    width:430px;
     margin: 0 auto;
     margin-right: 20px;
 }

@@ -1,3 +1,99 @@
+.filter {
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    color: #696969;
+    font-size: 16px;
+    padding: 5px 15px 15px;
+}
+
+.filter__title {
+    font-weight: 800;
+    margin: 10px 0 3px;
+}
+
+.filter-range-preview {
+    align-items: center; 
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.filter-range-preview__text {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.filter-range-preview__input {
+    background-color: #fff;
+    border: 1px solid #696969;
+    border-radius: 5px;
+    color: #242424;
+    flex-grow: 1;
+    font-size: 16px;
+    font-weight: 700;
+    height: 30px;
+    margin: 0 10px;
+    text-align: center;
+    width: 84px;
+}
+
+.filter-block {
+    border: 1px solid #e1e1e1;
+    border-radius: 5px;
+    padding: 14px 20px;
+}
+
+.filter__option {
+    color: #242424;
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.checkbox__input {
+    height: 14px;
+    opacity: 0;
+    position: absolute;
+    width: 14px;
+    z-index: -1;
+}
+
+.checkbox__box {
+    align-items: center;
+    background-color: #fff;
+    border-radius: 2.5px;
+    border: 1px solid #c62306;
+    color: #fff;
+    display: inline-flex;
+    font-size: 14px;
+    height: 1em;
+    justify-content: center;
+    margin-right: 5px;
+    width: 1em;
+}
+
+.checkbox__input:checked ~ .checkbox__box, .checkbox_checked .checkbox__box {
+    background-color: #c62306;
+}
+
+.checkbox__box:after {
+    background-image: url("data:image/svg+xml;utf8,<svg width='14' height='14' viewBox='0 0 14 14' xmlns='http://www.w3.org/2000/svg'><path d='M2.325 2.108a.817.817 0 0 0-.288 1.102l4.728 8.378c.041.073.094.14.156.197a.775.775 0 0 0 1.093-.021l3.343-3.42a.82.82 0 0 0 0-1.141.775.775 0 0 0-1.115 0l-2.62 2.68-4.22-7.48a.778.778 0 0 0-1.077-.295z' fill='rgb(255,255,255)'/></svg>");
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: 1em;
+    content: "";
+    height: 100%;
+    width: 100%;
+}
+
+.filter__option {
+    color: #242424;
+    display: inline-block;
+    font-weight: 400;
+}
+
+
+
 .alert {
     border: 1px solid #c62306;
     border-radius: 5px;

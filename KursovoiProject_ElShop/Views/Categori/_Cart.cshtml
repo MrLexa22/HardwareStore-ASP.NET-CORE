@@ -1,0 +1,176 @@
+﻿@model TovariInCart                
+@if (Model.list_tovari.Count() > 0)
+                {
+                    <form asp-action="Korzina" asp-controller="Categorii" method="post" class="callback-from" enctype="multipart/form-data">
+                        <div class="basket">
+
+                            <div class="basket__row basket__row_header">
+                                <div class="basket__col basket__col_image-header"></div>
+                                <div class="basket__col basket__col_name">Наименование товара</div>
+                                <div class="basket__col basket__col_quanity-header">Количество</div>
+                                <div class="basket__col basket__col_price-header">Цена</div>
+                                <div class="basket__col basket__col_actions-header">Действия</div>
+                            </div>
+                            @foreach (var items in Model.list_tovari)
+                            {
+                                <div class="basket-item">
+                                    <div class="basket__row">
+                                        <div class="basket__col basket__col_image">
+                                            <img src="@items.Goods.FtppathImage" alt="product image">
+                                        </div>
+                                        <div class="basket__col basket__col_name">
+                                            <div class="basket-item__name">
+                                                <a asp-action="Tovar" asp-controller="Categori" asp-route-id="@items.GoodsId"><b>@items.Goods.Manufacture.NameManufacture</b> @items.Goods.Name</a>
+                                            </div>
+                                        </div>
+                                        <div class="basket__col basket__col_quanity">
+                                            <div class="number-input">
+                                                <a style="height: 50%;" id="downdowndown-@items.GoodsId" class="number-input__btn btn_primary" data-decrease="">
+                                                    <svg style="display: block; margin: 4px auto;" class="icon" width="9" height="6" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M8.59117 1.56267C8.77524 1.36954 8.77524 1.06591 8.59117 0.872772L8.28019 0.546462C8.08317 0.339729 7.75331 0.33973 7.55629 0.546462L4.98895 3.24033C4.79192 3.44707 4.46206 3.44707 4.26504 3.24033L1.6977 0.546462C1.50068 0.339729 1.17082 0.339729 0.973798 0.546461L0.662814 0.872771C0.478749 1.06591 0.478749 1.36954 0.662814 1.56267L4.26504 5.34244C4.46206 5.54917 4.79192 5.54917 4.98894 5.34244L8.59117 1.56267Z" fill="white" />
+                                                    </svg>
+                                                </a>
+                                                <input readonly="readonly" type="number" id="kolichest-@items.GoodsId" class="input number-input__input" min="1" value="@items.Count" name="product-quantity" data-basket-code="20918014" data-product-id="1577992">
+                                                <a style="height: 50%;" id="upupup-@items.GoodsId" class="number-input__btn btn_primary" data-increase="">
+                                                    <svg style="display: block; margin: 4px auto;" class="icon" width="9" height="6" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M0.634901 4.15956C0.450837 4.35269 0.450836 4.65632 0.634901 4.84946L0.945884 5.17577C1.14291 5.3825 1.47277 5.3825 1.66979 5.17577L4.23713 2.4819C4.43415 2.27516 4.76401 2.27516 4.96103 2.4819L7.52837 5.17577C7.7254 5.3825 8.05525 5.3825 8.25228 5.17577L8.56326 4.84946C8.74733 4.65632 8.74733 4.35269 8.56326 4.15956L4.96103 0.379793C4.76401 0.173061 4.43415 0.17306 4.23713 0.379793L0.634901 4.15956Z" fill="white" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <script>
+                                                document.getElementById('upupup-@items.GoodsId').onclick = function () {
+                                                if (Number(document.getElementById('kolichest-@items.GoodsId').value) + 1 < 50) {
+                                                    document.getElementById('kolichest-@items.GoodsId').value = Number(document.getElementById('kolichest-@items.GoodsId').value) + 1;
+                                                    let myGreeting = setTimeout(function () {
+                                                        location.href = '@Url.Action("AddItemInExistCart", "Home")?id_tovara=@items.GoodsId&new_kolvo=' + document.getElementById('kolichest-@items.GoodsId').value;
+                                                    }, 1000);
+                                                }
+                                                else
+                                                    alert("Уж очень много товаров, низя так, оформите заказ и сообщите оператору, сколько Вам нужно товаров!");
+                                                };
+                                                document.getElementById('downdowndown-@items.GoodsId').onclick = function () {
+                                                    if ((Number(document.getElementById('kolichest-@items.GoodsId').value) - 1) > 0) {
+                                                            document.getElementById('kolichest-@items.GoodsId').value = Number(document.getElementById('kolichest-@items.GoodsId').value) - 1;
+                                                            let myGreeting = setTimeout(function () {
+                                                                location.href = '@Url.Action("AddItemInExistCart", "Home")?id_tovara=@items.GoodsId&new_kolvo=' + document.getElementById('kolichest-@items.GoodsId').value;
+                                                            }, 1000);
+                                                    }
+                                                    else
+                                                        alert("Низя меньше единицы товаров");
+                                                };
+                                            </script>
+                                        </div>
+
+                                        <div class="basket__col basket__col_price">
+                                            <div class="basket-price">
+                                                @((items.Count * Convert.ToDouble(items.Goods.Cost)).ToString())<span class="basket-price__currency">₽</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="basket__col basket__col_actions">
+                                            <div>
+                                                <a asp-action="DeleteFromCart" asp-controller="Home" asp-route-id="@items.IdKorzinaGood" class="btn btn_transparent basket-action">
+                                                    Удалить
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="basket__col basket__col_footer">
+                                <div style="text-align:left; margin-left:25px;" class="basket-summary">
+                                    <div>Общая стоимость товаров: 11111₽</div>
+                                </div>
+                                @*<input style="opacity: 0; width:0px; height:0px;" asp-for="@Model.zakaz.StoimostZakakaTovari" value="@Model.summazakaza">*@
+                           </div>
+                            <div class="card checkout" style="border-radius: 0px; box-shadow: none;">
+                                <div class="checkout__title">
+                                    <div class="checkout__step">2</div>
+                                    Способ получения
+                                </div>
+                                <div id="deliveryContainer">
+                                    <div class="profiles-form checkout__profile">
+                                        <div class="profiles-form__section">
+                                            <div class="profiles-form__title">Выберите филиал</div>
+                                            @foreach(var a in Model.list_filial)
+                                            {
+                                                <div class="profiles-form__block">
+                                                    <div class="form-group profiles-form__input" style="display: flex;">
+                                                        <input style="display: none;" asp-for="@a.IdFilial">
+                                                        <input checked style="height: 100%; margin-right:10px;" type="radio" id="@a.IdFilial" asp-for="@a.Selected" value="@a.IdFilial">
+                                                        <label for="@a.IdFilial"><b>@a.NameFilial</b> (<a href="https://yandex.ru/maps/213/moscow/search/@a.AddressFilial" target="_blank">@a.AddressFilial</a>)</label>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card checkout" style="border-radius: 0px; box-shadow: none;">
+                                <div class="checkout__title">
+                                    <div class="checkout__step">3</div>
+                                    Контактная информация
+                                </div>
+                                <div class="profiles-form checkout__profile">
+                                    <div class="profiles-form__section">
+                                        <div class="profiles-form__block profiles-form__block_wide">
+@*                                            @{
+                                                string gs = User.Identity.Name;
+                                                gs = gs.Substring(gs.IndexOf(' ') + 1);
+                                                <div class="form-group profiles-form__input">
+                                                    <label class="form-group__label form-group__label_required">
+                                                        Контактное лицо
+                                                    </label>
+                                                    <input asp-for="@Model.zakaz.Contact_Name" value="@gs" type="text" class="input form-group__input" required="">
+                                                    <span asp-validation-for="@Model.zakaz.Contact_Name" style="color: red;"></span>
+                                                </div>
+                                            }*@
+                                        </div>
+
+                                        <div class="profiles-form__block">
+                                            <div class="form-group profiles-form__input">
+@*                                                @{ 
+                                                    string gss = User.Identity.Name;
+                                                    string[] slova = gss.Split(' ');
+                                                    <label class="form-group__label form-group__label_required">
+                                                        E-mail
+                                                    </label>
+                                                    <input asp-for="@Model.zakaz.Contact_Email" value="@slova[0]" type="email" class="input form-group__input" required="">
+                                                    <span asp-validation-for="@Model.zakaz.Contact_Email" style="color: red;"></span>
+                                                }*@
+                                            </div>
+                                        </div>
+
+                                        <div class="profiles-form__block">
+                                            <div class="form-group profiles-form__input">
+@*                                                <label class="form-group__label form-group__label_required">
+                                                    Телефон (моб)
+                                                </label>
+                                                <input id="telnam" asp-for="@Model.zakaz.Contact_Telefon" type="tel" class="input form-group__input">
+                                                <span asp-validation-for="@Model.zakaz.Contact_Telefon" style="color: red;"></span>*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="basket__row basket__row_footer">
+
+                                <div class="basket__col basket__col_footer">
+                                    <div class="basket-summary">
+                                        <div>Общая стоимость товаров: 11111₽</div>
+                                    </div>
+
+                                    <div class="basket-submit" style="float: right;">
+                                        <input style="background-color: #c62306; border-color: #c62306; color: #fff;" class="btn btn_primary basket-submit__btn" type="submit" value="Оформить заказ">
+                                    </div>
+                                    @*<input style="opacity: 0; width:0px; height:0px;" asp-for="@Model.zakaz.StoimostZakakaTovari" value="@Model.summazakaza">*@
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    <h1>Корзина пуста :(</h1>
+                }

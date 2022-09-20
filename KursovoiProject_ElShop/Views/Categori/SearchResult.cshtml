@@ -1,36 +1,38 @@
 ﻿<link rel="stylesheet" href="~/css/styletovarilist.css">
-@model IndexPageModel
+@model TovariCategoryModel
 @{
-    ViewData["Title"] = "Все категории";
+    ViewData["Title"] = Model.search;
 }
 <main class="content-main">
     <div class="con-man">
         <div class="main-div-left">
-            <nav class="breadcrumbs">
-                <span class="breadcrumbs__items" itemscope="" itemtype="https://schema.org/BreadcrumbList">
-                    <a href="/" class="breadcrumbs__item">Главная</a>
-                </span>
-                <a href="javascript:history.back()" class="breadcrumbs__back btn btn_transparent">
-                    🠔Назад
-                </a>
-            </nav>
-            <h1 class="header-name-podcateg">Все категории</h1>
-            <div class="blocks-category">
-                @foreach (var item in Model.Categories)
-                {
-                    <div class="block-main">
-                        <div class="categories">
-                            <a asp-action="TovariCategory" asp-controller="Categori" asp-route-IDCategory="@item.IdCategori" style="text-decoration:none;" class="zagolovok-cat">@item.NameCategori</a>
-                        </div>
-                    </div>
-                }
-            </div>
-            <p class="info-in-main">
-                Современный дом сложно представить без бытовой техники. Она дарит удобство и комфорт и значительно облегчает нашу жизнь. Однако, чтобы приобрести то, что нужно, нам приходится тратить время, а его, подчас, не хватает. Интернет-магазин
-                бытовой техники Vasko.ru поможет вам сделать покупки быстрыми и приятными. Ведь чтобы купить стиральную машину или пылесос вам достаточно просто сделать заказ через наш онлайн магазин!
-            </p>
+            <div id="panel"></div>
         </div>
         <div class="notmain-div-right">
+            <div class="filter">
+                <div class="filter__title">Выбор по цене:</div>
+                <div class="filter-range-preview">
+				    <span class="filter-range-preview__text">от</span>
+				    <input id="min_price" name="min" asp-for="FilterViewModel.Min" class="filter-range-preview__input" type="number" name="price_min">
+				    <span class="filter-range-preview__text">до</span>
+				    <input id="max_price" name="max" asp-for="FilterViewModel.Max" class="filter-range-preview__input" type="number" name="price_max">
+				    <span class="filter-range-preview__text">₽</span>
+			    </div>
+                <div class="filter__title">Сортировать по:</div>
+                <div class="filter-range-preview">
+                    <select id="typesort" name="typesort" asp-for="FilterViewModel.TypeSort" style="width: 100%;">
+                      <option value="0">По умолчанию</option>
+                      <option value="1">По возрастнаию цены</option>
+                      <option value="2">По убыванию цены</option>
+                      <option value="3">По наименованию</option>
+                    </select>
+			    </div>
+                <div class="filter__title">Производитель:</div>
+                <div class="filter-range-preview">
+                    <select id="maufacture" style="width: 100%;" name="manufacte" asp-items="Model.FilterViewModel.Manufacturies"></select>
+			    </div>
+                <button id="btn_filters" style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Применить</button>
+            </div>
             <div class="right-image">
                 @if (Model.Right1Adds != null)
                 {
@@ -56,7 +58,7 @@
                     </div>
                 }
             </div>
-                <div class="work-right">
+            <div class="work-right">
                     @if(Model.Right2Adds != null)
                     {
                         <div class="slide2">
@@ -80,8 +82,15 @@
                             </button>
                         </div>
                     }
-                </div>
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        var urls = '@Url.Action("GetSpisokTovariSearch", "Categori", new {search=Model.search})';
+        $('#panel').load(urls);
+        $("#btn_filters").click(function(){
+            var urls = '@Url.Action("GetSpisokTovariSearch", "Categori", new {search=Model.search})'+'&min='+$("#min_price").val()+'&max='+$("#max_price").val()+'&typesort='+$("#typesort").val()+'&manufacte='+$("#maufacture").val();
+            $('#panel').load(urls);
+        });
+    </script>
 </main>
