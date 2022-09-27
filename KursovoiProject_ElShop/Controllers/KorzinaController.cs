@@ -194,7 +194,8 @@ namespace KursovoiProject_ElShop.Controllers
             order.DateOrder = DateTime.Now;
             order.Status = 0;
             order.FilialId = list.Filial.IdFilial;
-            order.DateDostavki = null;
+            order.DateReadyToExtradition = null;
+            order.DateExtradition = null;
             order.ItogSumma = Convert.ToDecimal(list.summa);
             int IDUser = _context.Users.Where(p => p.Login == getEmail()).First().IdUser;
             order.UserId = IDUser;

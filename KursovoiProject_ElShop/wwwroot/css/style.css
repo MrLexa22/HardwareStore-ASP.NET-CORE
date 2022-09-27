@@ -16,6 +16,12 @@
     border-radius: 0.25rem;
 }
 
+.notActivebtn {
+    background: #F8F8F8 !important;
+    color: black !important;
+    border: 1.5px solid #E1E1E1 !important;
+}
+
 .page-item.active .page-link {
     z-index: 1;
     color: #fff;

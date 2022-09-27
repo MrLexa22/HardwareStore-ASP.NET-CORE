@@ -121,5 +121,50 @@ namespace KursovoiProject_ElShop.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        public string getEmail()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = identity.Claims;
+            int i = 0;
+            string email = "";
+            foreach (var a in claims)
+            {
+                if (i == 1)
+                    email = a.Value;
+                i++;
+            }
+            return email;
+        }
+
+        public async Task<IActionResult> MyOrders()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+            OrdersUser model = new OrdersUser();
+            model.Right1Adds = (List<AddsSite>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/AddsSites/GetAddsSiteType/2").Result.Content.ReadAsStringAsync().Result, typeof(List<AddsSite>));
+            model.Right2Adds = (List<AddsSite>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/AddsSites/GetAddsSiteType/3").Result.Content.ReadAsStringAsync().Result, typeof(List<AddsSite>));
+            return View(model);
+        }
+
+        public async Task<IActionResult> nowOrders()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+            OrdersUser model = new OrdersUser();
+            User user = _context.Users.Where(p => p.Login == getEmail()).First();
+            model.Orders = _context.ViewOrdersClients.Where(p => p.UserId == user.IdUser && p.Status != 3 && p.Status != 4 && p.Status != 5 && p.Status != 6).ToList();
+            return PartialView("~/Views/Home/_nowOrdersClient.cshtml", model);
+        }
+
+        public async Task<IActionResult> oldOrders()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+            OrdersUser model = new OrdersUser();
+            User user = _context.Users.Where(p => p.Login == getEmail()).First();
+            model.Orders = _context.ViewOrdersClients.Where(p => p.UserId == user.IdUser && p.Status != 0 && p.Status != 1 && p.Status != 2).ToList();
+            return PartialView("~/Views/Home/_nowOrdersClient.cshtml", model);
+        }
     }
 }

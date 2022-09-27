@@ -408,9 +408,34 @@ namespace KursovoiProject_ElShop
             {
                 entity.HasNoKey();
 
-                entity.ToView("View_OrdersClient");
+                entity.ToView("ViewOrdersClient");
 
-                entity.HasComment("View 'ElShop.View_OrdersClient' references invalid table(s) or column(s) or function(s) or definer/invoker of view lack rights to use them");
+                entity.Property(e => e.AddressFilial).HasColumnType("text");
+
+                entity.Property(e => e.Category)
+                    .HasMaxLength(29)
+                    .UseCollation("utf8mb4_unicode_ci")
+                    .HasCharSet("utf8mb4");
+
+                entity.Property(e => e.DateExtradition).HasColumnType("datetime");
+
+                entity.Property(e => e.DateOrder).HasColumnType("datetime");
+
+                entity.Property(e => e.DateReadyToExtradition).HasColumnType("datetime");
+
+                entity.Property(e => e.FilialId).HasColumnName("Filial_ID");
+
+                entity.Property(e => e.IdFilial).HasColumnName("ID_Filial");
+
+                entity.Property(e => e.ItogSumma).HasPrecision(34, 2);
+
+                entity.Property(e => e.NameFilial).HasMaxLength(100);
+
+                entity.Property(e => e.Nds)
+                    .HasPrecision(34, 2)
+                    .HasColumnName("NDS");
+
+                entity.Property(e => e.UserId).HasColumnName("User_ID");
             });
 
             modelBuilder.Entity<Worker>(entity =>
