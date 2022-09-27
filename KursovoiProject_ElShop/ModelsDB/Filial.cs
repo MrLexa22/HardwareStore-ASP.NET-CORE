@@ -8,6 +8,7 @@ namespace KursovoiProject_ElShop
         public Filial()
         {
             GoodsFilials = new HashSet<GoodsFilial>();
+            Orders = new HashSet<Order>();
             WorkersFilials = new HashSet<WorkersFilial>();
         }
 
@@ -17,6 +18,7 @@ namespace KursovoiProject_ElShop
         public bool Availeble { get; set; }
 
         public virtual ICollection<GoodsFilial> GoodsFilials { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<WorkersFilial> WorkersFilials { get; set; }
     }
 }

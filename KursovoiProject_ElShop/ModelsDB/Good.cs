@@ -9,6 +9,7 @@ namespace KursovoiProject_ElShop
         {
             GoodsFilials = new HashSet<GoodsFilial>();
             Korzinas = new HashSet<Korzina>();
+            OrderContainers = new HashSet<OrderContainer>();
         }
 
         public int IdGood { get; set; }
@@ -24,5 +25,6 @@ namespace KursovoiProject_ElShop
         public virtual Manufacture Manufacture { get; set; } = null!;
         public virtual ICollection<GoodsFilial> GoodsFilials { get; set; }
         public virtual ICollection<Korzina> Korzinas { get; set; }
+        public virtual ICollection<OrderContainer> OrderContainers { get; set; }
     }
 }

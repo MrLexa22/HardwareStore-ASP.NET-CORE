@@ -17,24 +17,24 @@ namespace KursovoiProject_ElShop
         }
 
         public virtual DbSet<AddsSite> AddsSites { get; set; } = null!;
-        public virtual DbSet<Bank> Banks { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Filial> Filials { get; set; } = null!;
         public virtual DbSet<Good> Goods { get; set; } = null!;
         public virtual DbSet<GoodsFilial> GoodsFilials { get; set; } = null!;
-        public virtual DbSet<ViewGoodsWithManufacture> ViewGoodsWithManufactures { get; set; } = null!;
         public virtual DbSet<Korzina> Korzinas { get; set; } = null!;
         public virtual DbSet<MainCategory> MainCategories { get; set; } = null!;
         public virtual DbSet<Manufacture> Manufactures { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
-        public virtual DbSet<Post> Posts { get; set; } = null!;
+        public virtual DbSet<OrderContainer> OrderContainers { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<UsersRole> UsersRoles { get; set; } = null!;
+        public virtual DbSet<ViewFilialsGoodsNalich> ViewFilialsGoodsNaliches { get; set; } = null!;
+        public virtual DbSet<ViewGoodsWithManufacture> ViewGoodsWithManufactures { get; set; } = null!;
         public virtual DbSet<ViewMainCategori> ViewMainCategoris { get; set; } = null!;
-        public virtual DbSet<WorkersBankCadri> WorkersBankCadris { get; set; } = null!;
+        public virtual DbSet<ViewOrdersClient> ViewOrdersClients { get; set; } = null!;
+        public virtual DbSet<Worker> Workers { get; set; } = null!;
         public virtual DbSet<WorkersFilial> WorkersFilials { get; set; } = null!;
-        public virtual DbSet<WorkersPost> WorkersPosts { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -68,52 +68,6 @@ namespace KursovoiProject_ElShop
                     .HasColumnName("HREF");
 
                 entity.Property(e => e.Name).HasMaxLength(100);
-            });
-
-            modelBuilder.Entity<Bank>(entity =>
-            {
-                entity.HasKey(e => e.IdBank)
-                    .HasName("PRIMARY");
-
-                entity.Property(e => e.IdBank).HasColumnName("ID_Bank");
-
-                entity.Property(e => e.BikBank).HasMaxLength(10);
-
-                entity.Property(e => e.InnBank).HasMaxLength(11);
-
-                entity.Property(e => e.KorrSchetBank).HasMaxLength(20);
-
-                entity.Property(e => e.KppBank).HasMaxLength(10);
-
-                entity.Property(e => e.NameBank).HasMaxLength(250);
-            });
-
-            modelBuilder.Entity<ViewGoodsWithManufacture>(entity =>
-            {
-                entity.HasKey(e => e.IdGood)
-                    .HasName("PRIMARY");
-
-                entity.ToView("View_GoodsWithManufacture");
-
-                entity.Property(e => e.CategoriId).HasColumnName("Categori_ID");
-
-                entity.Property(e => e.Description).HasColumnType("text");
-
-                entity.Property(e => e.FtppathImage)
-                    .HasMaxLength(150)
-                    .HasColumnName("FTPPathImage");
-
-                entity.Property(e => e.IdGood).HasColumnName("ID_Good");
-
-                entity.Property(e => e.IdManufacture).HasColumnName("ID_Manufacture");
-
-                entity.Property(e => e.ManufactureId).HasColumnName("Manufacture_ID");
-
-                entity.Property(e => e.Name).HasMaxLength(150);
-
-                entity.Property(e => e.NameManufacture).HasMaxLength(100);
-
-                entity.Property(e => e.NameWithManufacture).HasMaxLength(251);
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -264,52 +218,70 @@ namespace KursovoiProject_ElShop
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.OrderNumber)
+                    .HasName("PRIMARY");
 
                 entity.HasIndex(e => e.FilialId, "FilialID_ForeignKey");
 
-                entity.HasIndex(e => e.GoodsId, "GoodsID_Index");
-
                 entity.HasIndex(e => e.UserId, "User_ID_ForeignKey");
 
-                entity.Property(e => e.Address).HasColumnType("text");
+                entity.Property(e => e.OrderNumber).ValueGeneratedNever();
 
-                entity.Property(e => e.DateDostavki).HasColumnType("datetime");
+                entity.Property(e => e.DateExtradition).HasColumnType("datetime");
 
                 entity.Property(e => e.DateOrder).HasColumnType("datetime");
 
+                entity.Property(e => e.DateReadyToExtradition).HasColumnType("datetime");
+
                 entity.Property(e => e.FilialId).HasColumnName("Filial_ID");
 
-                entity.Property(e => e.GoodsId).HasColumnName("Goods_ID");
+                entity.Property(e => e.ItogSumma).HasPrecision(34, 2);
 
                 entity.Property(e => e.UserId).HasColumnName("User_ID");
 
                 entity.HasOne(d => d.Filial)
-                    .WithMany()
+                    .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.FilialId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Orders_ibfk_3");
 
-                entity.HasOne(d => d.Goods)
-                    .WithMany()
-                    .HasForeignKey(d => d.GoodsId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Orders_ibfk_2");
-
                 entity.HasOne(d => d.User)
-                    .WithMany()
+                    .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Orders_ibfk_1");
             });
 
-            modelBuilder.Entity<Post>(entity =>
+            modelBuilder.Entity<OrderContainer>(entity =>
             {
-                entity.HasKey(e => e.IdPost)
+                entity.HasKey(e => e.ContainerId)
                     .HasName("PRIMARY");
 
-                entity.Property(e => e.IdPost).HasColumnName("ID_Post");
+                entity.ToTable("OrderContainer");
 
-                entity.Property(e => e.NamePost).HasMaxLength(200);
+                entity.HasIndex(e => e.GoodsId, "GoodsFKOrder");
+
+                entity.HasIndex(e => e.OrderNumberId, "ORNFK");
+
+                entity.Property(e => e.ContainerId).HasColumnName("ContainerID");
+
+                entity.Property(e => e.GoodsId).HasColumnName("Goods_ID");
+
+                entity.Property(e => e.OrderNumberId).HasColumnName("OrderNumber_ID");
+
+                entity.Property(e => e.Price).HasPrecision(34, 2);
+
+                entity.HasOne(d => d.Goods)
+                    .WithMany(p => p.OrderContainers)
+                    .HasForeignKey(d => d.GoodsId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("OrderContainer_ibfk_1");
+
+                entity.HasOne(d => d.OrderNumber)
+                    .WithMany(p => p.OrderContainers)
+                    .HasForeignKey(d => d.OrderNumberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("OrderContainer_ibfk_2");
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -370,32 +342,87 @@ namespace KursovoiProject_ElShop
                     .HasConstraintName("Users_Role_ibfk_1");
             });
 
+            modelBuilder.Entity<ViewFilialsGoodsNalich>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("View_FilialsGoodsNalich");
+
+                entity.Property(e => e.AddressFilial).HasColumnType("text");
+
+                entity.Property(e => e.IdFilial).HasColumnName("ID_Filial");
+
+                entity.Property(e => e.IdGood).HasColumnName("ID_Good");
+
+                entity.Property(e => e.Nalich)
+                    .HasMaxLength(32)
+                    .UseCollation("utf8mb4_unicode_ci")
+                    .HasCharSet("utf8mb4");
+
+                entity.Property(e => e.NameFilial).HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<ViewGoodsWithManufacture>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("View_GoodsWithManufacture");
+
+                entity.Property(e => e.CategoriId).HasColumnName("Categori_ID");
+
+                entity.Property(e => e.Description).HasColumnType("text");
+
+                entity.Property(e => e.FtppathImage)
+                    .HasMaxLength(150)
+                    .HasColumnName("FTPPathImage");
+
+                entity.Property(e => e.IdGood).HasColumnName("ID_Good");
+
+                entity.Property(e => e.IdManufacture).HasColumnName("ID_Manufacture");
+
+                entity.Property(e => e.ManufactureId).HasColumnName("Manufacture_ID");
+
+                entity.Property(e => e.Name).HasMaxLength(150);
+
+                entity.Property(e => e.NameManufacture).HasMaxLength(100);
+
+                entity.Property(e => e.NameWithManufacture).HasMaxLength(251);
+            });
+
             modelBuilder.Entity<ViewMainCategori>(entity =>
             {
-                entity.HasKey(e => e.IdCategori)
-                    .HasName("PRIMARY");
+                entity.HasNoKey();
 
                 entity.ToView("View_MainCategori");
 
+                entity.Property(e => e.CategoriId).HasColumnName("CategoriID");
+
                 entity.Property(e => e.IdCategori).HasColumnName("ID_Categori");
+
+                entity.Property(e => e.IdMainCategori).HasColumnName("ID_MainCategori");
 
                 entity.Property(e => e.NameCategori).HasMaxLength(100);
             });
 
-            modelBuilder.Entity<WorkersBankCadri>(entity =>
+            modelBuilder.Entity<ViewOrdersClient>(entity =>
             {
-                entity.HasKey(e => e.IdBankWorker)
+                entity.HasNoKey();
+
+                entity.ToView("View_OrdersClient");
+
+                entity.HasComment("View 'ElShop.View_OrdersClient' references invalid table(s) or column(s) or function(s) or definer/invoker of view lack rights to use them");
+            });
+
+            modelBuilder.Entity<Worker>(entity =>
+            {
+                entity.HasKey(e => e.IdWorker)
                     .HasName("PRIMARY");
-
-                entity.ToTable("Workers_BankCadri");
-
-                entity.HasIndex(e => e.BankId, "BankID_ForeignKey");
 
                 entity.HasIndex(e => e.UserId, "UserID_ForeignKey");
 
-                entity.Property(e => e.IdBankWorker).HasColumnName("ID_BankWorker");
+                entity.Property(e => e.IdWorker).HasColumnName("ID_Worker");
 
-                entity.Property(e => e.BankId).HasColumnName("BankID");
+                entity.Property(e => e.AddressRegistration).HasMaxLength(250);
 
                 entity.Property(e => e.Innworker)
                     .HasMaxLength(13)
@@ -403,11 +430,11 @@ namespace KursovoiProject_ElShop
 
                 entity.Property(e => e.NomerPasporta).HasMaxLength(10);
 
+                entity.Property(e => e.PrikazObUvolnenii).HasMaxLength(150);
+
                 entity.Property(e => e.PrikazOprieme)
                     .HasMaxLength(150)
                     .HasColumnName("PrikazOPrieme");
-
-                entity.Property(e => e.SchetWorker).HasMaxLength(21);
 
                 entity.Property(e => e.SeriaPasporta).HasMaxLength(5);
 
@@ -417,16 +444,11 @@ namespace KursovoiProject_ElShop
 
                 entity.Property(e => e.UserId).HasColumnName("User_ID");
 
-                entity.HasOne(d => d.Bank)
-                    .WithMany(p => p.WorkersBankCadris)
-                    .HasForeignKey(d => d.BankId)
-                    .HasConstraintName("Workers_BankCadri_ibfk_1");
-
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.WorkersBankCadris)
+                    .WithMany(p => p.Workers)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Workers_BankCadri_ibfk_2");
+                    .HasConstraintName("Workers_ibfk_2");
             });
 
             modelBuilder.Entity<WorkersFilial>(entity =>
@@ -457,36 +479,6 @@ namespace KursovoiProject_ElShop
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Workers_Filial_ibfk_2");
-            });
-
-            modelBuilder.Entity<WorkersPost>(entity =>
-            {
-                entity.HasKey(e => e.IdWorker)
-                    .HasName("PRIMARY");
-
-                entity.ToTable("Workers_Post");
-
-                entity.HasIndex(e => e.PostId, "Post_ID_ForeignKey");
-
-                entity.HasIndex(e => e.UserId, "User_ID_ForeignKey");
-
-                entity.Property(e => e.IdWorker).HasColumnName("ID_Worker");
-
-                entity.Property(e => e.PostId).HasColumnName("Post_ID");
-
-                entity.Property(e => e.UserId).HasColumnName("User_ID");
-
-                entity.HasOne(d => d.Post)
-                    .WithMany(p => p.WorkersPosts)
-                    .HasForeignKey(d => d.PostId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Workers_Post_ibfk_2");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.WorkersPosts)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Workers_Post_ibfk_1");
             });
 
             OnModelCreatingPartial(modelBuilder);

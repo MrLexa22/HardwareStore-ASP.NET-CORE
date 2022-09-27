@@ -1,0 +1,115 @@
+﻿@model TovariInCart                                  
+@foreach (var items in Model.list_tovari)
+                            {
+                                <div class="basket-item">
+                                    <div class="basket__row">
+                                        <div class="basket__col basket__col_image">
+                                            <img src="@items.Goods.FtppathImage" alt="product image">
+                                        </div>
+                                        <div class="basket__col basket__col_name">
+                                            <div class="basket-item__name">
+                                                <a asp-action="Tovar" asp-controller="Categori" asp-route-id="@items.GoodsId"><b>@items.Goods.Manufacture.NameManufacture</b> @items.Goods.Name</a>
+                                            </div>
+                                        </div>
+                                        <div class="basket__col basket__col_quanity">
+                                            <div class="number-input">
+                                                <a style="height: 50%;" id="do-@items.IdKorzinaGood" class="number-input__btn btn_primary minus" data-decrease="">
+                                                    <svg style="display: block; margin: 4px auto;" class="icon" width="9" height="6" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M8.59117 1.56267C8.77524 1.36954 8.77524 1.06591 8.59117 0.872772L8.28019 0.546462C8.08317 0.339729 7.75331 0.33973 7.55629 0.546462L4.98895 3.24033C4.79192 3.44707 4.46206 3.44707 4.26504 3.24033L1.6977 0.546462C1.50068 0.339729 1.17082 0.339729 0.973798 0.546461L0.662814 0.872771C0.478749 1.06591 0.478749 1.36954 0.662814 1.56267L4.26504 5.34244C4.46206 5.54917 4.79192 5.54917 4.98894 5.34244L8.59117 1.56267Z" fill="white" />
+                                                    </svg>
+                                                </a>
+                                                <input readonly="readonly" type="number" id="kolichest-@items.IdKorzinaGood" class="input number-input__input" min="1" value="@items.Count" name="product-quantity" data-basket-code="20918014" data-product-id="1577992">
+                                                <a style="height: 50%;" id="up-@items.IdKorzinaGood" class="number-input__btn btn_primary addplus" data-increase="">
+                                                    <svg style="display: block; margin: 4px auto;" class="icon" width="9" height="6" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M0.634901 4.15956C0.450837 4.35269 0.450836 4.65632 0.634901 4.84946L0.945884 5.17577C1.14291 5.3825 1.47277 5.3825 1.66979 5.17577L4.23713 2.4819C4.43415 2.27516 4.76401 2.27516 4.96103 2.4819L7.52837 5.17577C7.7254 5.3825 8.05525 5.3825 8.25228 5.17577L8.56326 4.84946C8.74733 4.65632 8.74733 4.35269 8.56326 4.15956L4.96103 0.379793C4.76401 0.173061 4.43415 0.17306 4.23713 0.379793L0.634901 4.15956Z" fill="white" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="basket__col basket__col_price">
+                                            <div class="basket-price">
+                                                @((items.Count * Convert.ToDouble(items.Goods.Cost)).ToString())<span class="basket-price__currency">₽</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="basket__col basket__col_actions">
+                                            <div>
+                                                <a onclick="return false;" href="api/Korzina/DeleteFromCart/@items.IdKorzinaGood" class="btn btn_transparent basket-action deletefrombuske">
+                                                    Удалить
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="basket__col basket__col_footer">
+                                <div style="text-align:left; margin-left:25px;" class="basket-summary">
+                                    <div>Общая стоимость товаров: @Model.summa ₽</div>
+                                </div>
+                           </div>
+                          <script>
+                           var initial;
+                           $(".deletefrombuske").click(function () {
+                                       $.ajax({
+                                            type: "DELETE",
+                                            url: $(this).attr("href"),
+                                            dataType: "text"
+                                        }).done(function() {
+                                            var urls = '@Url.Action("GetCartTovari", "Korzina")';
+                                            $('#panel_cart').load(urls);
+                                        });
+                            });
+
+                            $(".addplus").click(function() {
+                              addplus($(this));
+                            })
+                            function addplus(thisObj){
+                                clearTimeout(initial);
+                                var thisObj = thisObj;
+                                var id = $(thisObj).attr("id");
+                                id = id.substring(3, id.length +1);
+                                if (Number(document.getElementById('kolichest-'+id).value) + 1 < 50) {
+                                    document.getElementById('kolichest-'+id).value = Number(document.getElementById('kolichest-'+id).value) + 1;
+                                    var newKolvo = document.getElementById('kolichest-'+id).value;
+                                    initial = setTimeout(function() {
+                                        $.ajax({
+                                            type: "PUT",
+                                            url: 'api/Korzina/UpdateCart/'+id+'/'+newKolvo,
+                                            dataType: "text"
+                                        }).done(function() {
+                                            var urls = '@Url.Action("GetCartTovari", "Korzina")';
+                                            $('#panel_cart').load(urls);
+                                        });
+                                    }, 500);
+                                }
+                                else
+                                    alert("Уж очень много товаров, низя так, оформите заказ и сообщите оператору, сколько Вам нужно товаров!");
+                            };
+
+                            $(".minus").click(function() {
+                              minus($(this));
+                            })
+                            function minus(thisObj){
+                                clearTimeout(initial);
+                                var thisObj = thisObj;
+                                var id = $(thisObj).attr("id");
+                                id = id.substring(3, id.length +1);
+                                if (Number(document.getElementById('kolichest-'+id).value) - 1 > 0) {
+                                    document.getElementById('kolichest-'+id).value = Number(document.getElementById('kolichest-'+id).value) - 1;
+                                    var newKolvo = document.getElementById('kolichest-'+id).value;
+                                    initial = setTimeout(function() {
+                                        $.ajax({
+                                            type: "PUT",
+                                            url: 'api/Korzina/UpdateCart/'+id+'/'+newKolvo,
+                                            dataType: "text"
+                                        }).done(function() {
+                                            var urls = '@Url.Action("GetCartTovari", "Korzina")';
+                                            $('#panel_cart').load(urls);
+                                        });
+                                    }, 500);
+                                }
+                                else
+                                    alert("Низя меньше единицы товаров");
+                            };
+                        </script>

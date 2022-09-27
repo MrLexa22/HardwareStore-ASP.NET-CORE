@@ -44,5 +44,24 @@ namespace KursovoiProject_ElShop.Controllers.API
             var list = await _context.Korzinas.Where(p => p.UserId == id).ToListAsync();
             return list;
         }
+
+        [HttpDelete("DeleteFromCart/{id}")]
+        public async Task<IActionResult> DeleteFromCartId(int id)
+        {
+            var a = _context.Korzinas.Where(p => p.IdKorzinaGood == id).First();
+            _context.Remove(a);
+            _context.SaveChanges();
+            return NoContent();
+        }
+
+        [HttpPut("UpdateCart/{id}/{newKolvo}")]
+        public async Task<IActionResult> UpdateCart(int id, int newKolvo)
+        {
+            var a = _context.Korzinas.Where(p => p.IdKorzinaGood == id).First();
+            a.Count = newKolvo;
+            _context.Update(a);
+            _context.SaveChanges();
+            return NoContent();
+        }
     }
 }

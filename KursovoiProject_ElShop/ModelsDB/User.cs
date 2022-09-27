@@ -8,10 +8,10 @@ namespace KursovoiProject_ElShop
         public User()
         {
             Korzinas = new HashSet<Korzina>();
+            Orders = new HashSet<Order>();
             UsersRoles = new HashSet<UsersRole>();
-            WorkersBankCadris = new HashSet<WorkersBankCadri>();
+            Workers = new HashSet<Worker>();
             WorkersFilials = new HashSet<WorkersFilial>();
-            WorkersPosts = new HashSet<WorkersPost>();
         }
 
         public int IdUser { get; set; }
@@ -23,9 +23,9 @@ namespace KursovoiProject_ElShop
         public double IsAvalible { get; set; }
 
         public virtual ICollection<Korzina> Korzinas { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<UsersRole> UsersRoles { get; set; }
-        public virtual ICollection<WorkersBankCadri> WorkersBankCadris { get; set; }
+        public virtual ICollection<Worker> Workers { get; set; }
         public virtual ICollection<WorkersFilial> WorkersFilials { get; set; }
-        public virtual ICollection<WorkersPost> WorkersPosts { get; set; }
     }
 }
