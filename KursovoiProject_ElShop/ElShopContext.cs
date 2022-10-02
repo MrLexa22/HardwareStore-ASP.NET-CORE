@@ -57,7 +57,11 @@ namespace KursovoiProject_ElShop
 
                 entity.ToTable("AddsSite");
 
+                entity.HasIndex(e => e.PublisherUserId, "pubfk");
+
                 entity.Property(e => e.IdAdds).HasColumnName("ID_Adds");
+
+                entity.Property(e => e.DateEdn).HasColumnType("datetime");
 
                 entity.Property(e => e.FtppathImage)
                     .HasColumnType("text")
@@ -68,6 +72,14 @@ namespace KursovoiProject_ElShop
                     .HasColumnName("HREF");
 
                 entity.Property(e => e.Name).HasMaxLength(100);
+
+                entity.Property(e => e.PublisherUserId).HasColumnName("PublisherUser_ID");
+
+                entity.HasOne(d => d.PublisherUser)
+                    .WithMany(p => p.AddsSites)
+                    .HasForeignKey(d => d.PublisherUserId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("AddsSite_ibfk_1");
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -225,7 +237,23 @@ namespace KursovoiProject_ElShop
 
                 entity.HasIndex(e => e.UserId, "User_ID_ForeignKey");
 
+                entity.HasIndex(e => e.SborshikUserId, "sbusfk");
+
+                entity.HasIndex(e => e.SellerUserId, "sellusfk");
+
                 entity.Property(e => e.OrderNumber).ValueGeneratedNever();
+
+                entity.Property(e => e.ContactEmail)
+                    .HasMaxLength(250)
+                    .HasColumnName("Contact_Email");
+
+                entity.Property(e => e.ContactName)
+                    .HasMaxLength(250)
+                    .HasColumnName("Contact_Name");
+
+                entity.Property(e => e.ContactTelefon)
+                    .HasMaxLength(250)
+                    .HasColumnName("Contact_Telefon");
 
                 entity.Property(e => e.DateExtradition).HasColumnType("datetime");
 
@@ -237,6 +265,10 @@ namespace KursovoiProject_ElShop
 
                 entity.Property(e => e.ItogSumma).HasPrecision(34, 2);
 
+                entity.Property(e => e.SborshikUserId).HasColumnName("SborshikUser_ID");
+
+                entity.Property(e => e.SellerUserId).HasColumnName("SellerUser_ID");
+
                 entity.Property(e => e.UserId).HasColumnName("User_ID");
 
                 entity.HasOne(d => d.Filial)
@@ -245,8 +277,20 @@ namespace KursovoiProject_ElShop
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Orders_ibfk_3");
 
+                entity.HasOne(d => d.SborshikUser)
+                    .WithMany(p => p.OrderSborshikUsers)
+                    .HasForeignKey(d => d.SborshikUserId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("Orders_ibfk_4");
+
+                entity.HasOne(d => d.SellerUser)
+                    .WithMany(p => p.OrderSellerUsers)
+                    .HasForeignKey(d => d.SellerUserId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("Orders_ibfk_5");
+
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.Orders)
+                    .WithMany(p => p.OrderUsers)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Orders_ibfk_1");

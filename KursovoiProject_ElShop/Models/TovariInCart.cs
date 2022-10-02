@@ -60,4 +60,12 @@ namespace KursovoiProject_ElShop.Models
         public int IDUser { get; set; }
         public ContactInformation  contacts { get; set; }
     }
+    public class ModelOrder
+    {
+        public List<AddsSite> Right1Adds { get; set; }
+        public List<AddsSite> Right2Adds { get; set; }
+        public double summa { get; set; }
+        public ContactInformation contacts { get; set; }
+        public Order OrderInformation { get; set; }
+    }
 }

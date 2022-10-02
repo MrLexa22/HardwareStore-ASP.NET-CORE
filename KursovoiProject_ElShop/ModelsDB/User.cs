@@ -7,8 +7,11 @@ namespace KursovoiProject_ElShop
     {
         public User()
         {
+            AddsSites = new HashSet<AddsSite>();
             Korzinas = new HashSet<Korzina>();
-            Orders = new HashSet<Order>();
+            OrderSborshikUsers = new HashSet<Order>();
+            OrderSellerUsers = new HashSet<Order>();
+            OrderUsers = new HashSet<Order>();
             UsersRoles = new HashSet<UsersRole>();
             Workers = new HashSet<Worker>();
             WorkersFilials = new HashSet<WorkersFilial>();
@@ -22,8 +25,11 @@ namespace KursovoiProject_ElShop
         public string? PhoneNumber { get; set; }
         public double IsAvalible { get; set; }
 
+        public virtual ICollection<AddsSite> AddsSites { get; set; }
         public virtual ICollection<Korzina> Korzinas { get; set; }
-        public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<Order> OrderSborshikUsers { get; set; }
+        public virtual ICollection<Order> OrderSellerUsers { get; set; }
+        public virtual ICollection<Order> OrderUsers { get; set; }
         public virtual ICollection<UsersRole> UsersRoles { get; set; }
         public virtual ICollection<Worker> Workers { get; set; }
         public virtual ICollection<WorkersFilial> WorkersFilials { get; set; }

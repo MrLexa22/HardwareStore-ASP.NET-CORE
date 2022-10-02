@@ -53,7 +53,7 @@ namespace KursovoiProject_ElShop.Controllers.API
         [HttpGet("GetAddsSiteType/{type}")]
         public async Task<ActionResult<IEnumerable<AddsSite>>> GetAddsSiteType(int type)
         {
-            var addsSite = await _context.AddsSites.Where(p=>p.TypeWhere == type).ToListAsync();
+            var addsSite = await _context.AddsSites.Where(p=>p.TypeWhere == type && (p.DateEdn >= DateTime.Now || p.DateEdn == null)).ToListAsync();
             foreach(var a in addsSite)
             {
                 if(type == 1)

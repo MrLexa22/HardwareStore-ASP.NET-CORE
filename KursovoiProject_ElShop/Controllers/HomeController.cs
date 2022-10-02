@@ -3,10 +3,13 @@ using KursovoiProject_ElShop.Controllers.Validation;
 using KursovoiProject_ElShop.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using System.Net;
 using System.Net.Http.Headers;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 
@@ -118,7 +121,7 @@ namespace KursovoiProject_ElShop.Controllers
             HttpResponseMessage httpResponseMessage = client.PostAsync(@$"api/Users/", content).Result;
             p = (User)JsonConvert.DeserializeObject(httpResponseMessage.Content.ReadAsStringAsync().Result, typeof(User));
             await AuthenticationAsync(p.IdUser);
-
+            EmailService.SendEmailRegistrationAsync(p.Login, model.Password);
             return RedirectToAction("Index", "Home");
         }
 
@@ -165,6 +168,74 @@ namespace KursovoiProject_ElShop.Controllers
             User user = _context.Users.Where(p => p.Login == getEmail()).First();
             model.Orders = _context.ViewOrdersClients.Where(p => p.UserId == user.IdUser && p.Status != 0 && p.Status != 1 && p.Status != 2).ToList();
             return PartialView("~/Views/Home/_nowOrdersClient.cshtml", model);
+        }
+
+        public async Task<IActionResult> OrderUser(int id)
+        {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+            User us = _context.Users.Include(p => p.OrderUsers).Where(p => p.Login == getEmail()).First();
+            if (us.OrderUsers.Where(p=>p.OrderNumber == id).Count() <= 0)
+                return RedirectToAction("Index", "Home");
+            ModelOrder model = new ModelOrder();
+            model.Right1Adds = (List<AddsSite>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/AddsSites/GetAddsSiteType/2").Result.Content.ReadAsStringAsync().Result, typeof(List<AddsSite>));
+            model.Right2Adds = (List<AddsSite>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/AddsSites/GetAddsSiteType/3").Result.Content.ReadAsStringAsync().Result, typeof(List<AddsSite>));
+            Order order = _context.Orders.Include(p => p.Filial).Where(p => p.OrderNumber == id).First();
+            
+            model.contacts = new ContactInformation();
+            model.contacts.Contact_Telefon = order.ContactTelefon;
+            model.contacts.Contact_Name = order.ContactName;
+            model.contacts.Contact_Email = order.ContactEmail;
+            model.OrderInformation = new Order();
+            model.OrderInformation.OrderNumber = order.OrderNumber;
+            model.OrderInformation.Status = order.Status;
+            model.OrderInformation.Filial = order.Filial;
+            model.OrderInformation.DateOrder = order.DateOrder;
+            if (order.SborshikUserId != null)
+                model.OrderInformation.SborshikUser = _context.Users.Find(order.SborshikUserId);
+            if (order.SellerUserId != null)
+                model.OrderInformation.SborshikUser = _context.Users.Find(order.SellerUserId);
+            if (order.DateReadyToExtradition != null)
+                model.OrderInformation.DateReadyToExtradition = order.DateReadyToExtradition;
+            if (order.DateExtradition != null)
+                model.OrderInformation.DateExtradition = order.DateExtradition;
+            order.OrderContainers = _context.OrderContainers.Include(p => p.Goods).Include(p => p.Goods.Manufacture).Where(p=>p.OrderNumber == order).ToList();
+
+            foreach (var a in order.OrderContainers)
+            {
+                if (a.Goods.FtppathImage == null)
+                    a.Goods.FtppathImage = BaseAddresse.Server + "TovariImages/NoImageTovar.jpg";
+                else
+                    a.Goods.FtppathImage = BaseAddresse.Server + "TovariImages/" + a.Goods.FtppathImage;
+                model.summa += Convert.ToDouble(a.Price)*a.Count;
+            }
+            model.OrderInformation.OrderContainers = order.OrderContainers;
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> CancelOrder(int id)
+        {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+            User us = _context.Users.Include(p => p.OrderUsers).Where(p => p.Login == getEmail()).First();
+            if (us.OrderUsers.Where(p => p.OrderNumber == id).Count() <= 0)
+                return RedirectToAction("Index", "Home");
+
+            Order order = _context.Orders.Include(p => p.Filial).Where(p => p.OrderNumber == id).First();
+            order.OrderContainers = _context.OrderContainers.Include(p => p.Goods).Include(p => p.Goods.Manufacture).Where(p => p.OrderNumber == order).ToList();
+            foreach(var a in order.OrderContainers)
+            {
+                var b = _context.GoodsFilials.Where(p => p.FilialId == order.FilialId && p.GoodsId == a.GoodsId).First();
+                b.CountSklad += a.Count;
+                _context.Update(b);
+            }
+            order.Status = 4;
+            order.DateExtradition = DateTime.Now;
+            _context.Update(order);
+            _context.SaveChanges();
+
+            return RedirectToAction("OrderUser","Home",new {id = id});
         }
     }
 }

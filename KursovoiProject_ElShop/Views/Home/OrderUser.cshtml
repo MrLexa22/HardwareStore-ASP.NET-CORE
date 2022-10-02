@@ -1,6 +1,6 @@
-﻿@model informationPreOformleine
+﻿@model ModelOrder
 @{
-    ViewData["Title"] = "Проверка заказа";
+    ViewData["Title"] = "Заказ №"+Model.OrderInformation.OrderNumber;
 }
 
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" defer></script>
@@ -11,57 +11,48 @@
         <div class="main-div-left">
             <main class="main">
                 <header class="page-header">
-                    <h1>Проверьте заказ</h1>
+                    <h1>Заказ №@Model.OrderInformation.OrderNumber от @Model.OrderInformation.DateOrder</h1>
                 </header>
-                @if(Model.tovaris_false.Count() > 0)
+                @if(Model.OrderInformation.DateReadyToExtradition != null)
                 {
-                    <h3>Часть товаров отсутвует в наличии. Мы их удалили из корзины, или добавили в список товаров для оформления то количество, которое доступно в филиале</h3>
-                    <div class="basket">
-                        <div class="basket__row basket__row_header">
-                            <div class="basket__col basket__col_image-header"></div>
-                            <div class="basket__col basket__col_name">Наименование товара</div>
-                            <div class="basket__col basket__col_quanity-header">Количество</div>
-                            <div class="basket__col basket__col_quanity-header">Доступно в филиале</div>
-                            <div class="basket__col basket__col_price-header">Цена</div>
-                        </div>
-                   @for (int i =0; i< Model.tovaris_false.Count();i++)
-                   {
-                       <div style="display:none;">
-                                    <input type="text" asp-for="@Model.tovaris_false[i].GoodsId">
-                                    <input type="text" asp-for="@Model.tovaris_false[i].Count">
-                                    <input type="text" asp-for="@Model.tovaris_false[i].Goods.Cost">
-                        </div>
-                        <div class="basket-item">
-                            <div class="basket__row">
-                                <div class="basket__col basket__col_image">
-                                    <img src="@Model.tovaris_false[i].Goods.FtppathImage" alt="product image">
-                                </div>
-                                <div class="basket__col basket__col_name">
-                                    <div class="basket-item__name">
-                                        <a asp-action="Tovar" asp-controller="Categori" asp-route-id="@Model.tovaris_false[i].GoodsId"><b>@Model.tovaris_false[i].Goods.Manufacture.NameManufacture</b> @Model.tovaris_false[i].Goods.Name</a>
-                                    </div>
-                                </div>
-                                <div class="basket__col basket__col_quanity">
-                                    <div class="number-input">
-                                        <input readonly="readonly" type="number" class="input number-input__input" min="1" value="@Model.tovaris_false[i].Count" name="product-quantity" data-basket-code="20918014" data-product-id="1577992">
-                                    </div>
-                                </div>
-                                <div class="basket__col basket__col_quanity">
-                                    <div class="number-input">
-                                        <p style="line-height: 0;">@Model.tovaris_false[i].count_filial</p>
-                                    </div>
-                                </div>
-                                <div class="basket__col basket__col_price">
-                                    <div class="basket-price">
-                                        @((Model.tovaris_false[i].Count * Convert.ToDouble(Model.tovaris_false[i].Goods.Cost)).ToString())<span class="basket-price__currency">₽</span>
-                                    </div>
-                                </div>
-                            </div>
-                       </div>
-                    }
-                    </div>
+                    <div><p>Дата и время завершения сборки: @Model.OrderInformation.DateReadyToExtradition</p></div>
                 }
-                <form asp-action="PostOformlenie" method="post" asp-controller="Korzina">
+                @if(Model.OrderInformation.Status != 4 && Model.OrderInformation.DateExtradition != null)
+                {
+                    <div><p>Дата и время выдачи клиенту: @Model.OrderInformation.DateExtradition</p></div>
+                }
+                @if(Model.OrderInformation.Status == 4 && Model.OrderInformation.DateExtradition != null)
+                {
+                    <div><p>Дата и время отмены заказа: @Model.OrderInformation.DateExtradition</p></div>
+                }
+                @if (Model.OrderInformation.Status == 0)
+                {
+                    <p class="dostavka" style="max-width: 200px; align-items: center; text-align: center; background: #fff495; font-weight: bold; cursor: default;">Создан. Ожидает подтверждения</p>
+                }
+                else if (Model.OrderInformation.Status == 1)
+                {
+                    <p class="dostavka" style="max-width: 200px; align-items: center; text-align: center; background: #c4daff; font-weight: bold; cursor: default;">Подтверждён. Сборка</p>
+                }
+                else if (Model.OrderInformation.Status == 2)
+                {
+                    <p class="dostavka" style="max-width: 200px; align-items: center; text-align: center; background: #2780ff; font-weight: bold; cursor: default;">Ожидает выдачи</p>
+                }
+                else if (Model.OrderInformation.Status == 3)
+                {
+                    <p class="dostavka" style="max-width: 200px; align-items: center; text-align: center; background: #3ebb46; font-weight: bold; cursor: default;">Завершён. Выдан покупателю</p>
+                }
+                else if (Model.OrderInformation.Status == 4)
+                {
+                    <p class="dostavka" style="max-width: 260px; align-items: center; text-align: center; color: white; background: #555054; font-weight: bold; cursor: default; ">Завершён. Отменён</p>
+                }
+                else if (Model.OrderInformation.Status == 5)
+                {
+                    <p class="dostavka" style="max-width: 200px; align-items: center; text-align: center; background: #2780ff; font-weight: bold; cursor: default;">Полный возврат</p>
+                }
+                else if (Model.OrderInformation.Status == 6)
+                {
+                    <p class="dostavka" style="max-width: 200px; align-items: center; text-align: center; background: #2780ff; font-weight: bold; cursor: default;">Частичный возврат</p>
+                }
                     <div class="basket">
                             <div class="basket__row basket__row_header">
                                 <div class="basket__col basket__col_image-header"></div>
@@ -69,40 +60,32 @@
                                 <div class="basket__col basket__col_quanity-header">Количество</div>
                                 <div class="basket__col basket__col_price-header">Цена</div>
                             </div>
-                            @for (int i =0; i<Model.tovaris_true.Count();i++)
+                            @foreach (var a in Model.OrderInformation.OrderContainers)
                             {
-                                <div style="display:none;">
-                                    <input type="text" asp-for="@Model.tovaris_true[i].GoodsId">
-                                    <input type="text" asp-for="@Model.tovaris_true[i].Count">
-                                    <input type="text" asp-for="@Model.tovaris_true[i].Goods.Cost">
-                                </div>
                                 <div class="basket-item">
                                     <div class="basket__row">
                                         <div class="basket__col basket__col_image">
-                                            <img src="@Model.tovaris_true[i].Goods.FtppathImage" alt="product image">
+                                            <img src="@a.Goods.FtppathImage" alt="product image">
                                         </div>
                                         <div class="basket__col basket__col_name">
                                             <div class="basket-item__name">
-                                                <a asp-action="Tovar" asp-controller="Categori" asp-route-id="@Model.tovaris_true[i].GoodsId"><b>@Model.tovaris_true[i].Goods.Manufacture.NameManufacture</b> @Model.tovaris_true[i].Goods.Name</a>
+                                                <a asp-action="Tovar" asp-controller="Categori" asp-route-id="@a.Goods.IdGood"><b>@a.Goods.Manufacture.NameManufacture</b> @a.Goods.Name</a>
                                             </div>
                                         </div>
                                         <div class="basket__col basket__col_quanity">
                                             <div class="number-input">
-                                                <input readonly="readonly" type="number" class="input number-input__input" value="@Model.tovaris_true[i].Count" name="product-quantity" data-basket-code="20918014" data-product-id="1577992">
+                                                <input readonly="readonly" type="number" class="input number-input__input" value="@a.Count">
                                             </div>
                                         </div>
                                         <div class="basket__col basket__col_price">
                                             <div class="basket-price">
-                                                @((Model.tovaris_true[i].Count * Convert.ToDouble(Model.tovaris_true[i].Goods.Cost)).ToString())<span class="basket-price__currency">₽</span>
+                                                @((a.Count * Convert.ToDouble(a.Price)).ToString())<span class="basket-price__currency">₽</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             }
                             <div class="basket__col basket__col_footer">
-                                <div style="display:none;">
-                                    <input type="text" asp-for="@Model.summa">
-                                </div>
                                 <div style="text-align:left; margin-left:25px;" class="basket-summary">
                                     <div>Общая стоимость товаров: @Model.summa ₽</div>
                                 </div>
@@ -112,16 +95,13 @@
                                     <div class="checkout__step">2</div>
                                     Способ получения
                                 </div>
-                                <div style="display:none;">
-                                    <input type="text" asp-for="@Model.Filial.IdFilial">
-                                </div>
                                 <div id="deliveryContainer">
                                     <div class="profiles-form checkout__profile">
                                         <div class="profiles-form__section">
                                             <div class="profiles-form__title">Филиал</div>
                                                 <div class="profiles-form__block" style="width:100%;">
                                                     <div class="form-group profiles-form__input" style="display: flex; width:100%;">
-                                                        <label for="gr_@Model.Filial.IdFilial"><b>@Model.Filial.NameFilial</b> (<a href="https://yandex.ru/maps/213/moscow/search/@Model.Filial.AddressFilial" target="_blank">@Model.Filial.AddressFilial</a>)</label>
+                                                        <label for="gr_@Model.OrderInformation.Filial.IdFilial"><b>@Model.OrderInformation.Filial.NameFilial</b> (<a href="https://yandex.ru/maps/213/moscow/search/@Model.OrderInformation.Filial.AddressFilial" target="_blank">@Model.OrderInformation.Filial.AddressFilial</a>)</label>
                                                     </div>
                                                 </div>
                                         </div>
@@ -135,9 +115,6 @@
                                     Контактная информация
                                 </div>
                                 <div class="profiles-form checkout__profile">
-                                    <div style="display:none;">
-                                        <input type="text" asp-for="@Model.contacts.Contact_Name">
-                                    </div>
                                     <div class="profiles-form__section">
                                         <div class="profiles-form__block profiles-form__block_wide">
                                                 <div class="form-group profiles-form__input">
@@ -149,9 +126,6 @@
                                         </div>
 
                                         <div class="profiles-form__block">
-                                            <div style="display:none;">
-                                                <input type="text" asp-for="@Model.contacts.Contact_Email">
-                                            </div>
                                             <div class="form-group profiles-form__input">
                                                   <label class="form-group__label form-group__label_required">
                                                         E-mail
@@ -161,9 +135,6 @@
                                         </div>
 
                                         <div class="profiles-form__block">
-                                            <div style="display:none;">
-                                                <input type="text" asp-for="@Model.contacts.Contact_Telefon">
-                                            </div>
                                             <div class="form-group profiles-form__input">
                                                <label class="form-group__label form-group__label_required">
                                                     Телефон (моб)
@@ -174,18 +145,25 @@
                                     </div>
                                 </div>
                             </div>
-                            @if(Model.tovaris_true.Count()>0)
+                            @if(Model.OrderInformation.SborshikUser != null)
+                            {
+                                <div><p style="margin-left: 30px;">Сборщик: @Model.OrderInformation.SborshikUser.FirstName @Model.OrderInformation.SborshikUser.LastName</p></div>
+                            }
+                            @if(Model.OrderInformation.SellerUser != null)
+                            {
+                                <div><p style="margin-left: 30px;">Продавец (осуществил возврат): @Model.OrderInformation.SellerUser.FirstName @Model.OrderInformation.SellerUser.LastName</p></div>
+                            }
+                            @if(Model.OrderInformation.Status < 3)
                             {
                                 <div class="basket__row basket__row_footer">
                                     <div class="basket__col basket__col_footer">
                                         <div class="basket-submit">
-                                            <input style="background-color: #c62306; border-color: #c62306; color: #fff;" class="btn btn_primary basket-submit__btn" type="submit" value="Оформить заказ">
+                                            <a asp-action="CancelOrder" asp-controller="Home" asp-route-id="@Model.OrderInformation.OrderNumber" style="background-color: #c62306; border-color: #c62306; color: #fff;" class="btn btn_primary basket-submit__btn" >Отменить заказ</a>
                                         </div>
                                     </div>
                                 </div>
                             }
                         </div>
-                   </form>
             </main>
         </div>
         <div class="notmain-div-right">
@@ -217,7 +195,7 @@
                                 </a>
                             </li>
                             <li class="user-menu__item">
-                                <a href="/personal/profiles/" class="user-menu__link">
+                                <a asp-action="MyProfile" asp-controller="Home" class="user-menu__link">
                                     <svg class="icon user-menu__icon" width="21" height="12" viewBox="0 0 21 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M7.78332 11.2066H0.0566406C0.0566406 9.41804 1.08937 7.89337 2.54156 7.28843C2.22986 6.92842 2.0035 6.38102 1.88996 5.55498C1.74025 5.5895 1.50811 5.3947 1.4394 5.09799C1.36925 4.79634 1.32369 4.30893 1.47484 4.26208C1.51968 4.24811 1.56668 4.25797 1.61225 4.2851V3.44673C1.61225 2.12671 1.33888 1.35081 3.23728 1.12971L3.22065 1.12478C3.22065 1.12478 4.71695 0.961217 5.11109 0.558472C5.11109 0.558472 5.12194 0.89875 5.28105 1.27191C6.15684 1.65328 6.26677 2.53521 6.24146 3.44755V4.28674C6.28774 4.25962 6.33475 4.24976 6.37959 4.26373C6.53074 4.31058 6.45046 4.81606 6.38104 5.11936C6.31306 5.41278 6.11707 5.58786 5.96881 5.55662C5.85816 6.34321 5.61517 6.90787 5.27815 7.2835C6.74119 7.88104 7.78332 9.40818 7.78332 11.2066ZM20.6245 1.75356C20.6245 1.29962 20.2565 0.931628 19.8026 0.931628H10.7192C10.2652 0.931628 9.89724 1.29962 9.89724 1.75356V1.75356C9.89724 2.2075 10.2652 2.57549 10.7192 2.57549H19.8026C20.2565 2.57549 20.6245 2.2075 20.6245 1.75356V1.75356ZM20.6245 6.00046C20.6245 5.54652 20.2565 5.17853 19.8026 5.17853H10.7192C10.2652 5.17853 9.89724 5.54652 9.89724 6.00046V6.00046C9.89724 6.4544 10.2652 6.82239 10.7192 6.82239H19.8026C20.2565 6.82239 20.6245 6.4544 20.6245 6.00046V6.00046ZM20.6245 10.2482C20.6245 9.79425 20.2565 9.42626 19.8026 9.42626H10.7192C10.2652 9.42626 9.89724 9.79425 9.89724 10.2482V10.2482C9.89724 10.7021 10.2652 11.0701 10.7192 11.0701H19.8026C20.2565 11.0701 20.6245 10.7021 20.6245 10.2482V10.2482Z" fill="#C62306" />
                                     </svg> Профиль покупателя
@@ -235,7 +213,7 @@
                     </div>
                 </aside>
             </div>
-                                <div class="right-image">
+            <div class="right-image">
                         @if (Model.Right1Adds != null)
                         {
                             <div class="slide2">

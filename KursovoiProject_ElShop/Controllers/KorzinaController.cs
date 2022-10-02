@@ -193,6 +193,9 @@ namespace KursovoiProject_ElShop.Controllers
             order.OrderNumber = nomerZakaz;
             order.DateOrder = DateTime.Now;
             order.Status = 0;
+            order.ContactEmail = list.contacts.Contact_Email;
+            order.ContactName = list.contacts.Contact_Name;
+            order.ContactTelefon = list.contacts.Contact_Telefon;
             order.FilialId = list.Filial.IdFilial;
             order.DateReadyToExtradition = null;
             order.DateExtradition = null;

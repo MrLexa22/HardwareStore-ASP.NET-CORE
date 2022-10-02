@@ -10,5 +10,9 @@ namespace KursovoiProject_ElShop
         public int TypeWhere { get; set; }
         public string FtppathImage { get; set; } = null!;
         public string Href { get; set; } = null!;
+        public DateTime? DateEdn { get; set; }
+        public int? PublisherUserId { get; set; }
+
+        public virtual User? PublisherUser { get; set; }
     }
 }
