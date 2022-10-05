@@ -1,0 +1,24 @@
+﻿@using System.Diagnostics;
+@model ChangeInformation
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js" defer></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" defer></script>
+<script src="~/lib/jQuery-Mask-Plugin-master/dist/jquery.mask.js"></script>
+<div class="modal-content">
+    @Html.AntiForgeryToken()
+    <div class="modal-windows modal-body">
+        <div class="obratnii-zvonok">
+            <div class="form-auth fformms" style="padding: 30px; background-color: #fff; border-radius: 5px; box-shadow: 1px 1px 10px 0 rgb(0 0 0 / 12%); color: #696969; ">
+                <div class="zvonok-title">Вы уверены, что желаете отключить аккаунт?</div>
+                <div class="form-zap">
+                    <div class="btn-center">
+                        <a asp-action="CancelAccountPost" asp-controller="Home"><button class="sbm-zvonok" data-save="modal1" id="Regis">Да!</button></a>
+                    </div>
+                </div>
+                <div class="btn-center">
+                    <button class="sbm-zvonok otm" style="background-color: #c4c4c4; margin-top: 10px; color: White;" onclick='$(".modal-content").remove();'>Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

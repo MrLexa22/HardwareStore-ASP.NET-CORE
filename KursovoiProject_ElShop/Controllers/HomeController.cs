@@ -73,7 +73,7 @@ namespace KursovoiProject_ElShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AuthenticateUser(AuthenticationUser model)
         {
-            var user = _context.Users.Where(p => p.Login == model.Email && p.Password == HashPassword.hashPassword(model.Password));
+            var user = _context.Users.Where(p => p.Login == model.Email && p.Password == HashPassword.hashPassword(model.Password) && p.IsAvalible == 1);
             if (user.Count() > 0)
             {
                 await AuthenticationAsync(user.First().IdUser);
@@ -83,6 +83,78 @@ namespace KursovoiProject_ElShop.Controllers
             else
                 ModelState.AddModelError("", "");
             return PartialView("AuthenticateUser", model);
+        }
+
+        public async Task<IActionResult> ActivateAccount()
+        {
+            return PartialView("~/Views/Home/_ActivateAccount1.cshtml");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ActivateAccountPost(ActivateAccount1 model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("~/Views/Home/_ActivateAccount1.cshtml",model);
+            }
+            Random rnd = new Random();
+            int code = rnd.Next(10000, 99999);
+            var user = _context.Users.Where(p => p.Login == model.Email && p.IsAvalible == 0).ToList();
+            if(user.Count() <= 0)
+            {
+                ModelState.AddModelError("", "");
+            }
+            if (user.First().UsersRoles.Count() > 1)
+            {
+                ModelState.AddModelError("", "");
+            }
+            else
+            {
+                Response.Cookies.Append("Code", HashPassword.hashPassword(code.ToString()));
+                _ = EmailService.SendEmailActivation(code, model.Email);
+            }
+            return PartialView("~/Views/Home/_ActivateAccount2.cshtml");
+        }
+
+        public async Task<IActionResult> ActivateAccount2(string Email)
+        {
+            ActivateAccount1 model = new ActivateAccount1();
+            model.Email = Email;
+            return PartialView("~/Views/Home/_ActivateAccount2.cshtml",model);
+        }
+
+        public static string GetRandomPassword(int length)
+        {
+            const string chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            StringBuilder sb = new StringBuilder();
+            Random rnd = new Random();
+
+            for (int i = 0; i < length; i++)
+            {
+                int index = rnd.Next(chars.Length);
+                sb.Append(chars[index]);
+            }
+            return sb.ToString();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ActivateAccount2Post(ActivateAccount1 model)
+        {
+            if (HashPassword.hashPassword(model.Code) != Request.Cookies["Code"])
+            {
+                ModelState.AddModelError("", "");
+                return PartialView("~/Views/Home/_ActivateAccount2.cshtml", model);
+            }
+            var user = _context.Users.Where(p => p.Login == model.Email).First();
+            var pas = GetRandomPassword(8);
+            user.Password = HashPassword.hashPassword(pas);
+            user.IsAvalible = 1;
+            _context.Update(user);
+            _context.SaveChanges();
+            Response.Cookies.Delete("Code");
+            EmailService.SendEmailWithValuesForEnter(pas, model.Email);
+            return PartialView("~/Views/Home/_ActivateAccount2.cshtml", model);
         }
 
         [HttpGet]
@@ -97,14 +169,18 @@ namespace KursovoiProject_ElShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegistrateUser(RegistrateUsers model)
         {
-            if(!ModelState.IsValid)
+            if (!usersController.CheckPhone(0, model.Telefon))
             {
-                return PartialView();
+                ModelState.AddModelError("Telefon", "Данный номер телефона уже есть в базе");
+                return PartialView(model);
             }
-
-            if (!usersController.CheckPhone(0,model.Telefon) || !usersController.CheckEmail(0, model.Email))
+            if (!usersController.CheckEmail(0, model.Email))
             {
-                ModelState.AddModelError("", "");
+                ModelState.AddModelError("Email", "Email уже используется");
+                return PartialView(model);
+            }
+            if (!ModelState.IsValid)
+            {
                 return PartialView();
             }
 
@@ -236,6 +312,112 @@ namespace KursovoiProject_ElShop.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("OrderUser","Home",new {id = id});
+        }
+
+        public async Task<IActionResult> MyProfile()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+            User us = _context.Users.Where(p => p.Login == getEmail()).First();
+            var roles = _context.UsersRoles.Include(p => p.Role).Where(p => p.UserId == us.IdUser).ToList();
+            MyProfile model = new MyProfile();
+            model.Roles = roles;
+            model.Right1Adds = (List<AddsSite>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/AddsSites/GetAddsSiteType/2").Result.Content.ReadAsStringAsync().Result, typeof(List<AddsSite>));
+            model.Right2Adds = (List<AddsSite>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/AddsSites/GetAddsSiteType/3").Result.Content.ReadAsStringAsync().Result, typeof(List<AddsSite>));
+            model.user = us;
+            return View(model);
+        }
+
+        public async Task<IActionResult> ChangePassword()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+            return PartialView("~/Views/Home/_ChangePasswordModal.cshtml");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePasswordPost(ChangePassword model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("~/Views/Home/_ChangePasswordModal.cshtml",model);
+            }
+            var user = _context.Users.Where(p => p.Login == getEmail() && p.Password == HashPassword.hashPassword(model.Old_password));
+            if (user.Count() <= 0)
+            {
+                ModelState.AddModelError("", "");
+                return PartialView("~/Views/Home/_ChangePasswordModal.cshtml", model);
+            }
+            var userf = user.First();
+            userf.Password = HashPassword.hashPassword(model.New_password);
+            _context.Update(userf);
+            _context.SaveChanges();
+            return RedirectToAction("MyProfile", "Home");
+        }
+
+        public async Task<IActionResult> ChangeProfileInfo()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+            User us = _context.Users.Where(p => p.Login == getEmail()).First();
+            ChangeInformation model = new ChangeInformation();
+            model.Telefon = us.PhoneNumber;
+            model.Ima = us.LastName;
+            model.Familia = us.FirstName;
+            model.Email = us.Login;
+            model.Id = us.IdUser;
+            return PartialView("~/Views/Home/_ChangeInformationProfile.cshtml",model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeProfileInfoPost(ChangeInformation model)
+        {
+            User us = _context.Users.Where(p => p.Login == getEmail()).First();
+            if (!usersController.CheckPhone(model.Id, model.Telefon))
+            {
+                ModelState.AddModelError("Telefon", "Данный номер телефона уже есть в базе");
+                return PartialView("~/Views/Home/_ChangeInformationProfile.cshtml", model);
+            }
+            if (!usersController.CheckEmail(model.Id, model.Email))
+            {
+                ModelState.AddModelError("Email", "Email уже используется");
+                return PartialView("~/Views/Home/_ChangeInformationProfile.cshtml", model);
+            }
+            if (!ModelState.IsValid)
+            {
+                return PartialView("~/Views/Home/_ChangeInformationProfile.cshtml", model);
+            }
+            us.PhoneNumber = model.Telefon;
+            us.FirstName = model.Familia;
+            us.LastName = model.Ima;
+            us.Login = model.Email;
+            _context.Update(us);
+            _context.SaveChanges();
+            return RedirectToAction("MyProfile", "Home");
+        }
+
+        public async Task<IActionResult> CancelAccount()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+            return PartialView("~/Views/Home/_CancelAccount.cshtml");
+        }
+
+        public async Task<IActionResult> CancelAccountPost()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+            User us = _context.Users.Include(p=>p.UsersRoles).Where(p => p.Login == getEmail()).First();
+            if(us.UsersRoles.Count() == 1)
+            {
+                us.IsAvalible = 0;
+                _context.Update(us);
+                _context.SaveChanges();
+                await HttpContext.SignOutAsync("Application");
+            }
+            return RedirectToAction("Index", "Home"); ;
         }
     }
 }

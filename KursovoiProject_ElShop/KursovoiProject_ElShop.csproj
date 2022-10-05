@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\TemplatesMessage\NewValuesForEnter.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="wwwroot\lib\jQuery-Plugin-To-Restrict-Input-To-Numeric-Values-Mask-As-Number\.docs\number_input_on_chrome.png" />
     <Content Include="wwwroot\lib\jQuery-Plugin-To-Restrict-Input-To-Numeric-Values-Mask-As-Number\.docs\number_input_on_firefox.png" />
   </ItemGroup>
@@ -14,6 +18,7 @@
   <ItemGroup>
     <None Include="wwwroot\js\site.js" />
     <None Include="wwwroot\lib\jQuery-Plugin-To-Restrict-Input-To-Numeric-Values-Mask-As-Number\.docs\.gitkeep" />
+    <None Include="wwwroot\TemplatesMessage\NewValuesForEnter.html" />
     <None Include="wwwroot\TemplatesMessage\TemplateRegistration.html" />
   </ItemGroup>
 
