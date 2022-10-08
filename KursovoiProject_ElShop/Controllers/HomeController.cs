@@ -57,6 +57,8 @@ namespace KursovoiProject_ElShop.Controllers
             var rolesUser = _context.UsersRoles.Where(p=>p.UserId == id).ToList();
             if (rolesUser.Where(p=>p.RoleId==22).Count() >0)
                 claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Покупатель"));
+            if (rolesUser.Where(p => p.RoleId == 1).Count() > 0)
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Рекламщик"));
 
             await HttpContext.SignInAsync("Application", new ClaimsPrincipal(claimsIdentity));
         }
@@ -88,6 +90,58 @@ namespace KursovoiProject_ElShop.Controllers
         public async Task<IActionResult> ActivateAccount()
         {
             return PartialView("~/Views/Home/_ActivateAccount1.cshtml");
+        }
+
+        public async Task<IActionResult> RecoveryPassword()
+        {
+            return PartialView("~/Views/Home/_RecoveryPassword1.cshtml");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RecoveryPasswordPost(ActivateAccount1 model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("~/Views/Home/_RecoveryPassword1.cshtml", model);
+            }
+            Random rnd = new Random();
+            int code = rnd.Next(10000, 99999);
+            var user = _context.Users.Where(p => p.Login == model.Email && p.IsAvalible == 1).ToList();
+            if (user.Count() <= 0)
+            {
+                ModelState.AddModelError("", "");
+            }
+
+            Response.Cookies.Append("Code", HashPassword.hashPassword(code.ToString()));
+            _ = EmailService.SendEmailRecovertPassword(code, model.Email);
+
+            return PartialView("~/Views/Home/_RecoveryPassword1.cshtml");
+        }
+
+        public async Task<IActionResult> RecovryPassword2(string Email)
+        {
+            ActivateAccount1 model = new ActivateAccount1();
+            model.Email = Email;
+            return PartialView("~/Views/Home/_RecoveryPassword2.cshtml", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RecoveryPassword2Post(ActivateAccount1 model)
+        {
+            if (HashPassword.hashPassword(model.Code) != Request.Cookies["Code"])
+            {
+                ModelState.AddModelError("", "");
+                return PartialView("~/Views/Home/_RecoveryPassword2.cshtml", model);
+            }
+            var user = _context.Users.Where(p => p.Login == model.Email).First();
+            var pas = GetRandomPassword(8);
+            user.Password = HashPassword.hashPassword(pas);
+            _context.Update(user);
+            _context.SaveChanges();
+            Response.Cookies.Delete("Code");
+            EmailService.SendEmailWithValuesForEnter(pas, model.Email);
+            return PartialView("~/Views/Home/_RecoveryPassword2.cshtml", model);
         }
 
         [HttpPost]

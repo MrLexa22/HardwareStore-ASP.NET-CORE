@@ -1,0 +1,60 @@
+﻿<link rel="stylesheet" href="~/css/styletovarilist.css">
+@{
+    ViewData["Title"] = "Рекламные блоки сайта";
+}
+<main class="content-main">
+            <div class="filter" style="padding-left: 25px; padding-right: 25px;">
+                <div>
+                    <div class="filter__title">Наименование рекламы:</div>
+                    <div class="filter-range-preview">
+				        <input style="margin: 0; text-align: left;" class="filter-range-preview__input" id="searchf">
+			        </div>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <div>
+                        <div class="filter__title">Сортировать по:</div>
+                        <div class="filter-range-preview">
+                            <select id="typesort" name="typesort" style="width: 100%;">
+                              <option value="0">По умолчанию (сначала активные)</option>
+                              <option value="1">По окончанию срока (сначала завер.)</option>
+                              <option value="2">По наименованию</option>
+                            </select>
+			            </div>
+                    </div>
+                    <div>
+                        <div class="filter__title">Тип:</div>
+                        <div class="filter-range-preview">
+                            <select id="type" name="type" style="width: 100%;">
+                              <option value="0">Любой</option>
+                              <option value="1">Главный блок</option>
+                              <option value="2">Правый верхний</option>
+                              <option value="3">Правый нижний</option>
+                            </select>
+			            </div>
+                    </div>
+                    <div>
+                        <div class="filter__title">Статус:</div>
+                        <div class="filter-range-preview">
+                            <select id="status" name="type" style="width: 100%;">
+                               <option value="0">Любой</option>
+                              <option value="1">Активно</option>
+                              <option value="2">Не активно</option>
+                            </select>
+			            </div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <button id="btn_filters" style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Применить</button>
+                    <button style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Добавить блок рекламы</button>
+                </div>
+        </div>
+        <div style="padding: 25px;" id="panel"></div>
+    <script type="text/javascript">
+        var urls = '@Url.Action("GetAllAdds", "AddsSites")';
+        $('#panel').load(urls);
+        $("#btn_filters").click(function(){
+            var urls = '@Url.Action("GetAllAdds", "AddsSites")?search=' + $("#searchf").val() +'&typesort='+$("#typesort").val()+'&type='+$("#type").val()+'&status='+$("#status").val();
+            $('#panel').load(urls);
+        });
+    </script>
+</main>

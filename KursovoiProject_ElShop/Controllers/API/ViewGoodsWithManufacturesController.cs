@@ -132,8 +132,8 @@ namespace KursovoiProject_ElShop.Controllers.API
             else
                 viewGoodsWithManufacture.FtppathImage = BaseAddresse.Server + "TovariImages/" + viewGoodsWithManufacture.FtppathImage;
 
-            List <AddsSite> Right1Adds = (List<AddsSite>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/AddsSites/GetAddsSiteType/2").Result.Content.ReadAsStringAsync().Result, typeof(List<AddsSite>));
-            List <AddsSite> Right2Adds = (List<AddsSite>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/AddsSites/GetAddsSiteType/3").Result.Content.ReadAsStringAsync().Result, typeof(List<AddsSite>));
+            List<AddsSite> Right1Adds = (List<AddsSite>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/AddsSites/GetAddsSiteType/2").Result.Content.ReadAsStringAsync().Result, typeof(List<AddsSite>));
+            List<AddsSite> Right2Adds = (List<AddsSite>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/AddsSites/GetAddsSiteType/3").Result.Content.ReadAsStringAsync().Result, typeof(List<AddsSite>));
             if (idUser != 0)
             {
                 var conn = _context.Database.GetDbConnection();
@@ -154,94 +154,5 @@ namespace KursovoiProject_ElShop.Controllers.API
 
             return b;
         }
-
-        /*        // GET: api/ViewGoodsWithManufactures/5
-                [HttpGet("{id}")]
-                public async Task<ActionResult<ViewGoodsWithManufacture>> GetViewGoodsWithManufacture(int id)
-                {
-                  if (_context.ViewGoodsWithManufactures == null)
-                  {
-                      return NotFound();
-                  }
-                    var viewGoodsWithManufacture = await _context.ViewGoodsWithManufactures.FindAsync(id);
-
-                    if (viewGoodsWithManufacture == null)
-                    {
-                        return NotFound();
-                    }
-
-                    return viewGoodsWithManufacture;
-                }
-
-                // PUT: api/ViewGoodsWithManufactures/5
-                // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-                [HttpPut("{id}")]
-                public async Task<IActionResult> PutViewGoodsWithManufacture(int id, ViewGoodsWithManufacture viewGoodsWithManufacture)
-                {
-                    if (id != viewGoodsWithManufacture.IdGood)
-                    {
-                        return BadRequest();
-                    }
-
-                    _context.Entry(viewGoodsWithManufacture).State = EntityState.Modified;
-
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!ViewGoodsWithManufactureExists(id))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-
-                    return NoContent();
-                }
-
-                // POST: api/ViewGoodsWithManufactures
-                // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-                [HttpPost]
-                public async Task<ActionResult<ViewGoodsWithManufacture>> PostViewGoodsWithManufacture(ViewGoodsWithManufacture viewGoodsWithManufacture)
-                {
-                  if (_context.ViewGoodsWithManufactures == null)
-                  {
-                      return Problem("Entity set 'ElShopContext.ViewGoodsWithManufactures'  is null.");
-                  }
-                    _context.ViewGoodsWithManufactures.Add(viewGoodsWithManufacture);
-                    await _context.SaveChangesAsync();
-
-                    return CreatedAtAction("GetViewGoodsWithManufacture", new { id = viewGoodsWithManufacture.IdGood }, viewGoodsWithManufacture);
-                }
-
-                // DELETE: api/ViewGoodsWithManufactures/5
-                [HttpDelete("{id}")]
-                public async Task<IActionResult> DeleteViewGoodsWithManufacture(int id)
-                {
-                    if (_context.ViewGoodsWithManufactures == null)
-                    {
-                        return NotFound();
-                    }
-                    var viewGoodsWithManufacture = await _context.ViewGoodsWithManufactures.FindAsync(id);
-                    if (viewGoodsWithManufacture == null)
-                    {
-                        return NotFound();
-                    }
-
-                    _context.ViewGoodsWithManufactures.Remove(viewGoodsWithManufacture);
-                    await _context.SaveChangesAsync();
-
-                    return NoContent();
-                }
-
-                private bool ViewGoodsWithManufactureExists(int id)
-                {
-                    return (_context.ViewGoodsWithManufactures?.Any(e => e.IdGood == id)).GetValueOrDefault();
-                }*/
     }
 }

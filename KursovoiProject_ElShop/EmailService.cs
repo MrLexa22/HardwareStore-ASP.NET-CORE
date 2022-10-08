@@ -102,5 +102,36 @@ namespace KursovoiProject_ElShop
             }
             catch { }
         }
+
+        public static async Task SendEmailRecovertPassword(int Code, string email)
+        {
+            try
+            {
+                var emailMessage = new MimeMessage();
+                emailMessage.From.Add(new MailboxAddress("Администрация сайта", "no-reply@mrlexao.ru"));
+                emailMessage.To.Add(new MailboxAddress("", email));
+                emailMessage.Subject = "Код для восстановления пароля";
+
+                string FilePath = BaseAddresse.Address + "TemplatesMessage/recovetPassword.html";
+                WebClient clientss = new WebClient();
+                string htmlCode = clientss.DownloadString(FilePath);
+
+                htmlCode = htmlCode.Replace("{0}", Code.ToString());
+                emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+                {
+                    Text = htmlCode
+                };
+
+                using (var client = new SmtpClient())
+                {
+                    await client.ConnectAsync("smtp.mail.ru", 465, true);
+                    await client.AuthenticateAsync("no-reply@mrlexao.ru", "XMMndD9m3MNmPthYHSwU");
+                    await client.SendAsync(emailMessage);
+
+                    await client.DisconnectAsync(true);
+                }
+            }
+            catch { }
+        }
     }
 }

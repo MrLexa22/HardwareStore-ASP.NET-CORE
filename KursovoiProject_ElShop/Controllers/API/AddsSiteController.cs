@@ -12,11 +12,11 @@ namespace KursovoiProject_ElShop.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AddsSitesController : ControllerBase
+    public class AddsSites : ControllerBase
     {
         private readonly ElShopContext _context;
 
-        public AddsSitesController(ElShopContext context)
+        public AddsSites(ElShopContext context)
         {
             _context = context;
         }
@@ -30,6 +30,22 @@ namespace KursovoiProject_ElShop.Controllers.API
               return NotFound();
           }
             return await _context.AddsSites.ToListAsync();
+        }
+
+        [HttpGet("All")]
+        public async Task<ActionResult<IEnumerable<AddsSite>>> GetAllAddsSites()
+        {
+            var addsSite = await _context.AddsSites.ToListAsync();
+            foreach (var a in addsSite)
+            {
+                if (a.TypeWhere == 1)
+                    a.FtppathImage = BaseAddresse.Server + "AddsImages/MainPage/" + a.FtppathImage;
+                if (a.TypeWhere == 2)
+                    a.FtppathImage = BaseAddresse.Server + "AddsImages/Right1/" + a.FtppathImage;
+                if (a.TypeWhere == 3)
+                    a.FtppathImage = BaseAddresse.Server + "AddsImages/Right2/" + a.FtppathImage;
+            }
+            return addsSite;
         }
 
         // GET: api/AddsSites/5
