@@ -49,7 +49,7 @@ namespace KursovoiProject_ElShop.Controllers
             if(search != null)
             {
                 if(search.Trim() != "")
-                    Blocks = Blocks.Where(p=>p.Name.Contains(search.Trim()));
+                    Blocks = Blocks.Where(p=>p.Name.ToLower().Contains(search.Trim().ToLower()));
             }
             if (typesort == 1)
                 Blocks = Blocks.OrderByDescending(p => p.DateEdn);
@@ -68,6 +68,15 @@ namespace KursovoiProject_ElShop.Controllers
             model.PageViewModel = new PageViewModel(count, page, pageSize);
             model.FilterViewModel = new FilterViewModel_AddsSites(search, typesort, type, status);
             return PartialView("~/Views/AddsSites/_ListAdds.cshtml", model);
+        }
+
+        public async Task<IActionResult> AddEditAdds(int id)
+        {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
+            AddEditAdds model = new AddEditAdds();
+            model.categories = (List<Category>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Categories").Result.Content.ReadAsStringAsync().Result, typeof(List<Category>));
+            return PartialView("~/Views/AddsSites/_AddEditAdds.cshtml", model);
         }
     }
 }

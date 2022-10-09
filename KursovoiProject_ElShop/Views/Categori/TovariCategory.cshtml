@@ -85,12 +85,26 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        var urls = '@Url.Action("GetSpisokTovari", "Categori", new {IDCategory=Model.IDCategory})';
-        $('#panel').load(urls);
-        $("#btn_filters").click(function(){
-            var urls = '@Url.Action("GetSpisokTovari", "Categori")?IDCategory=' + @Model.IDCategory+'&min='+$("#min_price").val()+'&max='+$("#max_price").val()+'&typesort='+$("#typesort").val()+'&manufacte='+$("#maufacture").val();
+    @if (Model.Manufacture_id == null)
+    {
+        <script type="text/javascript">
+            var urls = '@Url.Action("GetSpisokTovari", "Categori", new {IDCategory=Model.IDCategory})';
             $('#panel').load(urls);
-        });
-    </script>
+            $("#btn_filters").click(function(){
+                var urls = '@Url.Action("GetSpisokTovari", "Categori")?IDCategory=' + @Model.IDCategory+'&min='+$("#min_price").val()+'&max='+$("#max_price").val()+'&typesort='+$("#typesort").val()+'&manufacte='+$("#maufacture").val();
+                $('#panel').load(urls);
+            });
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+            var urls = '@Url.Action("GetSpisokTovari", "Categori")?IDCategory=@Model.IDCategory&manufacte=@Model.Manufacture_id';
+            $('#panel').load(urls);
+            $("#btn_filters").click(function(){
+                var urls = '@Url.Action("GetSpisokTovari", "Categori")?IDCategory=' + @Model.IDCategory+'&min='+$("#min_price").val()+'&max='+$("#max_price").val()+'&typesort='+$("#typesort").val()+'&manufacte='+$("#maufacture").val();
+                $('#panel').load(urls);
+            });
+        </script>
+    }
 </main>

@@ -80,5 +80,6 @@ namespace KursovoiProject_ElShop.Models
         public PageViewModel PageViewModel { get; set; }
         public FilterViewModel_Tovari FilterViewModel { get; set; }
         public string search { get; set; }
+        public int? Manufacture_id { get; set; }
     }
 }

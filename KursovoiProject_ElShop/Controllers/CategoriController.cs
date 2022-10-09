@@ -142,7 +142,7 @@ namespace KursovoiProject_ElShop.Controllers
             return PartialView("~/Views/Categori/_TovariListSearch.cshtml", model);
         }
 
-        public async Task<IActionResult> TovariCategory(int IDCategory)
+        public async Task<IActionResult> TovariCategory(int IDCategory, int? manufacte)
         {
             Category categ = (Category)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Categories/{IDCategory}").Result.Content.ReadAsStringAsync().Result, typeof(Category));
             TovariCategoryModel model = new TovariCategoryModel();
@@ -150,6 +150,7 @@ namespace KursovoiProject_ElShop.Controllers
             model.Right2Adds = (List<AddsSite>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/AddsSites/GetAddsSiteType/3").Result.Content.ReadAsStringAsync().Result, typeof(List<AddsSite>));
             model.NameCategory = categ.NameCategori;
             model.IDCategory = categ.IdCategori;
+            model.Manufacture_id = manufacte;
             model.FilterViewModel = new FilterViewModel_Tovari((List<ManufacturesList>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Manufactures/GetMaufacturesByIdCateg/{IDCategory}").Result.Content.ReadAsStringAsync().Result, typeof(List<ManufacturesList>)), null, IDCategory, null, null, null);
             return View(model);
         }

@@ -2,8 +2,14 @@
 @{
     ViewData["Title"] = "Рекламные блоки сайта";
 }
-<main class="content-main">
-            <div class="filter" style="padding-left: 25px; padding-right: 25px;">
+<main class="content-main" style="max-width: 1190px; margin: 0 auto;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    max-width: 1190px;
+    padding: 0 13px;">
+        <div>
+            <div class="filter" style="padding-left: 25px; padding-right: 25px; margin-top: 25px;">
                 <div>
                     <div class="filter__title">Наименование рекламы:</div>
                     <div class="filter-range-preview">
@@ -23,7 +29,7 @@
                     </div>
                     <div>
                         <div class="filter__title">Тип:</div>
-                        <div class="filter-range-preview">
+                         <div class="filter-range-preview">
                             <select id="type" name="type" style="width: 100%;">
                               <option value="0">Любой</option>
                               <option value="1">Главный блок</option>
@@ -45,16 +51,25 @@
                 </div>
                 <div style="display: flex; justify-content: space-between;">
                     <button id="btn_filters" style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Применить</button>
-                    <button style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Добавить блок рекламы</button>
+                    <a id="addAdds" asp-action="AddEditAdds" asp-controller="AddsSites" asp-route-id="0"><button style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Добавить блок рекламы</button></a>
                 </div>
         </div>
-        <div style="padding: 25px;" id="panel"></div>
+        <div style="padding-top: 25px;" id="panel"></div>
+    </div>
     <script type="text/javascript">
         var urls = '@Url.Action("GetAllAdds", "AddsSites")';
         $('#panel').load(urls);
         $("#btn_filters").click(function(){
             var urls = '@Url.Action("GetAllAdds", "AddsSites")?search=' + $("#searchf").val() +'&typesort='+$("#typesort").val()+'&type='+$("#type").val()+'&status='+$("#status").val();
             $('#panel').load(urls);
+        });
+        $("#addAdds").click(function (e) {
+            $.ajaxSetup({ cache: false });
+            e.preventDefault();
+            $.get(this.href, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
         });
     </script>
 </main>

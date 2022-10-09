@@ -1,0 +1,131 @@
+﻿@model AddEditAdds;
+<div class="modal-content">
+    <link rel="stylesheet" type="text/css" href="~/css/style_list.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/styleInputFile.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="~/lib/jQuery-Mask-Plugin-master/dist/jquery.mask.js"></script>
+    <script src="~/js/control_image.js" defer></script>
+    <div class="modal-windows">
+        <div class="obratnii-zvonok">
+            <div class="form-edit fformms" style="padding: 30px; background-color: #fff; border-radius: 5px; box-shadow: 1px 1px 10px 0 rgb(0 0 0 / 12%); color: #696969; ">
+                <div class="zvonok-title">Добавление рекламного блока</div>
+                <form asp-action="CreateTovar" asp-controller="ManageTovari" method="post" class="callback-from" enctype="multipart/form-data">
+                    <div>
+                        <div class="form-zap">
+                            <label asp-for="@Model.Name" class="required"></label>
+                            <input type="text" asp-for="@Model.Name" class="inputs imz-in" />
+                            <span asp-validation-for="@Model.Name" style="color: red;"></span>
+                        </div>
+                        <div class="form-zap">
+                           <label asp-for="@Model.TypeWhere" class="required"></label>
+                           <div class="filter-range-preview">
+                                <select asp-for="@Model.TypeWhere" style="width: 100%;">
+                                    <option value="1">Главный блок</option>
+                                    <option value="2">Правый верхний</option>
+                                    <option value="3">Правый нижний</option>
+                                </select>
+			                </div>
+                        </div>
+                        <div class="form-zap">
+                            <label asp-for="@Model.href" class="required"></label>
+                            <input type="text" asp-for="@Model.href" id="hreff" class="inputs imz-in" />
+                            <span asp-validation-for="@Model.href" style="color: red;"></span>
+                            <div><p style="color: #C62306; cursor: pointer; width: fit-content;" id="generate_href_byCateg">Сгенерировать внутреннюю ссылку по категории</p></div>
+                            <div id="div_byCateg" style="display:none;">
+                                <label class="required">Выберите категорию</label>
+                                <select id="selectByCateg" style="width: 100%;" asp-items="@(new SelectList(Model.categories, nameof(Category.IdCategori), nameof(Category.NameCategori)))"></select>
+                            </div>
+                            <div><p style="color: #C62306; cursor: pointer; width: fit-content;" id="generate_href_byCategAndMan">Сгенерировать внутреннюю ссылку по категории и производителю</p></div>
+                            <div><p style="color: #C62306; cursor: pointer; width: fit-content;" id="generate_href_byTovar">Сгенерировать внутреннюю ссылку на товар</p></div>
+                        </div>
+                        <div class="form-zap">
+                            <label asp-for="@Model.dateEnd" class="required"></label>
+                            <input type="date" asp-for="@Model.dateEnd" id="datetimpr" class="inputs imz-in" />
+                            <span asp-validation-for="@Model.dateEnd" style="color: red;"></span>
+                            <div style="margin-top: 5px;">
+                                <input type="checkbox" id="checkend" asp-for="@Model.IsEnd"/>
+                                <label for="checkend">Без срока действия</label>
+                            </div>
+                        </div>
+                        <label asp-for="@Model.FTPImage" class="required"></label>
+                        <div class="form-zap">
+                            <div class="profile-picture-upload">
+                                <img src="" alt="Profile picture preview" class="imagePreview">
+                                <a class="action-button mode-upload" style="margin-top: 15px; color: White;">Загрузить</a>
+                                <input accept="image/png, image/jpg, image/jpeg" type="file" id="olo" class="hidden" name="uploadedFile" />
+                            </div>
+                        </div>
+                        <span asp-validation-for="@Model.FTPImage" style="color: red;"></span>
+                        <input type="text" asp-for="@Model.FTPImage" id="checker" value="" class="inputs imz-in" style="width: 0; height: 0; opacity: 0;" />
+                        <div class="form-zap">
+                            <div class="btn-center">
+                                <input class="sbm-zvonok" type="submit" value="Создать" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="btn-center">
+                    <button class="sbm-zvonok otm" style="background-color: #c4c4c4; margin-top: 15px; color: White;" onclick='$(".modal-content").remove();'>Отмена</button>
+                </div>
+            </div>
+        </div>
+        <script>
+        function padTo2Digits(num) {
+            return num.toString().padStart(2, '0');
+        }
+        function formatDate(date) {
+          return (
+            [
+              date.getFullYear(),
+              padTo2Digits(date.getMonth() + 1),
+              padTo2Digits(date.getDate()),
+            ].join('-') +
+            ' ' +
+            [
+              padTo2Digits(date.getHours()),
+              padTo2Digits(date.getMinutes()),
+            ].join(':')
+          );
+        }
+        date = new Date();
+        date.setDate(date.getDate() + 1);
+        input = document.getElementById("datetimpr");
+        [dates, time] = formatDate(date).split(' ');
+        input.setAttribute("min", dates);
+        input.value=dates;
+        document.getElementById('checkend').addEventListener('change', (event) => {
+          if (event.currentTarget.checked) {
+            document.getElementById('datetimpr').style.display = 'none';
+          } else {
+            document.getElementById('datetimpr').style.display = 'block';
+          }
+        });
+
+        function disableDiv(){
+            document.getElementById('div_byCateg').style.display = "none";
+        };
+
+        document.getElementById('selectByCateg').addEventListener('change', (event) => {
+            document.getElementById('hreff').value = "";
+            document.getElementById('hreff').value = "/Categori/TovariCategory?IDCategory="+document.getElementById('selectByCateg').value;
+        });
+
+        document.getElementById('generate_href_byCateg').addEventListener('click', (event) => {
+            if(document.getElementById('div_byCateg').style.display == "none"){
+                disableDiv();
+                document.getElementById('hreff').value = "/Categori/TovariCategory?IDCategory="+document.getElementById('selectByCateg').value;
+                document.getElementById('div_byCateg').style.display = "block";
+            } else if(document.getElementById('div_byCateg').style.display == "block"){
+                document.getElementById('div_byCateg').style.display = "none";
+            };
+        });
+
+        document.getElementById('generate_href_byTovar').addEventListener('click', (event) => {
+            disableDiv();
+            document.getElementById('hreff').value = "/Categori/Tovar/КОД_ТОВАРА";
+        });
+    </script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" defer></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" defer></script>
+    </div>
+</div>
