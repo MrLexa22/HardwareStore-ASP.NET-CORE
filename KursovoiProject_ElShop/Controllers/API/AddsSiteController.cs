@@ -118,13 +118,11 @@ namespace KursovoiProject_ElShop.Controllers.API
         [HttpPost]
         public async Task<ActionResult<AddsSite>> PostAddsSite(AddsSite addsSite)
         {
-          if (_context.AddsSites == null)
-          {
-              return Problem("Entity set 'ElShopContext.AddsSites'  is null.");
-          }
             _context.AddsSites.Add(addsSite);
             await _context.SaveChangesAsync();
-
+            addsSite.FtppathImage = addsSite.IdAdds.ToString() + addsSite.FtppathImage;
+            _context.Update(addsSite);
+            await _context.SaveChangesAsync();
             return CreatedAtAction("GetAddsSite", new { id = addsSite.IdAdds }, addsSite);
         }
 

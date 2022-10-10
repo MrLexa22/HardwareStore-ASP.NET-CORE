@@ -158,6 +158,10 @@ namespace KursovoiProject_ElShop.Controllers
         public async Task<IActionResult> SearchResult(string search)
         {
             TovariCategoryModel model = new TovariCategoryModel();
+            if (search == null)
+                return RedirectToAction("Index", "Home");
+            if(search.Trim() == "")
+                return RedirectToAction("Index", "Home");
             model.search = search;
             model.Right1Adds = (List<AddsSite>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/AddsSites/GetAddsSiteType/2").Result.Content.ReadAsStringAsync().Result, typeof(List<AddsSite>));
             model.Right2Adds = (List<AddsSite>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/AddsSites/GetAddsSiteType/3").Result.Content.ReadAsStringAsync().Result, typeof(List<AddsSite>));

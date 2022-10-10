@@ -12,6 +12,7 @@ namespace KursovoiProject_ElShop.Models
     public class AddEditAdds
     {
         public List<Category> categories { get; set; }
+        public List<Manufacture> manufactures { get; set; }
         public int ID { get; set; }
 
         [Display(Name = "Наименование")]
@@ -32,7 +33,7 @@ namespace KursovoiProject_ElShop.Models
 
         [Display(Name = "Срок действия")]
         [DataType(DataType.Date)]
-        public DateTime dateEnd { get; set; }
+        public DateTime? dateEnd { get; set; }
         public bool IsEnd { get; set; }
     }
 }

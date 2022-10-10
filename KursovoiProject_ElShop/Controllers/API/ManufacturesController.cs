@@ -40,6 +40,12 @@ namespace KursovoiProject_ElShop.Controllers.API
             return list;
         }
 
+        [HttpGet("GetManufacturesAll")]
+        public async Task<ActionResult<IEnumerable<Manufacture>>> GetManufacturesAll()
+        {
+            return await _context.Manufactures.ToListAsync();
+        }
+
         [HttpGet("GetMaufacturesByName/{name}")]
         public List<ManufacturesList> GetMaufacturesByIdCateg(string name)
         {

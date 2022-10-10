@@ -3,6 +3,9 @@ using KursovoiProject_ElShop.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Diagnostics;
+using System.Net.Http.Headers;
+using System.Security.Claims;
 
 namespace KursovoiProject_ElShop.Controllers
 {
@@ -14,6 +17,21 @@ namespace KursovoiProject_ElShop.Controllers
         {
             _context = context;
             client.BaseAddress = new Uri(BaseAddresse.Address);
+        }
+
+        public string getEmail()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = identity.Claims;
+            int i = 0;
+            string email = "";
+            foreach (var a in claims)
+            {
+                if (i == 1)
+                    email = a.Value;
+                i++;
+            }
+            return email;
         }
 
         public bool CheckAuthentication()
@@ -75,8 +93,39 @@ namespace KursovoiProject_ElShop.Controllers
             if (!CheckAuthentication())
                 return RedirectToAction("Index", "Home");
             AddEditAdds model = new AddEditAdds();
+            if (id != null && id > 0)
+                model.ID = id;
+            else
+                model.ID = 0;
             model.categories = (List<Category>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Categories").Result.Content.ReadAsStringAsync().Result, typeof(List<Category>));
+            model.manufactures = (List<Manufacture>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Manufactures/GetManufacturesAll").Result.Content.ReadAsStringAsync().Result, typeof(List<Manufacture>));
             return PartialView("~/Views/AddsSites/_AddEditAdds.cshtml", model);
+        }
+
+        public async Task<IActionResult> AddEditPost(int id, AddEditAdds model, IFormFile uploadedFile)
+        {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
+            if (model.IsEnd == true)
+                model.dateEnd = null;
+            if(id == 0)
+            {
+                AddsSite addsSite = new AddsSite();
+                addsSite.DateEdn = model.dateEnd;
+                addsSite.Href = model.href;
+                addsSite.Name = model.Name;
+                User us = (User)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Users/email/{getEmail()}").Result.Content.ReadAsStringAsync().Result, typeof(User));
+                addsSite.PublisherUserId = us.IdUser;
+                addsSite.FtppathImage = Path.GetExtension(uploadedFile.FileName);
+                addsSite.TypeWhere = model.TypeWhere;
+                var myContent = JsonConvert.SerializeObject(addsSite);
+                var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                var result = (AddsSite)JsonConvert.DeserializeObject(client.PostAsync("api/AddsSites", byteContent).Result.Content.ReadAsStringAsync().Result, typeof(AddsSite));
+                SendFileToServer.SendFileAdds(uploadedFile, result.IdAdds.ToString(), Path.GetExtension(uploadedFile.FileName), model.TypeWhere);
+            }
+            return RedirectToAction("Index", "AddsSites");
         }
     }
 }

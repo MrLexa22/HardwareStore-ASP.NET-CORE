@@ -9,7 +9,7 @@
         <div class="obratnii-zvonok">
             <div class="form-edit fformms" style="padding: 30px; background-color: #fff; border-radius: 5px; box-shadow: 1px 1px 10px 0 rgb(0 0 0 / 12%); color: #696969; ">
                 <div class="zvonok-title">Добавление рекламного блока</div>
-                <form asp-action="CreateTovar" asp-controller="ManageTovari" method="post" class="callback-from" enctype="multipart/form-data">
+                <form asp-action="AddEditPost" asp-controller="AddsSites" asp-route-id="@Model.ID" method="post" class="callback-from" enctype="multipart/form-data">
                     <div>
                         <div class="form-zap">
                             <label asp-for="@Model.Name" class="required"></label>
@@ -36,6 +36,12 @@
                                 <select id="selectByCateg" style="width: 100%;" asp-items="@(new SelectList(Model.categories, nameof(Category.IdCategori), nameof(Category.NameCategori)))"></select>
                             </div>
                             <div><p style="color: #C62306; cursor: pointer; width: fit-content;" id="generate_href_byCategAndMan">Сгенерировать внутреннюю ссылку по категории и производителю</p></div>
+                            <div id="div_byCategAndManufact" style="display:none;">
+                                <label class="required">Выберите категорию</label>
+                                <select id="selectByCategAndManufact_1" style="width: 100%;" asp-items="@(new SelectList(Model.categories, nameof(Category.IdCategori), nameof(Category.NameCategori)))"></select>
+                                <label class="required">Выберите производителя</label>
+                                <select id="selectByCategAndManufact_2" style="width: 100%;" asp-items="@(new SelectList(Model.manufactures, nameof(Manufacture.IdManufacture), nameof(Manufacture.NameManufacture)))"></select>
+                            </div>
                             <div><p style="color: #C62306; cursor: pointer; width: fit-content;" id="generate_href_byTovar">Сгенерировать внутреннюю ссылку на товар</p></div>
                         </div>
                         <div class="form-zap">
@@ -69,7 +75,7 @@
                 </div>
             </div>
         </div>
-        <script>
+    <script>
         function padTo2Digits(num) {
             return num.toString().padStart(2, '0');
         }
@@ -103,11 +109,31 @@
 
         function disableDiv(){
             document.getElementById('div_byCateg').style.display = "none";
+            document.getElementById('div_byCategAndManufact').style.display = "none";
         };
 
         document.getElementById('selectByCateg').addEventListener('change', (event) => {
             document.getElementById('hreff').value = "";
             document.getElementById('hreff').value = "/Categori/TovariCategory?IDCategory="+document.getElementById('selectByCateg').value;
+        });
+
+        document.getElementById('selectByCategAndManufact_1').addEventListener('change', (event) => {
+            document.getElementById('hreff').value = "";
+            document.getElementById('hreff').value = "/Categori/TovariCategory?IDCategory="+document.getElementById('selectByCategAndManufact_1').value+"&manufacte="+document.getElementById('selectByCategAndManufact_2').value;
+        });
+        document.getElementById('selectByCategAndManufact_2').addEventListener('change', (event) => {
+            document.getElementById('hreff').value = "";
+            document.getElementById('hreff').value = "/Categori/TovariCategory?IDCategory="+document.getElementById('selectByCategAndManufact_1').value+"&manufacte="+document.getElementById('selectByCategAndManufact_2').value;
+        });
+
+        document.getElementById('generate_href_byCategAndMan').addEventListener('click', (event) => {
+            if(document.getElementById('div_byCategAndManufact').style.display == "none"){
+                disableDiv();
+                document.getElementById('hreff').value = "/Categori/TovariCategory?IDCategory="+document.getElementById('selectByCategAndManufact_1').value+"&manufacte="+document.getElementById('selectByCategAndManufact_2').value;
+                document.getElementById('div_byCategAndManufact').style.display = "block";
+            } else if(document.getElementById('div_byCategAndManufact').style.display == "block"){
+                document.getElementById('div_byCategAndManufact').style.display = "none";
+            };
         });
 
         document.getElementById('generate_href_byCateg').addEventListener('click', (event) => {
