@@ -26,5 +26,23 @@ namespace KursovoiProject_ElShop
             }
             return 0;
         }
+
+        public static int DeleteOldFile(string nameFile, int typeAdds)
+        {
+            var connectionInfo = new ConnectionInfo(host, "root", new PasswordAuthenticationMethod(username, password));
+            using (var sftp = new SftpClient(connectionInfo))
+            {
+                sftp.Connect();
+                if (typeAdds == 1)
+                    sftp.ChangeDirectory("/var/www/89-108-64-223.cloudvps.regruhosting.ru/AddsImages/MainPage");
+                if (typeAdds == 2)
+                    sftp.ChangeDirectory("/var/www/89-108-64-223.cloudvps.regruhosting.ru/AddsImages/Right1");
+                if (typeAdds == 3)
+                    sftp.ChangeDirectory("/var/www/89-108-64-223.cloudvps.regruhosting.ru/AddsImages/Right2");
+                sftp.DeleteFile(nameFile);
+                sftp.Disconnect();
+            }
+            return 0;
+        }
     }
 }

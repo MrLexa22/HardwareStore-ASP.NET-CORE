@@ -71,5 +71,19 @@
                 $('#modDialog').show();
             });
         });
+        function deleteConfirm(theObject){
+            $.ajaxSetup({ cache: false });
+            $.get('/AddsSites/ConfirmDelete/'+theObject, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        }
+        function editAdds(theObject){
+            $.ajaxSetup({ cache: false });
+            $.get('/AddsSites/AddEditAdds/'+theObject, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        }
     </script>
 </main>

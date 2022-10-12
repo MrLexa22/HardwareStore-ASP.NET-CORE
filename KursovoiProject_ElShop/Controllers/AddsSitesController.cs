@@ -97,35 +97,80 @@ namespace KursovoiProject_ElShop.Controllers
                 model.ID = id;
             else
                 model.ID = 0;
+            if(id > 0)
+            {
+                AddsSite addsSite = (AddsSite)JsonConvert.DeserializeObject(client.GetAsync(@$"api/AddsSites/{id}").Result.Content.ReadAsStringAsync().Result, typeof(AddsSite));
+                model.ID = id;
+                model.Name = addsSite.Name;
+                model.FTPImage = addsSite.FtppathImage;
+                model.dateEnd = addsSite.DateEdn;
+                model.href = addsSite.Href;
+                model.TypeWhere = addsSite.TypeWhere;
+            }
             model.categories = (List<Category>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Categories").Result.Content.ReadAsStringAsync().Result, typeof(List<Category>));
             model.manufactures = (List<Manufacture>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Manufactures/GetManufacturesAll").Result.Content.ReadAsStringAsync().Result, typeof(List<Manufacture>));
             return PartialView("~/Views/AddsSites/_AddEditAdds.cshtml", model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddEditPost(int id, AddEditAdds model, IFormFile uploadedFile)
         {
             if (!CheckAuthentication())
                 return RedirectToAction("Index", "Home");
             if (model.IsEnd == true)
                 model.dateEnd = null;
-            if(id == 0)
+            if(uploadedFile == null && id == 0)
+                return RedirectToAction("Index", "Home");
+            AddsSite addsSite = new AddsSite();
+            addsSite.DateEdn = model.dateEnd;
+            addsSite.Href = model.href;
+            addsSite.Name = model.Name;
+            addsSite.TypeWhere = model.TypeWhere;
+            AddsSite addsSiteOld = new AddsSite();
+            if (id > 0)
             {
-                AddsSite addsSite = new AddsSite();
-                addsSite.DateEdn = model.dateEnd;
-                addsSite.Href = model.href;
-                addsSite.Name = model.Name;
+                addsSiteOld = (AddsSite)JsonConvert.DeserializeObject(client.GetAsync(@$"api/AddsSites/{id}").Result.Content.ReadAsStringAsync().Result, typeof(AddsSite));
+                addsSite.IdAdds = id;
+                addsSite.PublisherUserId = addsSiteOld.PublisherUserId;
+                if (uploadedFile != null)
+                {
+                    addsSite.FtppathImage = addsSiteOld.IdAdds.ToString()+Path.GetExtension(uploadedFile.FileName);
+                    SendFileToServer.DeleteOldFile(addsSiteOld.IdAdds.ToString()+Path.GetExtension(addsSiteOld.FtppathImage), addsSiteOld.TypeWhere);
+                    SendFileToServer.SendFileAdds(uploadedFile, addsSiteOld.IdAdds.ToString(), Path.GetExtension(uploadedFile.FileName), model.TypeWhere);
+                }
+                else
+                    addsSite.FtppathImage = addsSiteOld.IdAdds.ToString()+Path.GetExtension(addsSiteOld.FtppathImage);
+            }
+            else
+            {
                 User us = (User)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Users/email/{getEmail()}").Result.Content.ReadAsStringAsync().Result, typeof(User));
                 addsSite.PublisherUserId = us.IdUser;
                 addsSite.FtppathImage = Path.GetExtension(uploadedFile.FileName);
-                addsSite.TypeWhere = model.TypeWhere;
-                var myContent = JsonConvert.SerializeObject(addsSite);
-                var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
-                var byteContent = new ByteArrayContent(buffer);
-                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            }
+            var myContent = JsonConvert.SerializeObject(addsSite);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            if (id == 0)
+            {
                 var result = (AddsSite)JsonConvert.DeserializeObject(client.PostAsync("api/AddsSites", byteContent).Result.Content.ReadAsStringAsync().Result, typeof(AddsSite));
                 SendFileToServer.SendFileAdds(uploadedFile, result.IdAdds.ToString(), Path.GetExtension(uploadedFile.FileName), model.TypeWhere);
             }
+            if(id > 0)
+                await client.PostAsync("api/AddsSites/Edit", byteContent);
             return RedirectToAction("Index", "AddsSites");
+        }
+
+        public async Task<IActionResult> ConfirmDelete(int id)
+        {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
+            AddEditAdds model = new AddEditAdds();
+            model.ID = id;
+            var a = (AddsSite)JsonConvert.DeserializeObject(client.GetAsync(@$"api/AddsSites/{id}").Result.Content.ReadAsStringAsync().Result, typeof(AddsSite));
+            model.Name = a.Name;
+            return PartialView("~/Views/AddsSites/_ConfirmDelete.cshtml", model);
         }
     }
 }

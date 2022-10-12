@@ -52,16 +52,13 @@ namespace KursovoiProject_ElShop.Controllers.API
         [HttpGet("{id}")]
         public async Task<ActionResult<AddsSite>> GetAddsSite(int id)
         {
-          if (_context.AddsSites == null)
-          {
-              return NotFound();
-          }
             var addsSite = await _context.AddsSites.FindAsync(id);
-
-            if (addsSite == null)
-            {
-                return NotFound();
-            }
+                if (addsSite.TypeWhere == 1)
+                    addsSite.FtppathImage = BaseAddresse.Server + "AddsImages/MainPage/" + addsSite.FtppathImage;
+                if (addsSite.TypeWhere == 2)
+                    addsSite.FtppathImage = BaseAddresse.Server + "AddsImages/Right1/" + addsSite.FtppathImage;
+                if (addsSite.TypeWhere == 3)
+                    addsSite.FtppathImage = BaseAddresse.Server + "AddsImages/Right2/" + addsSite.FtppathImage;
 
             return addsSite;
         }
@@ -82,39 +79,14 @@ namespace KursovoiProject_ElShop.Controllers.API
             return addsSite;
         }
 
-        // PUT: api/AddsSites/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAddsSite(int id, AddsSite addsSite)
+        [HttpPost("Edit")]
+        public async Task<ActionResult<AddsSite>> PostEditAddsSite(AddsSite addsSite)
         {
-            if (id != addsSite.IdAdds)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(addsSite).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AddsSiteExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            _context.AddsSites.Update(addsSite);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction("GetAddsSite", new { id = addsSite.IdAdds }, addsSite);
         }
 
-        // POST: api/AddsSites
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<AddsSite>> PostAddsSite(AddsSite addsSite)
         {
@@ -126,7 +98,6 @@ namespace KursovoiProject_ElShop.Controllers.API
             return CreatedAtAction("GetAddsSite", new { id = addsSite.IdAdds }, addsSite);
         }
 
-        // DELETE: api/AddsSites/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAddsSite(int id)
         {
@@ -139,7 +110,7 @@ namespace KursovoiProject_ElShop.Controllers.API
             {
                 return NotFound();
             }
-
+            SendFileToServer.DeleteOldFile(addsSite.FtppathImage, addsSite.TypeWhere);
             _context.AddsSites.Remove(addsSite);
             await _context.SaveChangesAsync();
 

@@ -48,27 +48,25 @@ function setActionButtonMode(mode) {
 }
 
 function refreshImagePreview() {
-    if (picturePreview.src !== DEFAULT_IMAGE_SRC) {
-        picturePreview.src = DEFAULT_IMAGE_SRC;
-    } else {
-        if (fileInput.files && fileInput.files.length > 0) {
-            var fileName = fileInput.value,
-                idxDot = fileName.lastIndexOf(".") + 1,
-                extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
-            if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
-                fileReader.readAsDataURL(fileInput.files[0]);
-                fileReader.onload = (e) => {
-                    picturePreview.src = e.target.result;
-                    setActionButtonMode("remove");
-                }
+    if (fileInput.files && fileInput.files.length > 0) {
+        var fileName = fileInput.value,
+            idxDot = fileName.lastIndexOf(".") + 1,
+            extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+        console.log("hsjfd  " + fileName);
+        if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+            fileReader.readAsDataURL(fileInput.files[0]);
+            fileReader.onload = (e) => {
+                picturePreview.src = e.target.result;
+                setActionButtonMode("remove");
             }
-            else {
-                alert("Только jpg/jpeg и png файлы можно использовать!");
-                fileInput.value = "";
-                document.getElementById('checker').value = '';
-            }
+        }
+        else {
+            alert("Только jpg/jpeg и png файлы можно использовать!");
+            fileInput.value = "";
+            document.getElementById('checker').value = '';
         }
     }
 }
-
+document.getElementById('checker').value = 'true';
+setActionButtonMode("remove");
 refreshImagePreview();

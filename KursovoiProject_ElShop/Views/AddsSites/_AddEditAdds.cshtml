@@ -4,11 +4,10 @@
     <link rel="stylesheet" type="text/css" href="~/css/styleInputFile.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="~/lib/jQuery-Mask-Plugin-master/dist/jquery.mask.js"></script>
-    <script src="~/js/control_image.js" defer></script>
     <div class="modal-windows">
         <div class="obratnii-zvonok">
             <div class="form-edit fformms" style="padding: 30px; background-color: #fff; border-radius: 5px; box-shadow: 1px 1px 10px 0 rgb(0 0 0 / 12%); color: #696969; ">
-                <div class="zvonok-title">Добавление рекламного блока</div>
+                <div class="zvonok-title">@if (Model.ID == 0) { <text>Добавление</text>} else{<text>Изменение</text>} рекламного блока</div>
                 <form asp-action="AddEditPost" asp-controller="AddsSites" asp-route-id="@Model.ID" method="post" class="callback-from" enctype="multipart/form-data">
                     <div>
                         <div class="form-zap">
@@ -45,27 +44,69 @@
                             <div><p style="color: #C62306; cursor: pointer; width: fit-content;" id="generate_href_byTovar">Сгенерировать внутреннюю ссылку на товар</p></div>
                         </div>
                         <div class="form-zap">
-                            <label asp-for="@Model.dateEnd" class="required"></label>
-                            <input type="date" asp-for="@Model.dateEnd" id="datetimpr" class="inputs imz-in" />
-                            <span asp-validation-for="@Model.dateEnd" style="color: red;"></span>
-                            <div style="margin-top: 5px;">
-                                <input type="checkbox" id="checkend" asp-for="@Model.IsEnd"/>
-                                <label for="checkend">Без срока действия</label>
-                            </div>
+                            @if (Model.ID == 0)
+                            {
+                                <label asp-for="@Model.dateEnd" class="required"></label>
+                                <input type="date" asp-for="@Model.dateEnd" id="datetimpr" class="inputs imz-in" />
+                                <span asp-validation-for="@Model.dateEnd" style="color: red;"></span>
+                                <div style="margin-top: 5px;">
+                                    <input type="checkbox" id="checkend" asp-for="@Model.IsEnd"/>
+                                    <label for="checkend">Без срока действия</label>
+                                </div>
+                            }
+                            else
+                            {
+                                @if(Model.dateEnd == null)
+                                {
+                                    <label asp-for="@Model.dateEnd" class="required"></label>
+                                    <input type="date" asp-for="@Model.dateEnd" id="datetimpr" style="display:none;" class="inputs imz-in" />
+                                    <span asp-validation-for="@Model.dateEnd" style="color: red;"></span>
+                                    <div style="margin-top: 5px;">
+                                        <input type="checkbox" id="checkend" checked asp-for="@Model.IsEnd"/>
+                                        <label for="checkend">Без срока действия</label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <label asp-for="@Model.dateEnd" class="required"></label>
+                                    <input type="date" asp-for="@Model.dateEnd" id="datetimpr" class="inputs imz-in" />
+                                    <span asp-validation-for="@Model.dateEnd" style="color: red;"></span>
+                                    <div style="margin-top: 5px;">
+                                        <input type="checkbox" id="checkend" asp-for="@Model.IsEnd"/>
+                                        <label for="checkend">Без срока действия</label>
+                                    </div>
+                                }
+                            }
                         </div>
-                        <label asp-for="@Model.FTPImage" class="required"></label>
-                        <div class="form-zap">
-                            <div class="profile-picture-upload">
-                                <img src="" alt="Profile picture preview" class="imagePreview">
-                                <a class="action-button mode-upload" style="margin-top: 15px; color: White;">Загрузить</a>
-                                <input accept="image/png, image/jpg, image/jpeg" type="file" id="olo" class="hidden" name="uploadedFile" />
+                        @if (Model.ID == 0)
+                        {
+                            <label asp-for="@Model.FTPImage" class="required"></label>
+                            <div class="form-zap">
+                                <div class="profile-picture-upload">
+                                    <img src="" alt="Profile picture preview" class="imagePreview">
+                                    <a class="action-button mode-upload" style="margin-top: 15px; color: White;">Загрузить</a>
+                                    <input accept="image/png, image/jpg, image/jpeg" type="file" id="olo" class="hidden" name="uploadedFile" />
+                                </div>
                             </div>
-                        </div>
-                        <span asp-validation-for="@Model.FTPImage" style="color: red;"></span>
-                        <input type="text" asp-for="@Model.FTPImage" id="checker" value="" class="inputs imz-in" style="width: 0; height: 0; opacity: 0;" />
+                            <span asp-validation-for="@Model.FTPImage" style="color: red;"></span>
+                            <input type="text" asp-for="@Model.FTPImage" id="checker" value="" class="inputs imz-in" style="width: 0; height: 0; opacity: 0;" />
+                        }
+                        else
+                        {
+                            <label asp-for="@Model.FTPImage" class="required"></label>
+                            <div class="form-zap">
+                                <div class="profile-picture-upload">
+                                    <img src="@Model.FTPImage" alt="Profile picture preview" class="imagePreview">
+                                    <a class="action-button mode-upload" style="margin-top: 15px; color: White;">Загрузить</a>
+                                    <input accept="image/png, image/jpg, image/jpeg" type="file" id="olo" autocomplete="off" class="hidden" name="uploadedFile" />
+                                </div>
+                            </div>
+                            <span asp-validation-for="@Model.FTPImage" style="color: red;"></span>
+                            <input type="text" asp-for="@Model.FTPImage" id="checker" value="" class="inputs imz-in" style="width: 0; height: 0; opacity: 0;" />
+                        }
                         <div class="form-zap">
                             <div class="btn-center">
-                                <input class="sbm-zvonok" type="submit" value="Создать" />
+                                <input class="sbm-zvonok" type="submit" value="@if (Model.ID == 0) { <text>Добавить</text>} else{<text>Изменить</text>}" />
                             </div>
                         </div>
                     </div>
@@ -98,7 +139,14 @@
         input = document.getElementById("datetimpr");
         [dates, time] = formatDate(date).split(' ');
         input.setAttribute("min", dates);
-        input.value=dates;
+        @if(Model.ID > 0 && Model.dateEnd == null)
+        {
+            <text>input.value=dates;</text>
+        }
+        @if(Model.ID == 0)
+        {
+            <text>input.value=dates;</text>
+        }
         document.getElementById('checkend').addEventListener('change', (event) => {
           if (event.currentTarget.checked) {
             document.getElementById('datetimpr').style.display = 'none';
@@ -106,17 +154,14 @@
             document.getElementById('datetimpr').style.display = 'block';
           }
         });
-
         function disableDiv(){
             document.getElementById('div_byCateg').style.display = "none";
             document.getElementById('div_byCategAndManufact').style.display = "none";
         };
-
         document.getElementById('selectByCateg').addEventListener('change', (event) => {
             document.getElementById('hreff').value = "";
             document.getElementById('hreff').value = "/Categori/TovariCategory?IDCategory="+document.getElementById('selectByCateg').value;
         });
-
         document.getElementById('selectByCategAndManufact_1').addEventListener('change', (event) => {
             document.getElementById('hreff').value = "";
             document.getElementById('hreff').value = "/Categori/TovariCategory?IDCategory="+document.getElementById('selectByCategAndManufact_1').value+"&manufacte="+document.getElementById('selectByCategAndManufact_2').value;
@@ -125,7 +170,6 @@
             document.getElementById('hreff').value = "";
             document.getElementById('hreff').value = "/Categori/TovariCategory?IDCategory="+document.getElementById('selectByCategAndManufact_1').value+"&manufacte="+document.getElementById('selectByCategAndManufact_2').value;
         });
-
         document.getElementById('generate_href_byCategAndMan').addEventListener('click', (event) => {
             if(document.getElementById('div_byCategAndManufact').style.display == "none"){
                 disableDiv();
@@ -135,7 +179,6 @@
                 document.getElementById('div_byCategAndManufact').style.display = "none";
             };
         });
-
         document.getElementById('generate_href_byCateg').addEventListener('click', (event) => {
             if(document.getElementById('div_byCateg').style.display == "none"){
                 disableDiv();
@@ -145,7 +188,6 @@
                 document.getElementById('div_byCateg').style.display = "none";
             };
         });
-
         document.getElementById('generate_href_byTovar').addEventListener('click', (event) => {
             disableDiv();
             document.getElementById('hreff').value = "/Categori/Tovar/КОД_ТОВАРА";
@@ -153,5 +195,13 @@
     </script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" defer></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" defer></script>
+    @if(Model.ID == 0)
+    {
+        <script src="~/js/control_image.js" defer></script>
+    }
+    @if(Model.ID > 0)
+    {
+        <script src="~/js/control_imageEdit.js" defer></script>
+    }
     </div>
 </div>
