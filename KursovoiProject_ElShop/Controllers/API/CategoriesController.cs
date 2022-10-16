@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using KursovoiProject_ElShop;
+using KursovoiProject_ElShop.Models;
 
 namespace KursovoiProject_ElShop.Controllers.API
 {
@@ -31,6 +32,37 @@ namespace KursovoiProject_ElShop.Controllers.API
             return await _context.Categories.ToListAsync();
         }
 
+        [HttpGet("GetAllCategs")]
+        public async Task<ActionResult<IEnumerable<CategoriesSite>>> GetAllCategories()
+        {
+            var list = await _context.Categories.ToListAsync();
+            var main = await _context.MainCategories.ToListAsync();
+            List<CategoriesSite> listCategs = new List<CategoriesSite>();
+            foreach(var a in list)
+            {
+                CategoriesSite h = new CategoriesSite();
+                h.CategoryName = a.NameCategori;
+                h.CategoryId = a.IdCategori;
+                if (main.Where(p => p.CategoriId == a.IdCategori).Count() > 0)
+                    h.IsMain = true;
+                else
+                    h.IsMain = false;
+                listCategs.Add(h);
+            }
+            return listCategs;
+        }
+
+        [HttpGet("GetCategory/{id}")]
+        public async Task<ActionResult<CategoriesSite>> GetCategorySecond(int id)
+        {
+            var category = await _context.Categories.FindAsync(id);
+            CategoriesSite categ = new CategoriesSite();
+            categ.CategoryId = id;
+            categ.CategoryName = category.NameCategori;
+            categ.IsMain = _context.MainCategories.Where(p => p.CategoriId == id).Count() > 0 ? true : false;
+            return categ;
+        }
+
         // GET: api/Categories/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Category>> GetCategory(int id)
@@ -49,33 +81,49 @@ namespace KursovoiProject_ElShop.Controllers.API
             return category;
         }
 
+        [HttpGet("GetByName/{name}/{id}")]
+        public async Task<ActionResult<IEnumerable<Category>>> GetCategoryByName(string name, int id)
+        {
+            List<Category> category = new List<Category>();
+            if(id == 0)
+                category = _context.Categories.Where(p=>p.NameCategori == name).ToList();
+            else
+                category = _context.Categories.Where(p => p.NameCategori == name && p.IdCategori != id).ToList();
+            return category;
+        }
+
+        [HttpGet("MainCategories")]
+        public async Task<ActionResult<IEnumerable<MainCategory>>> GetMainCategories()
+        {
+            return await _context.MainCategories.ToListAsync();
+        }
+
         // PUT: api/Categories/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory(int id, Category category)
+        [HttpPost("UpdateCategory")]
+        public async Task<IActionResult> UpdateCategory(CategoriesSite categ)
         {
-            if (id != category.IdCategori)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(category).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CategoryExists(id))
+                Category category = new Category();
+                category.NameCategori = categ.CategoryName;
+                category.IdCategori = categ.CategoryId;
+
+                if (_context.MainCategories.Where(p => p.CategoriId == categ.CategoryId).Count() == 0 && categ.IsMain == true)
                 {
-                    return NotFound();
+                    MainCategory h = new MainCategory();
+                    h.CategoriId = category.IdCategori;
+                    _context.Add(h);
                 }
-                else
+                if (_context.MainCategories.Where(p => p.CategoriId == categ.CategoryId).Count() > 0 && categ.IsMain == false)
                 {
-                    throw;
+                    var f = _context.MainCategories.Where(p => p.CategoriId == categ.CategoryId).First();
+                    _context.Remove(f);
                 }
+                _context.Update(category);
+                _context.SaveChanges();
             }
+            catch { }
 
             return NoContent();
         }
@@ -95,22 +143,38 @@ namespace KursovoiProject_ElShop.Controllers.API
             return CreatedAtAction("GetCategory", new { id = category.IdCategori }, category);
         }
 
+        [HttpPost("Create")]
+        public async Task<ActionResult<Category>> CreateCategory(CategoriesSite categ)
+        {
+            Category category = new Category();
+            category.NameCategori = categ.CategoryName;
+            category.IdCategori = categ.CategoryId;
+
+            _context.Add(category);
+            _context.SaveChanges();
+
+            if (categ.IsMain == true)
+            {
+                MainCategory h = new MainCategory();
+                h.CategoriId = category.IdCategori;
+                _context.Add(h);
+                _context.SaveChanges();
+            }
+
+            return NoContent();
+        }
+
         // DELETE: api/Categories/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            if (_context.Categories == null)
+            try
             {
-                return NotFound();
+                var category = await _context.Categories.FindAsync(id);
+                _context.Remove(category);
+                _context.SaveChanges();
             }
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
+            catch { }
 
             return NoContent();
         }

@@ -50,5 +50,11 @@ namespace KursovoiProject_ElShop.Controllers.API
         {
             return await _context.Filials.Where(p=>p.Availeble==true).ToListAsync();
         }
+
+        [HttpGet("GetAllFilials")]
+        public async Task<ActionResult<IEnumerable<Filial>>> GetAllFilials()
+        {
+            return await _context.Filials.ToListAsync();
+        }
     }
 }

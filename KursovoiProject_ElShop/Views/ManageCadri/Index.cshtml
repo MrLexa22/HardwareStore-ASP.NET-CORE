@@ -1,0 +1,106 @@
+﻿@model IndexPageCadri;
+<link rel="stylesheet" href="~/css/styletovarilist.css">
+@{
+    ViewData["Title"] = "Сотрудники";
+}
+<main class="content-main" style="max-width: 1190px; margin: 0 auto;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    max-width: 1190px;
+    padding: 0 13px;">
+        <div>
+            <div class="filter" style="padding-left: 25px; padding-right: 25px; margin-top: 25px;">
+                <div style="display:flex;">
+                    <button id="rabotSotr" style="margin-top: 10px; margin-right: 15px;" class="disabledbtn btn btn_outline btn_primary filter__submit">Работающие сотрудники</button>
+                    <button id="uvolsSotr" style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Уволенные сотрудники</button>
+                </div>
+                <div>
+                    <div class="filter__title">Фамилия имя сотрудника:</div>
+                    <div class="filter-range-preview">
+				        <input style="margin: 0; text-align: left;" class="filter-range-preview__input" id="searchf">
+			        </div>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <div>
+                        <div class="filter__title">Сортировать по:</div>
+                        <div class="filter-range-preview">
+                            <select id="typesort" name="typesort" style="width: 100%;">
+                              <option value="0">По умолчанию</option>
+                              <option value="1">По фамилии имени</option>
+                              <option value="2">По дате рождения</option>
+                            </select>
+			            </div>
+                    </div>
+                    <div>
+                        <div class="filter__title">Должность:</div>
+                         <div class="filter-range-preview">
+                            <select id="dolzhnost" name="dolzhnost" style="width: 100%;">
+                              <option value="0">Любая</option>
+                              <option value="9">Сотрудники отдела кадров</option>
+                              <option value="15">Сотрудники склада магазина</option>
+                              <option value="19">Сотрудники отдела продаж</option>
+                            </select>
+			            </div>
+                    </div>
+                    <div>
+                        <div class="filter__title">Филиал работы:</div>
+                        <div class="filter-range-preview">
+                            <select id="filial" asp-items="@(new SelectList(Model.filials, nameof(Filial.IdFilial), nameof(Filial.NameFilial)))" name="filial" style="width: 100%;">
+                                <option value="0">Любой</option>
+                                <option value="-1">Не указан</option>
+                            </select>
+			            </div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <button id="btn_filters" style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Применить</button>
+                    <a id="addAdds" asp-action="AddEditAdds" asp-controller="AddsSites" asp-route-id="0"><button style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Добавить сотрудника</button></a>
+                </div>
+        </div>
+        <div style="padding-top: 25px;" id="panel"></div>
+    </div>
+    <script type="text/javascript">
+        let urls = '@Url.Action("GetAllCadri", "ManageCadri")?uvol=0';
+        $('#panel').load(urls);
+
+        $("#btn_filters").click(function(){
+            console.log(urls+'&search=' + $("#searchf").val() +'&typesort='+$("#typesort").val()+'&dolzhnost='+$("#dolzhnost").val()+'&filial='+$("#filial").val());
+            $('#panel').load(urls+'&search=' + $("#searchf").val() +'&typesort='+$("#typesort").val()+'&dolzhnost='+$("#dolzhnost").val()+'&filial='+$("#filial").val());
+        });
+        $("#addAdds").click(function (e) {
+            $.ajaxSetup({ cache: false });
+            e.preventDefault();
+            $.get(this.href, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        });
+        function deleteConfirm(theObject){
+            $.ajaxSetup({ cache: false });
+            $.get('/AddsSites/ConfirmDelete/'+theObject, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        }
+        function editAdds(theObject){
+            $.ajaxSetup({ cache: false });
+            $.get('/AddsSites/AddEditAdds/'+theObject, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        }
+        $("#rabotSotr").click(function (e) {
+            urls = '@Url.Action("GetAllCadri", "ManageCadri")?uvol=0';
+            $('#panel').load(urls);
+            $('#rabotSotr').addClass("disabledbtn");
+            $('#uvolsSotr').removeClass("disabledbtn");
+        });
+        $("#uvolsSotr").click(function (e) {
+            urls = '@Url.Action("GetAllCadri", "ManageCadri")?uvol=1';
+            $('#panel').load(urls);
+            $('#uvolsSotr').addClass("disabledbtn");
+            $('#rabotSotr').removeClass("disabledbtn");
+        });
+    </script>
+</main>

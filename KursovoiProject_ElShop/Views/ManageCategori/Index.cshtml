@@ -1,0 +1,77 @@
+﻿<link rel="stylesheet" href="~/css/styletovarilist.css">
+@{
+    ViewData["Title"] = "Категории сайта";
+}
+<main class="content-main" style="max-width: 1190px; margin: 0 auto;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    max-width: 1190px;
+    padding: 0 13px;">
+        <div>
+            <div class="filter" style="padding-left: 25px; padding-right: 25px; margin-top: 25px;">
+                <div>
+                    <div class="filter__title">Наименование категории:</div>
+                    <div class="filter-range-preview">
+				        <input style="margin: 0; text-align: left;" class="filter-range-preview__input" id="searchf">
+			        </div>
+                </div>
+                <div style="display: flex;">
+                    <div style="margin-right: 15px;">
+                        <div class="filter__title">Сортировать по:</div>
+                        <div class="filter-range-preview">
+                            <select id="typesort" name="typesort" style="width: 100%;">
+                              <option value="0">По умолчанию</option>
+                              <option value="1">По наименованию</option>
+                            </select>
+			            </div>
+                    </div>
+                    <div>
+                        <div class="filter__title">Виды:</div>
+                         <div class="filter-range-preview">
+                            <select id="type" name="type" style="width: 100%;">
+                              <option value="0">Все</option>
+                              <option value="1">Только главные сверху</option>
+                              <option value="2">Только обычные</option>
+                            </select>
+			            </div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <button id="btn_filters" style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Применить</button>
+                    <a id="addAdds" asp-action="AddEditCategory" asp-controller="ManageCategori" asp-route-id="0"><button style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Добавить категорию</button></a>
+                </div>
+        </div>
+        <div style="padding-top: 25px;" id="panel"></div>
+    </div>
+    <script type="text/javascript">
+        var urls = '@Url.Action("GetAllCategory", "ManageCategori")';
+        $('#panel').load(urls);
+        $("#btn_filters").click(function(){
+            var urls = '@Url.Action("GetAllCategory", "ManageCategori")?search=' + $("#searchf").val() +'&typesort='+$("#typesort").val()+'&type='+$("#type").val();
+            $('#panel').load(urls);
+        });
+        $("#addAdds").click(function (e) {
+            $.ajaxSetup({ cache: false });
+            e.preventDefault();
+            $.get(this.href, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        });
+        function deleteConfirm(theObject){
+            $.ajaxSetup({ cache: false });
+            $.get('/ManageCategori/ConfirmDelete/'+theObject, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        }
+        function editAdds(theObject){
+            $.ajaxSetup({ cache: false });
+            $.get('/ManageCategori/AddEditCategory/'+theObject, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        }
+    </script>
+</main>

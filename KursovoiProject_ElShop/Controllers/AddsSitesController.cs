@@ -38,9 +38,10 @@ namespace KursovoiProject_ElShop.Controllers
         {
             if (!User.Identity.IsAuthenticated)
                 return false;
-            if (!User.IsInRole("Рекламщик"))
+            if (User.IsInRole("Рекламщик") || User.IsInRole("Администратор"))
+                return true;
+            else
                 return false;
-            return true;
         }
         public ActionResult Index()
         {

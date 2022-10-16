@@ -131,9 +131,17 @@
                             <div class="user-lk2">
                                 <a class="ssilka-lk" asp-action="MyProfile" asp-controller="Home">Личный кабинет</a>
                                 <a class="ssilka-lk" asp-action="MyOrders" asp-controller="Home">Мои заказы</a>
-                                @if (User.IsInRole("Рекламщик"))
+                                @if (User.IsInRole("Рекламщик") || User.IsInRole("Администратор"))
                                 {
                                     <a class="ssilka-lk" asp-controller="AddsSites" asp-action="Index">Рекламные блоки сайта</a>
+                                }
+                                @if (User.IsInRole("Сотрудник отдела кадров") || User.IsInRole("Администратор"))
+                                {
+                                    <a class="ssilka-lk" asp-controller="ManageCadri" asp-action="Index">Кадры</a>
+                                }
+                                @if (User.IsInRole("Сотрудник отдела продаж") || User.IsInRole("Администратор"))
+                                {
+                                    <a class="ssilka-lk" asp-controller="ManageCategori" asp-action="Index">Категории товаров</a>
                                 }
                                 <a class="ssilka-lk ssred" asp-controller="Home" asp-action="Logout">Выход</a>
                             </div>

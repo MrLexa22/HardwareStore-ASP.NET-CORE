@@ -1,3 +1,7 @@
+.disabledbtn {
+    background-color: dimgray !important;
+}
+
 .filter {
     background-color: #f8f8f8;
     border-radius: 5px;
