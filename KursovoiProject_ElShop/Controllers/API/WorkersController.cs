@@ -1,6 +1,7 @@
 ﻿using KursovoiProject_ElShop.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace KursovoiProject_ElShop.Controllers.API
 {
@@ -12,6 +13,86 @@ namespace KursovoiProject_ElShop.Controllers.API
         public WorkersController(ElShopContext context)
         {
             _context = context;
+        }
+
+        public static string GetRandomPassword(int length)
+        {
+            const string chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            StringBuilder sb = new StringBuilder();
+            Random rnd = new Random();
+
+            for (int i = 0; i < length; i++)
+            {
+                int index = rnd.Next(chars.Length);
+                sb.Append(chars[index]);
+            }
+            return sb.ToString();
+        }
+
+        [HttpDelete("{id}/{prikaz}")]
+        public async Task<IActionResult> DeleteCadri(int id, string? prikaz)
+        {
+            if (prikaz == null)
+                prikaz = "Не указан";
+            else if (prikaz.Trim() == "")
+                prikaz = "Не указан";
+
+            var a = _context.Workers.Include(p=>p.User).Where(p=>p.IdWorker == id).First();
+            a.User.IsAvalible = 0;
+            _context.Users.Update(a.User);
+            a.PrikazObUvolnenii = prikaz;
+            _context.Workers.Update(a);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpGet("RecoveryCadri/{id}")]
+        public async Task<IActionResult> RecoveryCadri(int id)
+        {
+            var a = _context.Workers.Include(p => p.User).Where(p => p.IdWorker == id).First();
+            a.User.IsAvalible = 1;
+            _context.Users.Update(a.User);
+            a.PrikazObUvolnenii = null;
+            _context.Workers.Update(a);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpGet("BlockAccount/{id}")]
+        public async Task<IActionResult> BlockCadri(int id)
+        {
+            var a = _context.Workers.Include(p => p.User).Where(p => p.IdWorker == id).First();
+            a.User.IsAvalible = 0;
+            _context.Users.Update(a.User);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpGet("UnBlockAccount/{id}")]
+        public async Task<IActionResult> UnBlockCadri(int id)
+        {
+            var a = _context.Workers.Include(p => p.User).Where(p => p.IdWorker == id).First();
+            a.User.IsAvalible = 1;
+            _context.Users.Update(a.User);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpGet("GetByID/{id}")]
+        public async Task<ActionResult<InfoCadri>> GetByID(int id)
+        {
+            InfoCadri h = new InfoCadri();
+            var a = _context.Workers.Include(p => p.User).Where(p => p.IdWorker == id).First();
+            h.Familia = a.User.FirstName;
+            h.Ima = a.User.LastName;
+            return h;
+        }
+
+        [HttpGet("GetByIDWorker/{id}")]
+        public async Task<ActionResult<Worker>> GetByIDWorker(int id)
+        {
+            var a = _context.Workers.Include(p => p.User).Where(p => p.IdWorker == id).First();
+            return a;
         }
 
         // GET: api/Workers
@@ -71,6 +152,69 @@ namespace KursovoiProject_ElShop.Controllers.API
                 }    
                 result.Add(h);
             }    
+            return result;
+        }
+
+        [HttpGet("CheckExistWorkerInn/{id}/{inn}")]
+        public bool CheckExistWorkerInn(int id, string inn)
+        {
+            bool result = false;
+            if(id == 0)
+            {
+                if (_context.Workers.Where(p => p.Innworker == inn).Count() > 0)
+                    result = false;
+                else
+                    result = true;
+            }
+            else
+            {
+                if (_context.Workers.Where(p => p.Innworker == inn && p.IdWorker != id).Count() > 0)
+                    result = false;
+                else
+                    result = true;
+            }
+            return result;
+        }
+
+        [HttpGet("CheckExistWorkerSnils/{id}/{snils}")]
+        public bool CheckExistWorkerSnils(int id, string snils)
+        {
+            bool result = false;
+            if (id == 0)
+            {
+                if (_context.Workers.Where(p => p.Snils == snils).Count() > 0)
+                    result = false;
+                else
+                    result = true;
+            }
+            else
+            {
+                if (_context.Workers.Where(p => p.Snils == snils && p.IdWorker != id).Count() > 0)
+                    result = false;
+                else
+                    result = true;
+            }
+            return result;
+        }
+
+        [HttpGet("CheckExistWorkerPassport/{id}/{serpasp}/{nompasp}")]
+        public bool CheckExistWorkerSnils(int id, string serpasp, string nompasp)
+        {
+            bool result = false;
+            if (id == 0)
+            {
+                if (_context.Workers.Where(p => p.SeriaPasporta == serpasp && p.NomerPasporta == nompasp).Count() > 0)
+                    result = false;
+                else
+                    result = true;
+            }
+            else
+            {
+                if (_context.Workers.Where(p => p.SeriaPasporta == serpasp && p.NomerPasporta == nompasp && p.IdWorker != id).Count() > 0)
+                    result = false;
+                else
+                    result = true;
+            }
             return result;
         }
     }

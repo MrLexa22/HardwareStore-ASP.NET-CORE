@@ -56,5 +56,36 @@ namespace KursovoiProject_ElShop.Controllers.API
         {
             return await _context.Filials.ToListAsync();
         }
+
+        [HttpGet("GetFilialsWithBoolean/{idSotr}")]
+        public async Task<ActionResult<IEnumerable<FilialsWithBoolean>>> GetFilialsWithBoolean(int idSotr)
+        {
+            var l = await _context.Filials.ToListAsync();
+            List<FilialsWithBoolean> list = new List<FilialsWithBoolean>();
+            List<WorkersFilial> listFilialsWorker = new List<WorkersFilial>();
+            if (idSotr > 0)
+            {
+                var list1 = _context.Workers.Where(p => p.IdWorker == idSotr).First();
+                listFilialsWorker = _context.WorkersFilials.Where(p => p.UserId == list1.UserId).ToList();
+            }
+            foreach(var a in l)
+            {
+                FilialsWithBoolean h = new FilialsWithBoolean();
+                h.ID_Filial = a.IdFilial;
+                h.IsAvalib = a.Availeble;
+                h.NameFilial = a.NameFilial;
+                if (idSotr > 0)
+                {
+                    if (listFilialsWorker.Where(p => p.FilialId == a.IdFilial).Count() > 0)
+                        h.IsSelected = true;
+                    else
+                        h.IsSelected = false;
+                }
+                else
+                    h.IsSelected = false;
+                list.Add(h);
+            }
+            return list;
+        }
     }
 }

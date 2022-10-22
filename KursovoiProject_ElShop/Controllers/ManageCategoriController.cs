@@ -20,7 +20,7 @@ namespace KursovoiProject_ElShop.Controllers
         {
             if (!User.Identity.IsAuthenticated)
                 return false;
-            if (User.IsInRole("Администратор") || User.IsInRole("Сотрудник отдела продаж"))
+            if (User.IsInRole("Администратор") || User.IsInRole("Сотрудник склада магазина"))
                 return true;
             else
                 return false;

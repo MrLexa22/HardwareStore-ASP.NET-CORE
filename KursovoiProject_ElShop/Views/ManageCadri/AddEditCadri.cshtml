@@ -1,0 +1,240 @@
+﻿@model AddEditCadri;
+<link rel="stylesheet" href="~/css/styletovarilist.css">
+<script src="~/lib/jQuery-Mask-Plugin-master/dist/jquery.mask.js"></script>
+@{
+    @if(Model.ID_Worker == 0){ ViewData["Title"] = "Добавление сотрудника"; }
+    else{ ViewData["Title"] = "Изменение сотрудника"; }
+}
+<style>
+    .hr-line {
+	    margin: 20px 0;
+	    padding: 0;
+	    height: 0;
+	    border: none;
+	    border-top: 1px solid #333;
+    }
+    .table_roles {
+        width: 100%;
+    }
+
+    .table_roles tr {
+        border-bottom: none;
+    }
+
+    .table_roles th {
+        color: black;
+        text-align: left;
+        font-weight: normal;
+        vertical-align: top;
+    }
+
+    .table_roles th:first-child {
+        width: 180px;
+    }
+
+    .table_roles tr th:first-child {
+        color: rgb(103, 103, 103);
+        font-weight: bold;
+    }
+
+    .table_roles th div {
+        margin-bottom: 15px;
+    }
+    .search {
+        display: inline-flex;
+        border: 1px solid rgb(152, 152, 152);
+        /* border-radius: 30px; */
+        padding: 5px;
+        width: 60%;
+    }
+
+    .search-icon {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        order: -1;
+    }
+
+    .search-field {
+        border: 0;
+        font-size: 14px;
+        width: 100%;
+        background-color: transparent;
+    }
+
+    .search-field:focus {
+        outline: none;
+    }
+    .search-results {
+        border: 1px solid rgb(152, 152, 152);
+        max-height: 350px;
+        position: relative;
+        overflow-y: auto;
+        padding: 10px;
+    }
+</style>
+<main class="content-main" style="max-width: 1190px; margin: 0 auto; flex-direction: row; justify-content: space-between; align-items: stretch; max-width: 1190px; padding: 0 13px;">
+    <div style="padding-top: 25px;" id="panel">
+        <h1 style="text-align: center;">@if (Model.ID_Worker == 0) { <text>Добавление</text> }else{ <text>Изменение</text>} сотрудника</h1>
+        <form asp-action="AddEditCadriPost" asp-controller="ManageCadri" asp-route-id="@Model.ID_Worker" style="width: 50%; margin: 0 auto;" method="post" class="callback-from" enctype="multipart/form-data">
+            <div class="form-zap">
+                <label asp-for="@Model.First_Name" class="required"></label>
+                <input type="text" asp-for="@Model.First_Name" class="inputs imz-in" />
+                <span asp-validation-for="@Model.First_Name" style="color: red;"></span>
+            </div>
+            <div class="form-zap">
+                <label asp-for="@Model.Last_Name" class="required"></label>
+                <input type="text" asp-for="@Model.Last_Name" class="inputs imz-in" />
+                <span asp-validation-for="@Model.Last_Name" style="color: red;"></span>
+            </div>
+            <div class="form-zap">
+                <label asp-for="@Model.INN" class="required"></label>
+                <input type="text" asp-for="@Model.INN" id="inn" class="inputs imz-in" />
+                <span asp-validation-for="@Model.INN" style="color: red;"></span>
+            </div>
+            <div class="form-zap">
+                <label asp-for="@Model.SNILS" class="required"></label>
+                <input id="snils" type="text" asp-for="@Model.SNILS" class="inputs imz-in" />
+                <span asp-validation-for="@Model.SNILS" style="color: red;"></span>
+            </div>
+            <div class="form-zap">
+                <label asp-for="@Model.SeriaPasport" class="required"></label>
+                <input type="number" id="serpasp" asp-for="@Model.SeriaPasport" class="inputs imz-in" />
+                <span asp-validation-for="@Model.SeriaPasport" style="color: red;"></span>
+            </div>
+            <div class="form-zap">
+                <label asp-for="@Model.NomerPasport" class="required"></label>
+                <input type="number" id="numbpasp" asp-for="@Model.NomerPasport" class="inputs imz-in" />
+                <span asp-validation-for="@Model.NomerPasport" style="color: red;"></span>
+            </div>
+            <div class="form-zap">
+                <label asp-for="@Model.DateOfBirth" class="required"></label>
+                <input type="date" asp-for="@Model.DateOfBirth" class="inputs imz-in" />
+                <span asp-validation-for="@Model.DateOfBirth" style="color: red;"></span>
+            </div>
+            <div class="form-zap">
+                <label asp-for="@Model.AddressRegistration" class="required"></label>
+                <input type="text" asp-for="@Model.AddressRegistration" class="inputs imz-in" />
+                <span asp-validation-for="@Model.AddressRegistration" style="color: red;"></span>
+            </div>
+            <div class="form-zap">
+                <label asp-for="@Model.Login" class="required"></label>
+                <input type="text" asp-for="@Model.Login" class="inputs imz-in" />
+                <span asp-validation-for="@Model.Login" style="color: red;"></span>
+            </div>
+            @if (Model.ID_Worker == 0)
+            {
+                <p style="font-style: italic;">Пароль будет направлен пользователю по указанному email.</p>
+            }
+            @if (Model.ID_Worker > 0)
+            {
+                <p style="font-style: italic;">При изменении логина пароль пользователя будет сброшен и направлен ему на новую указанную почту.</p>
+            }
+            <div class="form-zap">
+                <label asp-for="@Model.Telefon" class="required"></label>
+                <input type="text" id="phonenumber" asp-for="@Model.Telefon" class="inputs imz-in" />
+                <span asp-validation-for="@Model.Telefon" style="color: red;"></span>
+            </div>
+            <div class="form-zap">
+                <label asp-for="@Model.PrikazOPrinat" class="required"></label>
+                <input type="text" placeholder="если нет, то напишите - не указан" asp-for="@Model.PrikazOPrinat" class="inputs imz-in" />
+                <span asp-validation-for="@Model.PrikazOPrinat" style="color: red;"></span>
+            </div>
+            @if(@Model.PrikazObUval != null)
+            {
+                    <div class="form-zap">
+                        <label asp-for="@Model.PrikazObUval" class="required"></label>
+                        <input type="text" asp-for="@Model.PrikazObUval" class="inputs imz-in" />
+                        <span asp-validation-for="@Model.PrikazObUval" style="color: red;"></span>
+                    </div>                                              
+            }
+            <hr class="hr-line" />
+                <label class="required">Роли в системе</label>
+                <table class="table_roles" style="height: fit-content;">
+                    <tr>
+                        <th>
+                            <div>
+                                <div class="search-results">
+                                    <div class="checkboxes_element">
+                                        @for(int i=0;i< Model.roles.Count();i++)
+                                        {
+                                            @if(Model.roles[i].ID_Role != 21 && Model.roles[i].ID_Role != 22)
+                                            {
+                                                <div style="display:none;">
+                                                    <input type="text" asp-for="@Model.roles[i].ID_Role">
+                                                    <input type="text" asp-for="@Model.roles[i].NameRole">
+                                                </div>
+                                                <input type="checkbox" asp-for="@Model.roles[i].IsSelected" class="custom-checkbox child" id="grou_@Model.roles[i].ID_Role">
+                                                <label class="child_el search__element_orgped" for="grou_@Model.roles[i].ID_Role">@Model.roles[i].NameRole</label>
+                                                <div></div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </table>
+                <span asp-validation-for="@Model.roles" style="color: red;"></span>
+            <hr class="hr-line" />
+            <label class="required">Филиал</label>
+            <table class="table_roles" style="height: fit-content;">
+                <tr>
+                    <th>
+                        <div>
+                            <div class="search" style="margin-bottom: 0px; width:100%;">
+                                <input type="text" onkeyup="search_group()" id="search-field_orgped" class="search-field" style="width: 100%;" placeholder="Введите наименование филиала">
+                                <img src="~/images/search.svg" alt="" class="search-icon">
+                            </div>
+                            <div class="search-results">
+                                <div class="checkboxes_element">
+                                    @for(int i=0;i< Model.filials.Count();i++)
+                                    {
+                                        <div style="display:none;">
+                                            <input type="text" asp-for="@Model.filials[i].ID_Filial">
+                                            <input type="text" asp-for="@Model.filials[i].NameFilial">
+                                            <input type="text" asp-for="@Model.filials[i].IsAvalib">
+                                        </div>
+                                        <input type="checkbox" asp-for="@Model.filials[i].IsSelected" class="custom-checkbox child" id="group_@Model.filials[i].ID_Filial">
+                                        <label class="child_el search__element_orgped" for="group_@Model.filials[i].ID_Filial">@Model.filials[i].NameFilial @if (Model.filials[i].IsAvalib == false) {<p style="font-style: italic; color:red; margin: 0; margin-left: 5px;"> (Филиал не работает)</p> }</label>
+                                        <div></div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+            </table>
+            <span asp-validation-for="@Model.filials" style="color: red;"></span>
+            <div style="display: flex; justify-content: space-evenly; margin-top: 10px; margin-bottom: 20px;">
+                 <div class="btn-center">
+                    <input class="sbm-zvonok" id="sbbtn" type="submit" value="@if (Model.ID_Worker == 0) { <text>Добавить</text>} else{<text>Изменить</text>}" />
+                </div>
+                <div class="btn-center">
+                    <a href="/ManageCadri" class="sbm-zvonok otm" style="background-color: #c4c4c4; color: White;"><p style="line-height: 0.2;">Отмена</p></a>
+                </div>
+            </div>
+        </form>
+        <script>
+            $('#inn').mask('000000000000');
+            $('#snils').mask('000-000-000 00');
+            $('#serpasp').mask('0000');
+            $('#numbpasp').mask('000000');
+            $('#phonenumber').mask('+7(000)000-00-00');
+            function search_group() {
+                let input = document.getElementById('search-field_orgped').value;
+                input = input.toLowerCase();
+                let x = document.getElementsByClassName('search__element_orgped');
+
+                for (i = 0; i < x.length; i++) {
+                    if (!x[i].innerHTML.toLowerCase().includes(input)) {
+                        if (!x[i].classList.contains('name_spec'))
+                            x[i].style.display = "none";
+                    } else {
+                        x[i].style.display = "block";
+                    }
+                }
+            }
+        </script>
+    </div>
+</main>

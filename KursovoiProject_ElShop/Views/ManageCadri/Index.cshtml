@@ -55,7 +55,7 @@
                 </div>
                 <div style="display: flex; justify-content: space-between;">
                     <button id="btn_filters" style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Применить</button>
-                    <a id="addAdds" asp-action="AddEditAdds" asp-controller="AddsSites" asp-route-id="0"><button style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Добавить сотрудника</button></a>
+                    <a id="addAdds" asp-action="AddEditCadri" asp-controller="ManageCadri" asp-route-id="0"><button style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Добавить сотрудника</button></a>
                 </div>
         </div>
         <div style="padding-top: 25px;" id="panel"></div>
@@ -68,24 +68,30 @@
             console.log(urls+'&search=' + $("#searchf").val() +'&typesort='+$("#typesort").val()+'&dolzhnost='+$("#dolzhnost").val()+'&filial='+$("#filial").val());
             $('#panel').load(urls+'&search=' + $("#searchf").val() +'&typesort='+$("#typesort").val()+'&dolzhnost='+$("#dolzhnost").val()+'&filial='+$("#filial").val());
         });
-        $("#addAdds").click(function (e) {
-            $.ajaxSetup({ cache: false });
-            e.preventDefault();
-            $.get(this.href, function (data) {
-                $('#dialogContent').html(data);
-                $('#modDialog').show();
-            });
-        });
         function deleteConfirm(theObject){
             $.ajaxSetup({ cache: false });
-            $.get('/AddsSites/ConfirmDelete/'+theObject, function (data) {
+            $.get('/ManageCadri/ConfirmDelete/'+theObject, function (data) {
                 $('#dialogContent').html(data);
                 $('#modDialog').show();
             });
         }
-        function editAdds(theObject){
+        function recoveryConfirm(theObject){
             $.ajaxSetup({ cache: false });
-            $.get('/AddsSites/AddEditAdds/'+theObject, function (data) {
+            $.get('/ManageCadri/ConfirmRecovery/'+theObject, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        }
+        function blockConfirm(theObject){
+            $.ajaxSetup({ cache: false });
+            $.get('/ManageCadri/ConfirmBlock/'+theObject, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        }
+        function unblockConfirm(theObject){
+            $.ajaxSetup({ cache: false });
+            $.get('/ManageCadri/ConfirmUnBlock/'+theObject, function (data) {
                 $('#dialogContent').html(data);
                 $('#modDialog').show();
             });

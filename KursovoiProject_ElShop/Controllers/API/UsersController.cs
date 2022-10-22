@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using KursovoiProject_ElShop;
 using System.Diagnostics;
+using KursovoiProject_ElShop.Models;
 
 namespace KursovoiProject_ElShop.API
 {
@@ -30,6 +31,45 @@ namespace KursovoiProject_ElShop.API
           }
             return await _context.Users.ToListAsync();
         }
+
+        [HttpGet("GetRolesUser/{idUser}")]
+        public async Task<ActionResult<IEnumerable<RolesWithBoolean>>> GetRoles(int idUser)
+        {
+            if(idUser > 0)
+                idUser = _context.Workers.Where(p => p.IdWorker == idUser).First().UserId;
+            var listRoles = _context.Roles.ToList();
+            List<UsersRole> UsersRoles = new List<UsersRole>();
+            if (idUser > 0)
+                UsersRoles = _context.UsersRoles.Where(p=>p.UserId == idUser).ToList();
+            List<RolesWithBoolean> result = new List<RolesWithBoolean>();
+            if(idUser == 0)
+            {
+                foreach(var a in listRoles)
+                {
+                    RolesWithBoolean h = new RolesWithBoolean();
+                    h.ID_Role = a.IdRole;
+                    h.NameRole = a.NameRole;
+                    h.IsSelected = false;
+                    result.Add(h);
+                }
+            }
+            else
+            {
+                foreach (var a in listRoles)
+                {
+                    RolesWithBoolean h = new RolesWithBoolean();
+                    h.ID_Role = a.IdRole;
+                    h.NameRole = a.NameRole;
+                    if(UsersRoles.Where(p=>p.RoleId == a.IdRole).Count() > 0)
+                        h.IsSelected = true;
+                    else
+                        h.IsSelected = false;
+                    result.Add(h);
+                }
+            }
+            return result;
+        }
+
 
         [HttpGet("CheckLogin/{id}/{login}")]
         public bool CheckEmail(int id, string login)

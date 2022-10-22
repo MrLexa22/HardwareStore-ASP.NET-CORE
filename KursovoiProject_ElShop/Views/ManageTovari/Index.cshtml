@@ -1,0 +1,98 @@
+﻿@model IndexManageTovari;
+<link rel="stylesheet" href="~/css/styletovarilist.css">
+@{
+    ViewData["Title"] = "Товары";
+}
+<main class="content-main" style="max-width: 1190px; margin: 0 auto; flex-direction: row; justify-content: space-between; align-items: stretch; max-width: 1190px; padding: 0 13px;">
+        <div>
+            <div class="filter" style="padding-left: 25px; padding-right: 25px; margin-top: 25px;">
+                <div>
+                    <div class="filter__title">Наименование/код товара:</div>
+                    <div class="filter-range-preview">
+				        <input style="margin: 0; text-align: left;" class="filter-range-preview__input" id="searchf">
+			        </div>
+                </div>
+                <div style="display: flex;">
+                    <div style="margin-right: 15px;">
+                        <div class="filter__title">Сортировать по:</div>
+                        <div class="filter-range-preview">
+                            <select id="typesort" name="typesort" style="width: 100%;">
+                              <option value="0">По умолчанию</option>
+                              <option value="1">По наименованию</option>
+                              <option value="2">По цене (выше → ниже)</option>
+                              <option value="3">По цене (ниже → выше)</option>
+                            </select>
+			            </div>
+                    </div>
+                    <div style="margin-right: 15px;">
+                        <div class="filter__title">Категория товара:</div>
+                         <div class="filter-range-preview">
+                            <select id="category" name="category" asp-items="@(new SelectList(Model.categories, nameof(Category.IdCategori), nameof(Category.NameCategori)))" style="width: 100%;">
+                              <option value="0">Все</option>
+                            </select>
+			            </div>
+                    </div>
+                    <div style="margin-right: 15px;">
+                        <div class="filter__title">Производитель:</div>
+                         <div class="filter-range-preview">
+                            <select id="proizvoditel" name="proizvoditel" asp-items="@(new SelectList(Model.manufactures, nameof(Manufacture.IdManufacture), nameof(Manufacture.NameManufacture)))" style="width: 100%;">
+                              <option value="0">Все</option>
+                            </select>
+			            </div>
+                    </div>
+                    <div>
+                        <div class="filter__title">Отображение на сайте:</div>
+                         <div class="filter-range-preview">
+                            <select id="visibal" name="visibal" style="width: 100%;">
+                              <option value="0">Все</option>
+                              <option selected value="1">Доступные на сайте</option>
+                              <option value="2">Недоступные к продаже</option>
+                            </select>
+			            </div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <button id="btn_filters" style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Применить</button>
+                    <a id="addAdds" asp-action="AddEditCategory" asp-controller="ManageCategori" asp-route-id="0"><button style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Добавить товар</button></a>
+                </div>
+        </div>
+        <div style="padding-top: 25px;" id="panel"></div>
+    </div>
+    <script type="text/javascript">
+        var urls = '@Url.Action("GetAllTovars", "ManageTovari")?visibal=1';
+        $('#panel').load(urls);
+        $("#btn_filters").click(function(){
+            urls = '@Url.Action("GetAllTovars", "ManageTovari")?search=' + $("#searchf").val() +'&typesort='+$("#typesort").val()+'&category='+$("#category").val()+'&proizvoditel='+$("#proizvoditel").val()+'&visibal='+$("#visibal").val();
+            $('#panel').load(urls);
+        });
+        $("#addAdds").click(function (e) {
+            $.ajaxSetup({ cache: false });
+            e.preventDefault();
+            $.get(this.href, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        });
+        function deleteConfirm(theObject){
+            $.ajaxSetup({ cache: false });
+            $.get('/ManageTovari/ConfirmDelete/'+theObject, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        }
+        function returnTovar(theObject){
+            $.ajaxSetup({ cache: false });
+            $.get('/ManageTovari/ConfirmReturn/'+theObject, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        }
+        function editAdds(theObject){
+            $.ajaxSetup({ cache: false });
+            $.get('/ManageCategori/AddEditCategory/'+theObject, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        }
+    </script>
+</main>
