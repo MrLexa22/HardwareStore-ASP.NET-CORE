@@ -53,7 +53,7 @@
                 </div>
                 <div style="display: flex; justify-content: space-between;">
                     <button id="btn_filters" style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Применить</button>
-                    <a id="addAdds" asp-action="AddEditCategory" asp-controller="ManageCategori" asp-route-id="0"><button style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Добавить товар</button></a>
+                    <a id="addAdds" asp-action="AddEditTovar" asp-controller="ManageTovari" asp-route-id="0"><button style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Добавить товар</button></a>
                 </div>
         </div>
         <div style="padding-top: 25px;" id="panel"></div>
@@ -73,6 +73,21 @@
                 $('#modDialog').show();
             });
         });
+        function EditTovar(theObject){
+            $.ajaxSetup({ cache: false });
+            $.get('/ManageTovari/AddEditTovar/'+theObject, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        }
+        function ChangeImage(theObject){
+            $.ajaxSetup({ cache: false });
+            $.get('/ManageTovari/ChangeImage/'+theObject, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        }
+
         function deleteConfirm(theObject){
             $.ajaxSetup({ cache: false });
             $.get('/ManageTovari/ConfirmDelete/'+theObject, function (data) {

@@ -57,7 +57,7 @@
                                 <li>Производитель:&nbsp;<b>@Model.NameManufacture</b></li>
                                 <li>Наименование товара:&nbsp;<b>@Model.Name</b></li>
                                 <li>Категория:&nbsp;<b>@Model.NameCategory</b></li>
-                                <li>Описание:&nbsp;<br /><b>@Model.Description</b></li>
+                                <li>Описание:&nbsp;<br /><b>@Html.Raw(Model.Description.Replace(Environment.NewLine, "<br/>"))</b></li>
                             </ul>
                             <div class="product-detail__buttons">
                                 @if (Model.IsAvaliable)

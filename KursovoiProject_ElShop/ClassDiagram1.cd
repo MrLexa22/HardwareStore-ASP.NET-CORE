@@ -1,0 +1,557 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="KursovoiProject_ElShop.Controllers.API.AddsSites" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABQAAAAAACAQAAAAAAAABAAABAAEAAAI=</HashCode>
+      <FileName>Controllers\API\AddsSiteController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Controllers.API.CategoriesController" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAABAAAAAICBAEgAAAAAAAAAQAAgAAAAAAgAAgAAAg=</HashCode>
+      <FileName>Controllers\API\CategoriesController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Controllers.API.FilialsController" Collapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAFAAgAAAAAAAAAABAAAAAAAAIBAAAAAA=</HashCode>
+      <FileName>Controllers\API\FilialsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Controllers.API.KorzinaController" Collapsed="true">
+    <Position X="5.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAABAIAAAAAAEAAAAAAAAAAAAAAgAAABAA=</HashCode>
+      <FileName>Controllers\API\KorzinaController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Controllers.API.ManufacturesController" Collapsed="true">
+    <Position X="5.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAABAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\API\ManufacturesController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Controllers.API.ViewGoodsWithManufacturesController">
+    <Position X="0.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAABAAFAAAAAAAAAAAAAAAAAAIAAAABAAAAAA=</HashCode>
+      <FileName>Controllers\API\ViewGoodsWithManufacturesController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Controllers.API.ViewMainCategorisController">
+    <Position X="4" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>Controllers\API\ViewMainCategorisController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Controllers.API.WorkersController" Collapsed="true">
+    <Position X="9.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAEACAAAAABAAAAAAAkIgAAAAAAIAAIAAAgAAAAAA=</HashCode>
+      <FileName>Controllers\API\WorkersController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Controllers.API.TovarsController" Collapsed="true">
+    <Position X="4" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAABAAgAAAAAAAAAAAAAEBAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\API\TovarsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.API.UsersController" Collapsed="true">
+    <Position X="7.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IgAAAAAAAAAABQAEgAAggAAAAAAAAAACMAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\API\UsersController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Controllers.Validation.BaseAddresse" Collapsed="true">
+    <Position X="14.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAgAAAAA=</HashCode>
+      <FileName>Controllers\Validation\ValidationUsersController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Controllers.Validation.ValidationUsersController" Collapsed="true">
+    <Position X="11" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAAAAAgAAAAAABAAAAAA=</HashCode>
+      <FileName>Controllers\Validation\ValidationUsersController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Controllers.AddsSitesController" Collapsed="true">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQBAgAAAAAAAAAAAAAAAAAABEABIBIAAA=</HashCode>
+      <FileName>Controllers\AddsSitesController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Controllers.CategoriController" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAECBAAAgAAAAAAAIAAAAAAAAAEgBAAAAAA=</HashCode>
+      <FileName>Controllers\CategoriController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Controllers.HomeController" Collapsed="true">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgCAKIAAAExigQQAAIBQJoKAAAAIEAAoAQRAAAAAI=</HashCode>
+      <FileName>Controllers\HomeController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Controllers.KorzinaController" Collapsed="true">
+    <Position X="7.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAgAAAEAAEAAAEAAAAQAAAEABAAAACA=</HashCode>
+      <FileName>Controllers\KorzinaController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Controllers.ManageCadriController" Collapsed="true">
+    <Position X="14.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAACAAABABAACEAAAAAAAAAQAEACAABEgBABAAAA=</HashCode>
+      <FileName>Controllers\ManageCadriController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Controllers.ManageCategoriController" Collapsed="true">
+    <Position X="0.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAABAAAAAAAAAAAQAAAAAAAABEABABIAAA=</HashCode>
+      <FileName>Controllers\ManageCategoriController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Controllers.ManageTovariController" Collapsed="true">
+    <Position X="2.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAgAAAAgAAAIAAAAAAAAABEABABAAAA=</HashCode>
+      <FileName>Controllers\ManageTovariController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.ListAdds" Collapsed="true">
+    <Position X="9.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAACAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Models\AddsSitesModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.AddEditAdds" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAgAgAAAAAAAEAQUBAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>Models\AddsSitesModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.ActivateAccount1" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\AuthenticationUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.AuthenticationUser" Collapsed="true">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAACAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Models\AuthenticationUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.ErrorViewModel" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ErrorViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.FilialsNalichTovar" Collapsed="true">
+    <Position X="7.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAACAIAAAACAAAAQAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Models\FilialsNalichTovar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.FilterViewModel_AddsSites" Collapsed="true">
+    <Position X="12.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAgAAAAAAAAAAAAAAAAAAQAAAAAgAAA=</HashCode>
+      <FileName>Models\FilterViewModel_AddsSites.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.IndexPageModel" Collapsed="true">
+    <Position X="14.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAABAAAAAAAAEAAAgAAAAAAAAAA=</HashCode>
+      <FileName>Models\IndexPageModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.BeforeDeleteCadri" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAgAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ManageCadriModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.RolesWithBoolean" Collapsed="true">
+    <Position X="11" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Models\ManageCadriModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.FilialsWithBoolean" Collapsed="true">
+    <Position X="11" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAIAAAAAAAAARAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ManageCadriModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.AddEditCadri" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAABAAAAABACAgBBAAAYAAEGAABQAAABAAA=</HashCode>
+      <FileName>Models\ManageCadriModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.InfoCadri" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAQAQAAAAAAABAAAAAgAAAEAQEAEAAAAIAAAAAAA=</HashCode>
+      <FileName>Models\ManageCadriModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.IndexPageCadri" Collapsed="true">
+    <Position X="11" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAAAAAEAEAAAAAAAAIAA=</HashCode>
+      <FileName>Models\ManageCadriModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.CategoriesSite" Collapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAACAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ManageCategoriModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.IndexPageCategory" Collapsed="true">
+    <Position X="12.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAEAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ManageCategoriModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.ChangeInformation" Collapsed="true">
+    <Position X="9.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAQACAAAAAAAAAAAAAAAAAAAAAAAAAIAAABAAA=</HashCode>
+      <FileName>Models\MyProfile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.ChangePassword" Collapsed="true">
+    <Position X="11" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAKACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\MyProfile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.MyProfile" Collapsed="true">
+    <Position X="11" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAgAAAAAAAAQA=</HashCode>
+      <FileName>Models\MyProfile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.OrdersUser" Collapsed="true">
+    <Position X="2.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>Models\OrdersUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.RegistrateUsers" Collapsed="true">
+    <Position X="7.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQACAAAAAAAAAAAAAAAAAAAAACAAAIAAABIAA=</HashCode>
+      <FileName>Models\RegistrateUsers.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.TovariUsersModel" Collapsed="true">
+    <Position X="2.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAACIAAAAgAAAAAAABABQAIAIAAAAEgAAAAgAAggA=</HashCode>
+      <FileName>Models\TovariCategoryModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.ManufacturesList" Collapsed="true">
+    <Position X="7.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAI=</HashCode>
+      <FileName>Models\TovariCategoryModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.TovariCategoryModel" Collapsed="true">
+    <Position X="14.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAACAAAAAAAAAwAAgACQAAAAAAAAAEgCAAAAAAAAA=</HashCode>
+      <FileName>Models\TovariCategoryModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.FilialsWithBoll" Collapsed="true">
+    <Position X="9.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAIAAIAAABAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Models\TovariInCart.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.ContactInformation" Collapsed="true">
+    <Position X="12.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAQA=</HashCode>
+      <FileName>Models\TovariInCart.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.availibleTovari" Collapsed="true">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAIACA=</HashCode>
+      <FileName>Models\TovariInCart.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.informationPreOformleine" Collapsed="true">
+    <Position X="2.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAhAAhAAAIAAA=</HashCode>
+      <FileName>Models\TovariInCart.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.TovariInCart" Collapsed="true">
+    <Position X="0.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAEAAQAgAAAAAACAAAAAAAgAABAAAAAAA=</HashCode>
+      <FileName>Models\TovariInCart.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.ModelOrder" Collapsed="true">
+    <Position X="9.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAAAAAAAAAAEAAAAAAAgAABAAAAAAA=</HashCode>
+      <FileName>Models\TovariInCart.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.NalichFilialManageTovari" Collapsed="true">
+    <Position X="12.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAIAAAAAAAAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ManageTovariModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.ListTovariManageTovari" Collapsed="true">
+    <Position X="11" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAQACAAAAAAABACABAAAAAAAAAEAAACAAE=</HashCode>
+      <FileName>Models\ManageTovariModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.IndexManageTovari" Collapsed="true">
+    <Position X="9.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAIAAAAAAAAAAAACAAQBAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ManageTovariModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Models.FilterViewModel_ManageTovari" Collapsed="true">
+    <Position X="14.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAEAAAAAAgCCA=</HashCode>
+      <FileName>Models\ManageTovariModels.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ElSt.Models.FilterViewModel_Tovari" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAoAEAAAAAAAAAAAAAAAAAAAAQAAAAQ=</HashCode>
+      <FileName>Models\FilterViewModel_Predmeti.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.PageViewModel" Collapsed="true">
+    <Position X="5.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAgAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\PageViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.AddsSite" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAgARgAQABAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelsDB\AddsSite.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Category" Collapsed="true">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAACAAACA=</HashCode>
+      <FileName>ModelsDB\Category.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Filial" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAABAAAAAAAAAIAAIAAABAIAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelsDB\Filial.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Good" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAgAAAoAAABABQAIAIAAAAAAAAAAgAQgAA=</HashCode>
+      <FileName>ModelsDB\Good.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.GoodsFilial" Collapsed="true">
+    <Position X="4" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAIAQAAAAAAAAAAAAAAAAAAAAAAAgAAAAAIACA=</HashCode>
+      <FileName>ModelsDB\GoodsFilial.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Korzina" Collapsed="true">
+    <Position X="4" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABgAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAIAAAACA=</HashCode>
+      <FileName>ModelsDB\Korzina.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.MainCategory" Collapsed="true">
+    <Position X="12.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAwAAAAAAAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelsDB\MainCategory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Manufacture" Collapsed="true">
+    <Position X="4" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>ModelsDB\Manufacture.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Order" Collapsed="true">
+    <Position X="14.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAABAAMECQBAACAAAAIiAAgAAAAABAABAAAAAAAYAAA=</HashCode>
+      <FileName>ModelsDB\Order.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.OrderContainer" Collapsed="true">
+    <Position X="0.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAoAAQAAAAACAAAAAAQAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>ModelsDB\OrderContainer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Role" Collapsed="true">
+    <Position X="9.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAQAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>ModelsDB\Role.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.User" Collapsed="true">
+    <Position X="5.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAEAICAAAAAIIAAAAQAACAAACAgACAAAwACAAAAg=</HashCode>
+      <FileName>ModelsDB\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.UsersRole" Collapsed="true">
+    <Position X="9.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAIAAAAAAAAAEAAAAAgAAAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ModelsDB\UsersRole.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.ViewFilialsGoodsNalich" Collapsed="true">
+    <Position X="12.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAIAAIACAAAAAAAAAAAAgAAAAAAgAA=</HashCode>
+      <FileName>ModelsDB\ViewFilialsGoodsNalich.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.ViewGoodsWithManufacture" Collapsed="true">
+    <Position X="14.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAIAAAAgAAAAAAABABQAAAIAAAAAAAAAAgAAggA=</HashCode>
+      <FileName>ModelsDB\ViewGoodsWithManufacture.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.ViewMainCategori">
+    <Position X="2.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAQAAAAAAAAAAIAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>ModelsDB\ViewMainCategori.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.ViewOrdersClient" Collapsed="true">
+    <Position X="5.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAABABIEAQBAAAAIAAICAAhAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>ModelsDB\ViewOrdersClient.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.Worker" Collapsed="true">
+    <Position X="7.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAhAAAAAEABAAAAAEgAAAgAAAAQIAAAAAAAAAAAEQA=</HashCode>
+      <FileName>ModelsDB\Worker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.WorkersFilial" Collapsed="true">
+    <Position X="11" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAQAAAAAAAAAAAAgAAAAAIAAAAAAAAAAIAAA=</HashCode>
+      <FileName>ModelsDB\WorkersFilial.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.ElShopContext" Collapsed="true">
+    <Position X="14.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAlIACAIAQIQAAAIAAAAACAAMgAAEgAAAAAgBAAQCCA=</HashCode>
+      <FileName>ElShopContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.EmailService" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAIAAAAAAAAAAAAAAAAAAggAAAAAAAA=</HashCode>
+      <FileName>EmailService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.HashPassword" Collapsed="true">
+    <Position X="5.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>HashPassword.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.PageLinkTagHelper" Collapsed="true">
+    <Position X="4" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAIAAAAAgABAAEAAAAAAAAAAAAAIAAAACA=</HashCode>
+      <FileName>PageLinkTagHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KursovoiProject_ElShop.SendFileToServer" Collapsed="true">
+    <Position X="12.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAAkAAAAAAAAAAAgAAgAAAAA=</HashCode>
+      <FileName>SendFileToServer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

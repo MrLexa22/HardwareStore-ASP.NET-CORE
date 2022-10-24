@@ -1,0 +1,46 @@
+﻿@model changeImageTovar;
+<div class="modal-content">
+    <link rel="stylesheet" type="text/css" href="~/css/style_list.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/styleInputFile.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <div class="modal-windows">
+        <div class="obratnii-zvonok">
+            <div class="form-edit fformms" style="padding: 30px; background-color: #fff; border-radius: 5px; box-shadow: 1px 1px 10px 0 rgb(0 0 0 / 12%); color: #696969; ">
+                <form asp-action="ChangeImagePost" asp-controller="ManageTovari" asp-route-id="@Model.ID_Tovar" method="post" class="callback-from" enctype="multipart/form-data">
+                    <div class="zvonok-title">Изменение изображения товара</div>
+                    <div>
+                        <div class="form-zap">
+                            <label class="required">Код товара</label>
+                            <input class="inputs imz-in" value="@Model.ID_Tovar.ToString()" readonly>
+                        </div>
+                        <div class="form-zap">
+                            <label class="required">Наименование товара</label>
+                            <input class="inputs imz-in" value="@Model.NameTovar" readonly>
+                        </div>
+                            <label asp-for="@Model.FTTPPathImage" class="required"></label>
+                            <div class="form-zap">
+                                <div class="profile-picture-upload">
+                                    <img src="@Model.FTTPPathImage" alt="Profile picture preview" class="imagePreview">
+                                    <a class="action-button mode-upload" style="margin-top: 15px; color: White;">Загрузить</a>
+                                    <input accept="image/png, image/jpg, image/jpeg" type="file" id="olo" autocomplete="off" class="hidden" name="uploadedFile" />
+                                </div>
+                            </div>
+                            <span asp-validation-for="@Model.FTTPPathImage" style="color: red;"></span>
+                            <input type="text" asp-for="@Model.FTTPPathImage" id="checker" value="" class="inputs imz-in" style="width: 0; height: 0; opacity: 0;" />
+                    </div>
+                    <div class="form-zap">
+                        <div class="btn-center">
+                            <input class="sbm-zvonok" id="submitDelete" type="submit" value="Обновить изображение" />
+                        </div>
+                    </div>
+                    <div class="btn-center">
+                        <button class="sbm-zvonok otm" style="background-color: #c4c4c4; margin-top: 15px; color: White;" onclick='$(".modal-content").remove();'>Отмена</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" defer></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" defer></script>
+    <script src="~/js/control_imageEdit.js" defer></script>
+</div>

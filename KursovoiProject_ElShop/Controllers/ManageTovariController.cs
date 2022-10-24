@@ -115,5 +115,186 @@ namespace KursovoiProject_ElShop.Controllers
             model.NameGood = a.NameGood;
             return PartialView("~/Views/ManageTovari/_ConfirmReturn.cshtml", model);
         }
+
+        public async Task<IActionResult> AddEditTovar(int id)
+        {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
+
+            AddEditTovar model = new AddEditTovar();
+            model.ID_Tovar = id;
+            if(id > 0)
+            {
+                var good = (Good)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Tovars/GetTovarByID/{id}").Result.Content.ReadAsStringAsync().Result, typeof(Good));
+                model.Cost = good.Cost.ToString();
+                model.Description = good.Description;
+                model.Name_Tovar = good.Name;
+                model.Category_ID = good.CategoriId;
+                model.Proizvoditel_ID = good.ManufactureId;
+            }
+            model.manufactures = (List<Manufacture>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Manufactures/GetManufacturesAll").Result.Content.ReadAsStringAsync().Result, typeof(List<Manufacture>));
+            model.categories = (List<Category>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Categories").Result.Content.ReadAsStringAsync().Result, typeof(List<Category>));
+            model.Nalichielist = (List<NalichFilialManageTovari>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Tovars/GetFilialsCount/{getEmail()}/{id}").Result.Content.ReadAsStringAsync().Result, typeof(List<NalichFilialManageTovari>));
+            return PartialView("~/Views/ManageTovari/_AddEditTovar.cshtml", model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddEditTovarPost(int id, AddEditTovar model)
+        {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
+
+            model.ID_Tovar = id;
+            model.manufactures = (List<Manufacture>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Manufactures/GetManufacturesAll").Result.Content.ReadAsStringAsync().Result, typeof(List<Manufacture>));
+            model.categories = (List<Category>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Categories").Result.Content.ReadAsStringAsync().Result, typeof(List<Category>));
+            if (model.Name_Tovar == null)
+            {
+                ModelState.AddModelError("Name_Tovar", "Некорректное наименование товара");
+                return View("~/Views/ManageTovari/_AddEditTovar.cshtml", model);
+            }
+            else if(model.Name_Tovar.Trim().Length < 3)
+            {
+                ModelState.AddModelError("Name_Tovar", "Некорректное наименование товара");
+                return PartialView("~/Views/ManageTovari/_AddEditTovar.cshtml", model);
+            }
+            if(model.Name_Tovar != null)
+            {
+                string withoutslashes = model.Name_Tovar.Replace('/', ' ').Replace('\\',' ');
+                string check = (string)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Tovars/CheckExistTovar/{withoutslashes}/{id}").Result.Content.ReadAsStringAsync().Result, typeof(string));
+                if(check == "false")
+                {
+                    ModelState.AddModelError("Name_Tovar", "Такое наименование товара уже существует");
+                    return PartialView("~/Views/ManageTovari/_AddEditTovar.cshtml", model);
+                }
+            }
+
+            if(model.Category_ID == null)
+            {
+                ModelState.AddModelError("Category_ID", "Некорректная категория товара");
+                return PartialView("~/Views/ManageTovari/_AddEditTovar.cshtml", model);
+            }
+            else if (model.Category_ID <= 0)
+            {
+                ModelState.AddModelError("Category_ID", "Некорректная категория товара");
+                return PartialView("~/Views/ManageTovari/_AddEditTovar.cshtml", model);
+            }
+
+            if(model.Proizvoditel_ID == null)
+            {
+                ModelState.AddModelError("Proizvoditel_ID", "Некорректный производитель");
+                return PartialView("~/Views/ManageTovari/_AddEditTovar.cshtml", model);
+            }
+            else if (model.Proizvoditel_ID <= 0)
+            {
+                ModelState.AddModelError("Proizvoditel_ID", "Некорректный производитель");
+                return PartialView("~/Views/ManageTovari/_AddEditTovar.cshtml", model);
+            }
+
+            try
+            {
+                Convert.ToDouble(model.Cost);
+                if(Convert.ToDouble(model.Cost) < 1)
+                {
+                    ModelState.AddModelError("Cost", "Некорректная цена");
+                    return PartialView("~/Views/ManageTovari/_AddEditTovar.cshtml", model);
+                }
+            }
+            catch
+            {
+                ModelState.AddModelError("Cost", "Некорректная цена");
+                return PartialView("~/Views/ManageTovari/_AddEditTovar.cshtml", model);
+            }
+
+            if(model.Description == null)
+            {
+                ModelState.AddModelError("Description", "Некорректное описание");
+                return PartialView("~/Views/ManageTovari/_AddEditTovar.cshtml", model);
+            }
+            else if(model.Description.Trim().Length < 10)
+            {
+                ModelState.AddModelError("Description", "Некорректное описание");
+                return PartialView("~/Views/ManageTovari/_AddEditTovar.cshtml", model);
+            }
+
+            for(int i = 0; i<model.Nalichielist.Count();i++)
+            {
+                try
+                {
+                    Convert.ToInt16(model.Nalichielist[i].CountInFilial);
+                }
+                catch
+                {
+                    ModelState.AddModelError("Nalichielist[" + i + "].CountInFilial", "Некорректное количество");
+                    return PartialView("~/Views/ManageTovari/_AddEditTovar.cshtml", model);
+                }
+                if(model.Nalichielist[i].CountInFilial < 0)
+                {
+                    ModelState.AddModelError("Nalichielist["+i+"].CountInFilial", "Некорректное количество");
+                    return PartialView("~/Views/ManageTovari/_AddEditTovar.cshtml", model);
+                }
+            }
+
+            ModelState.Clear();
+            Good good = new Good();
+            if (id == 0)
+            {
+                good.CategoriId = model.Category_ID;
+                good.ManufactureId = model.Proizvoditel_ID;
+                good.Name = model.Name_Tovar;
+                good.Description = model.Description;
+                good.Cost = Convert.ToDouble(model.Cost);
+                good.FtppathImage = null;
+                good.IsAvaliable = true;
+                _context.Goods.Add(good);
+                _context.SaveChanges();
+                var listGoodsFilials = _context.GoodsFilials.Where(p => p.GoodsId == good.IdGood).ToList();
+                foreach (var a in model.Nalichielist)
+                {
+                    GoodsFilial goodsFilial = listGoodsFilials.Where(p => p.FilialId == a.ID_Filial && p.GoodsId == good.IdGood).First(); ;
+                    goodsFilial.CountSklad = a.CountInFilial;
+                    _context.Update(goodsFilial);
+                }
+                _context.SaveChanges();
+            }
+            else
+            {
+                good.IdGood = id;
+                good.CategoriId = model.Category_ID;
+                good.ManufactureId = model.Proizvoditel_ID;
+                good.Name = model.Name_Tovar;
+                good.Description = model.Description;
+                good.Cost = Convert.ToDouble(model.Cost);
+                good.FtppathImage = null;
+                good.IsAvaliable = true;
+                _context.Goods.Update(good);
+                _context.SaveChanges();
+                var listGoodsFilials = _context.GoodsFilials.Where(p => p.GoodsId == good.IdGood).ToList();
+                foreach (var a in model.Nalichielist)
+                {
+                    GoodsFilial goodsFilial = listGoodsFilials.Where(p => p.FilialId == a.ID_Filial && p.GoodsId == good.IdGood).First(); ;
+                    goodsFilial.CountSklad = a.CountInFilial;
+                    _context.Update(goodsFilial);
+                }
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("ChangeImage", "ManageTovari", new {id = good.IdGood});
+        }
+
+        public async Task<IActionResult> ChangeImage(int id)
+        {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
+
+            changeImageTovar model = new changeImageTovar();
+            model.ID_Tovar = id;
+            var good = (Good)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Tovars/GetTovarByIDToChangeImage/{id}").Result.Content.ReadAsStringAsync().Result, typeof(Good));
+            model.NameTovar = good.Name;
+            model.FTTPPathImage = good.FtppathImage;
+            return PartialView("~/Views/ManageTovari/_ChangeImage.cshtml", model);
+        } 
+
+        //СДЕЛАТЬ ОТПРАВКУ КАРТИНОК ТОВАРОВ НА СЕРВЕР
     }
 }

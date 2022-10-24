@@ -1,4 +1,5 @@
 ﻿using ElSt.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace KursovoiProject_ElShop.Models
 {
@@ -47,6 +48,8 @@ namespace KursovoiProject_ElShop.Models
         public int IdGood { get; set; }
         public double Cost { get; set; }
         public string Name { get; set; } = null!;
+
+        [DataType(DataType.MultilineText)]
         public string Description { get; set; } = null!;
         public string? FtppathImage { get; set; }
         public int CategoriId { get; set; }
