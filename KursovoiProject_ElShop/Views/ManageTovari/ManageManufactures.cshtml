@@ -1,0 +1,45 @@
+﻿<link rel="stylesheet" href="~/css/styletovarilist.css">
+@{
+    ViewData["Title"] = "Производители";
+}
+<main class="content-main" style="max-width: 1190px; margin: 0 auto; flex-direction: row; justify-content: space-between; align-items: stretch; max-width: 1190px; padding: 0 13px;">
+        <div>
+            <a asp-action="Index" asp-controller="ManageTovari"><button style="margin-top: 25px;" class="btn btn_outline btn_primary filter__submit">Управление товарами</button></a>
+            <div class="filter" style="padding-left: 25px; padding-right: 25px; margin-top: 25px;">
+                <div>
+                    <div class="filter__title">Наименование производителя:</div>
+                    <div class="filter-range-preview">
+				        <input style="margin: 0; text-align: left;" class="filter-range-preview__input" id="searchf">
+			        </div>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <button id="btn_filters" style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Искать</button>
+                    <a id="addAdds" asp-action="AddEditManufacture" asp-controller="ManageTovari" asp-route-id="0"><button style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Добавить производителя</button></a>
+                </div>
+        </div>
+        <div style="padding-top: 25px;" id="panel"></div>
+    </div>
+    <script type="text/javascript">
+        var urls = '@Url.Action("GetAllManufactures", "ManageTovari")';
+        $('#panel').load(urls);
+        $("#btn_filters").click(function(){
+            urls = '@Url.Action("GetAllManufactures", "ManageTovari")?search=' + $("#searchf").val();
+            $('#panel').load(urls);
+        });
+        $("#addAdds").click(function (e) {
+            $.ajaxSetup({ cache: false });
+            e.preventDefault();
+            $.get(this.href, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        });
+        function EditManufacture(theObject){
+            $.ajaxSetup({ cache: false });
+            $.get('/ManageTovari/AddEditManufacture/'+theObject, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        }
+    </script>
+</main>

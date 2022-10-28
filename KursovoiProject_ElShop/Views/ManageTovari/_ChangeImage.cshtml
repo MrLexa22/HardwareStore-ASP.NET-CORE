@@ -17,6 +17,9 @@
                             <label class="required">Наименование товара</label>
                             <input class="inputs imz-in" value="@Model.NameTovar" readonly>
                         </div>
+                            <div style="display: none;">
+                                <input type="checkbox" autocomplete="off" asp-for="@Model.hasImage" name="oldPath" />
+                            </div>
                             <label asp-for="@Model.FTTPPathImage" class="required"></label>
                             <div class="form-zap">
                                 <div class="profile-picture-upload">

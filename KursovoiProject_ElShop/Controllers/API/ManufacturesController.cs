@@ -46,6 +46,39 @@ namespace KursovoiProject_ElShop.Controllers.API
             return await _context.Manufactures.ToListAsync();
         }
 
+        [HttpGet("GetManufactureByID/{id}")]
+        public async Task<ActionResult<Manufacture>> GetManufactureByID(int id)
+        {
+            return await _context.Manufactures.Where(p=>p.IdManufacture == id).FirstAsync();
+        }
+
+        [HttpGet("CheckExistManufacture/{name}/{id}")]
+        public async Task<ActionResult<Boolean>> CheckExistManufacture(string name, int id)
+        {
+            var list = _context.Manufactures.Where(p => p.NameManufacture.ToLower() == name.ToLower() && p.IdManufacture != id).ToList();
+            Boolean result = false;
+            if (list.Count() <= 0)
+                result = true;
+            return result;
+        }
+
+        [HttpGet("EditOrCreate/{id}/{name}")]
+        public async Task<ActionResult> EditOrCreate(int id, string name)
+        {
+            Manufacture manufacture = new Manufacture();
+            manufacture.NameManufacture = name;
+            if(id == 0)
+                _context.Add(manufacture);
+            else
+            {
+                manufacture = await _context.Manufactures.FindAsync(id);
+                manufacture.NameManufacture = name;
+                _context.Update(manufacture);
+            }
+            _context.SaveChanges();
+            return NoContent();
+        }
+
         [HttpGet("GetMaufacturesByName/{name}")]
         public List<ManufacturesList> GetMaufacturesByIdCateg(string name)
         {

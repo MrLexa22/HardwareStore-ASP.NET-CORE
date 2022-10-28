@@ -292,9 +292,110 @@ namespace KursovoiProject_ElShop.Controllers
             var good = (Good)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Tovars/GetTovarByIDToChangeImage/{id}").Result.Content.ReadAsStringAsync().Result, typeof(Good));
             model.NameTovar = good.Name;
             model.FTTPPathImage = good.FtppathImage;
+            if (model.FTTPPathImage == BaseAddresse.Server + "TovariImages/NoImageTovar.jpg")
+                model.hasImage = false;
+            else
+                model.hasImage = true;
             return PartialView("~/Views/ManageTovari/_ChangeImage.cshtml", model);
-        } 
+        }
 
-        //СДЕЛАТЬ ОТПРАВКУ КАРТИНОК ТОВАРОВ НА СЕРВЕР
+        [HttpPost]
+        public async Task<IActionResult> ChangeImagePost(int id, IFormFile uploadedFile, bool oldPath)
+        {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
+
+            Good good = new Good();
+            good = (Good)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Tovars/GetTovarByID/{id}").Result.Content.ReadAsStringAsync().Result, typeof(Good));
+            if (uploadedFile != null)
+            {
+                if (oldPath == true)
+                    SendFileToServer.DeleteOldFileTovar(good.FtppathImage);
+
+                good.FtppathImage = id.ToString() + Path.GetExtension(uploadedFile.FileName);
+                _context.Update(good);
+                _context.SaveChanges();
+                SendFileToServer.SendFileTovar(uploadedFile, id.ToString(), Path.GetExtension(uploadedFile.FileName));
+            }
+            return RedirectToAction("Index","ManageTovari");
+        }
+
+        public IActionResult ManageManufactures()
+        {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
+            return View();
+        }
+
+        public async Task<IActionResult> GetAllManufactures(string? search, int page = 1)
+        {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
+
+            IndexManageTovari model = new IndexManageTovari();
+
+            int pageSize = 15;
+            var listManufactures = (List<Manufacture>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Manufactures/GetManufacturesAll").Result.Content.ReadAsStringAsync().Result, typeof(List<Manufacture>));
+
+            IQueryable<Manufacture> Blocks = listManufactures.AsQueryable();
+
+            if (search != null)
+            {
+                if (search.Trim() != "")
+                    Blocks = Blocks.Where(p => p.NameManufacture.ToLower().Contains(search.Trim().ToLower()));
+            }
+            Blocks = Blocks.OrderBy(p => p.NameManufacture);
+            var items = Blocks.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var count = Blocks.Count();
+            model.manufactures = items;
+            model.PageViewModel = new PageViewModel(count, page, pageSize);
+            model.FilterViewModel_ManageTovari = new FilterViewModel_ManageTovari(search,null,null,null,null);
+            return PartialView("~/Views/ManageTovari/_ListManufactures.cshtml", model);
+        }
+
+        public async Task<IActionResult> AddEditManufacture(int id)
+        {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
+
+            Manufacture model = new Manufacture();
+            model.IdManufacture = id;
+            if(id > 0)
+                model = (Manufacture)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Manufactures/GetManufactureByID/{id}").Result.Content.ReadAsStringAsync().Result, typeof(Manufacture));
+            return PartialView("~/Views/ManageTovari/_AddEditManufacture.cshtml", model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddEditManufacturePost(int id, Manufacture model)
+        {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
+
+            if(model.NameManufacture == null)
+            {
+                ModelState.AddModelError("NameManufacture", "Некорректное наименование производителя");
+                model.IdManufacture = id;
+                return PartialView("~/Views/ManageTovari/_AddEditManufacture.cshtml", model);
+            }
+            model.NameManufacture = model.NameManufacture.Trim();
+
+            if(model.NameManufacture.Trim().Length < 3)
+            {
+                ModelState.AddModelError("NameManufacture", "Некорректное наименование производителя");
+                model.IdManufacture = id;
+                return PartialView("~/Views/ManageTovari/_AddEditManufacture.cshtml", model);
+            }
+            Boolean check = (Boolean)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Manufactures/CheckExistManufacture/{model.NameManufacture}/{id}").Result.Content.ReadAsStringAsync().Result, typeof(Boolean));
+            if(check == false)
+            {
+                ModelState.AddModelError("NameManufacture", "Такое наименование производителя уже существует");
+                model.IdManufacture = id;
+                return PartialView("~/Views/ManageTovari/_AddEditManufacture.cshtml", model);
+            }
+            await client.GetAsync(@$"api/Manufactures/EditOrCreate/{id}/{model.NameManufacture.Trim()}");
+            ModelState.Clear();
+            return NoContent();
+        }
     }
 }

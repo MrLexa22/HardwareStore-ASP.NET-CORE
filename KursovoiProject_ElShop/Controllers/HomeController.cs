@@ -65,6 +65,8 @@ namespace KursovoiProject_ElShop.Controllers
                 claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Сотрудник отдела кадров"));
             if (rolesUser.Where(p => p.RoleId == 15).Count() > 0)
                 claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Сотрудник склада магазина"));
+            if (rolesUser.Where(p => p.RoleId == 21).Count() > 0)
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Администратор"));
 
             await HttpContext.SignInAsync("Application", new ClaimsPrincipal(claimsIdentity));
         }

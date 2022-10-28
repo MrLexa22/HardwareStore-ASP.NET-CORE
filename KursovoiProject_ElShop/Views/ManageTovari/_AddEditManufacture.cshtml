@@ -1,0 +1,53 @@
+﻿@model Manufacture;
+<div class="modal-content">
+    @Html.AntiForgeryToken()
+    <link rel="stylesheet" type="text/css" href="~/css/style_list.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/styleInputFile.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous">
+    <script src="~/lib/jQuery-Mask-Plugin-master/dist/jquery.mask.js"></script>
+    <script src="~/lib/selectize.js-master/dist/js/selectize.js"></script>
+    <link href="~/lib/selectize.js-master/dist/css/selectize.default.css" rel="stylesheet">
+    <div class="modal-windows">
+        <div class="obratnii-zvonok modal-body">
+            <div class="form-edit fformms" style="padding: 30px; background-color: #fff; border-radius: 5px; box-shadow: 1px 1px 10px 0 rgb(0 0 0 / 12%); color: #696969; ">
+                <div class="zvonok-title">@if (Model.IdManufacture == 0) { <text>Добавление</text>} else{<text>Изменение</text>} производителя</div>
+                <form asp-action="AddEditManufacturePost" asp-controller="ManageTovari" asp-route-id="@Model.IdManufacture" method="post" class="callback-from" enctype="multipart/form-data">
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+                    <div class="form-zap">
+                        <label asp-for="@Model.NameManufacture" class="required">Наименование производителя</label>
+                        <input type="text" asp-for="@Model.NameManufacture" class="inputs imz-in" />
+                        <span asp-validation-for="@Model.NameManufacture" style="color: red;"></span>
+                    </div>
+                </form>
+                <div class="btn-center">
+                    <input class="sbm-zvonok" id="subbtnff" type="button" value="@if (Model.IdManufacture == 0) { <text>Добавить</text>} else{<text>Изменить</text>}" />
+                </div>
+                <div class="btn-center">
+                    <button class="sbm-zvonok otm" style="background-color: #c4c4c4; margin-top: 15px; color: White;" onclick='$(".modal-content").remove();'>Отмена</button>
+                </div>
+                    <script>
+                        $("#subbtnff").click(function (e) {
+                            var placeholderElement = $('.modal');
+                            var form = $(this).parents('.modal').find('form');
+                            var actionUrl = form.attr('action');
+                            var dataToSend = form.serialize();
+
+                            $.post(actionUrl, dataToSend).done(function (data) {
+                                var newBody = $('.modal-body', data);
+                                placeholderElement.find('.modal-body').replaceWith(newBody);
+                                var isValid = newBody.find('[name="IsValid"]').val() == 'True';
+                                if (newBody.find('[name="IsValid"]').val() == undefined || newBody.find('[name="IsValid"]').val() == 'True') {
+                                    $(".modal-content").remove();
+                                    var urls = '@Url.Action("GetAllManufactures", "ManageTovari")?search=' + $("#searchf").val();
+                                    $('#panel').load(urls);
+                                }
+                            });
+                        });
+                </script>
+            </div>
+        </div>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" defer></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" defer></script>
+    </div>
+</div>

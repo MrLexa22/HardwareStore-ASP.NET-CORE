@@ -44,5 +44,31 @@ namespace KursovoiProject_ElShop
             }
             return 0;
         }
+
+        public static int DeleteOldFileTovar(string nameFile)
+        {
+            var connectionInfo = new ConnectionInfo(host, "root", new PasswordAuthenticationMethod(username, password));
+            using (var sftp = new SftpClient(connectionInfo))
+            {
+                sftp.Connect();
+                sftp.ChangeDirectory("/var/www/89-108-64-223.cloudvps.regruhosting.ru/TovariImages");
+                sftp.DeleteFile(nameFile);
+                sftp.Disconnect();
+            }
+            return 0;
+        }
+
+        public static int SendFileTovar(IFormFile uploadedFile, string id, string extension)
+        {
+            var connectionInfo = new ConnectionInfo(host, "root", new PasswordAuthenticationMethod(username, password));
+            using (var sftp = new SftpClient(connectionInfo))
+            {
+                sftp.Connect();
+                sftp.ChangeDirectory("/var/www/89-108-64-223.cloudvps.regruhosting.ru/TovariImages");
+                sftp.UploadFile(uploadedFile.OpenReadStream(), id + extension, true);
+                sftp.Disconnect();
+            }
+            return 0;
+        }
     }
 }

@@ -13,6 +13,9 @@ namespace KursovoiProject_ElShop.Models
         [ValidateNever]
         [Display(Name = "Картинка товара")]
         public string? FTTPPathImage { get; set; }
+
+        [ValidateNever]
+        public bool hasImage { get; set; }
         public IFormFile uploadedImage { get; set; }
     }
     public class AddEditTovar
