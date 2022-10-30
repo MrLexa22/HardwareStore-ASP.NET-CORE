@@ -48,6 +48,8 @@ namespace KursovoiProject_ElShop.Controllers
         }
         public IActionResult Index()
         {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
             IdexPageManageOrders model = new IdexPageManageOrders();
             model.filialsWork = (List<Filial>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Filials/GetFilialsWhereWork/{getEmail()}").Result.Content.ReadAsStringAsync().Result, typeof(List<Filial>));
             model.filialsAll = (List<Filial>)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Filials/GetAllFilials").Result.Content.ReadAsStringAsync().Result, typeof(List<Filial>));

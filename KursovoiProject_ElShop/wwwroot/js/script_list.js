@@ -1,6 +1,9 @@
-﻿t = document.getElementById('rod').value;
-if (t != "")
-    $("#rod1").text(t);
+﻿try {
+    t = document.getElementById('rod').value;
+    if (t != "")
+        $("#rod1").text(t);
+}
+catch {}
 
 $('.dropdown1').click(function () {
     $(this).attr('tabindex', 1).focus();

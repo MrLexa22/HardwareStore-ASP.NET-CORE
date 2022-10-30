@@ -158,7 +158,23 @@
         $('input[name="tabs"]').click(function(){
             var statusOrder = $(this).attr('id').slice(6);
             urls = '@Url.Action("GetAllOrders", "ManageOrders")?statusOrder='+statusOrder;
-            $('#panel').load(urls+'&filial='+$("#filial").val());
+            if(Number(statusOrder) > 2)
+            {
+                $('#filials').val($('#filial').val());
+                $('.filialsWork').attr("id","filials");
+                $('.filialsAll').attr("id","filial");
+                $('.filialsWork').css("display", "none");
+                $('.filialsAll').css("display", "block");
+            }
+            if(Number(statusOrder) < 3)
+            {
+                $('.filialsAll').attr("id","filials");
+                $('.filialsWork').attr("id","filial");
+                $('.filialsAll').css("display", "none");
+                $('.filialsWork').css("display", "block");
+            }
+            getvaluesToTop();
+            $('#panel').load(urls+'&search=' + $("#searchf").val() +'&typesort='+$("#typesort").val()+'&filial='+$("#filial").val());
         });
     </script>
 </main>
