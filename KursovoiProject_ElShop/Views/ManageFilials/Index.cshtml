@@ -48,7 +48,7 @@
         var urls = '@Url.Action("GetAllFilials", "ManageFilials")?type=1';
         $('#panel').load(urls);
         $("#btn_filters").click(function(){
-            var urls = '@Url.Action("GetAllFilials", "ManageFilials")?search=' + $("#searchf").val() +'&typesort='+$("#typesort").val()+'&type='+$("#type").val();
+            urls = '@Url.Action("GetAllFilials", "ManageFilials")?search=' + $("#searchf").val() +'&typesort='+$("#typesort").val()+'&type='+$("#type").val();
             $('#panel').load(urls);
         });
         $("#addAdds").click(function (e) {
@@ -59,16 +59,24 @@
                 $('#modDialog').show();
             });
         });
-        function deleteConfirm(theObject){
+        function closeFilial(theObject){
             $.ajaxSetup({ cache: false });
-            $.get('/ManageCategori/ConfirmDelete/'+theObject, function (data) {
+            $.get('/ManageFilials/ConfirmClose/'+theObject, function (data) {
                 $('#dialogContent').html(data);
                 $('#modDialog').show();
             });
         }
-        function editAdds(theObject){
+        function openFilial(theObject){
             $.ajaxSetup({ cache: false });
-            $.get('/ManageCategori/AddEditCategory/'+theObject, function (data) {
+            $.get('/ManageFilials/ConfirmOpen/'+theObject, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').show();
+            });
+        }
+
+        function editFilial(theObject){
+            $.ajaxSetup({ cache: false });
+            $.get('/ManageFilials/AddEditFilial/'+theObject, function (data) {
                 $('#dialogContent').html(data);
                 $('#modDialog').show();
             });

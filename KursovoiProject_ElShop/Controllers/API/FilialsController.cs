@@ -51,10 +51,54 @@ namespace KursovoiProject_ElShop.Controllers.API
             return await _context.Filials.Where(p=>p.Availeble==true).ToListAsync();
         }
 
+        [HttpGet("GetFilialsWhereWork/{email}")]
+        public async Task<ActionResult<IEnumerable<Filial>>> GetFilialsWhereWork(string email)
+        {
+            int UserID = _context.Users.Where(p => p.Login == email).First().IdUser;
+            var listFilials = _context.WorkersFilials.Include(p=>p.Filial).Where(p => p.UserId == UserID).ToList();
+            List<Filial> filials = new List<Filial>();
+            foreach(var a in listFilials)
+            {
+                filials.Add(a.Filial);
+            }
+            return filials;
+        }
+
         [HttpGet("GetAllFilials")]
         public async Task<ActionResult<IEnumerable<Filial>>> GetAllFilials()
         {
             return await _context.Filials.ToListAsync();
+        }
+
+        [HttpGet("CheckExistFilial/{id}/{name}/{address}")]
+        public async Task<ActionResult<Boolean>> CheckExistFilial(int id, string name, string address)
+        {
+            Boolean result = true;
+            if (_context.Filials.Where(p => (p.NameFilial.ToLower() == name.ToLower() || p.AddressFilial.ToLower() == address.ToLower()) && p.IdFilial != id).Count() > 0)
+                result = false;
+            return result;
+        }
+
+        [HttpGet("AddEditFilial/{id}/{name}/{address}")]
+        public async Task<ActionResult<Filial>> AddEditFilial(int id, string name, string address)
+        {
+            Filial model = new Filial();
+            if(id == 0)
+            {
+                model.NameFilial = name.Trim();
+                model.AddressFilial = address.Trim();
+                _context.Filials.Add(model);
+                await _context.SaveChangesAsync();
+            }
+            if (id > 0)
+            {
+                model = await _context.Filials.FindAsync(id);
+                model.NameFilial = name.Trim();
+                model.AddressFilial = address.Trim();
+                _context.Filials.Update(model);
+                await _context.SaveChangesAsync();
+            }
+            return model;
         }
 
         [HttpGet("GetFilialsWithBoolean/{idSotr}")]
@@ -86,6 +130,32 @@ namespace KursovoiProject_ElShop.Controllers.API
                 list.Add(h);
             }
             return list;
+        }
+
+        [HttpGet("GetFilialByID/{id}")]
+        public async Task<ActionResult<Filial>> GetFilialByID(int id)
+        {
+            return await _context.Filials.FindAsync(id);
+        }
+
+        [HttpDelete("CloseFilial/{id}")]
+        public async Task<ActionResult> CloseFilial(int id)
+        {
+            var a = await _context.Filials.FindAsync(id);
+            a.Availeble = false;
+            _context.Update(a);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpGet("OpenFilial/{id}")]
+        public async Task<ActionResult> OpenFilial(int id)
+        {
+            var a = await _context.Filials.FindAsync(id);
+            a.Availeble = true;
+            _context.Update(a);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
     }
 }

@@ -1,0 +1,40 @@
+﻿@model Filial;
+<div class="modal-content">
+    <link rel="stylesheet" type="text/css" href="~/css/style_list.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/styleInputFile.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <div class="modal-windows">
+        <div class="obratnii-zvonok">
+            <div class="form-edit fformms" style="padding: 30px; background-color: #fff; border-radius: 5px; box-shadow: 1px 1px 10px 0 rgb(0 0 0 / 12%); color: #696969; ">
+                <div class="zvonok-title">Вы уверены, что желаете открыть данный филиал?</div>
+                    <div>
+                        <div class="form-zap">
+                            <label class="required">Наименование филиала</label>
+                            <input class="inputs imz-in" value="@Model.NameFilial.ToString()" readonly>
+                        </div>
+                        <div class="form-zap">
+                            <label class="required">Адрес филиала</label>
+                            <input class="inputs imz-in" value="@Model.AddressFilial" readonly>
+                        </div>
+                    </div>
+                    <div class="form-zap">
+                        <div class="btn-center">
+                            <input class="sbm-zvonok" id="submitDelete" type="submit" value="Открыть филиал" />
+                        </div>
+                    </div>
+                    <div class="btn-center">
+                        <button class="sbm-zvonok otm" style="background-color: #c4c4c4; margin-top: 15px; color: White;" onclick='$(".modal-content").remove();'>Отмена</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $( "#submitDelete" ).click(function() {
+          fetch('api/Filials/OpenFilial/@Model.IdFilial', { method: 'GET' })
+            .then(() => {
+                $('#panel').load(urls);
+                $(".modal-content").remove();
+            });
+        });
+    </script>
+</div>

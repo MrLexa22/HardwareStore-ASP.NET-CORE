@@ -64,5 +64,84 @@ namespace KursovoiProject_ElShop.Controllers
             model.FilterViewModel = new FilterViewModel_AddsSites(search, typesort, type, null);
             return PartialView("~/Views/ManageFilials/_ListFilials.cshtml", model);
         }
+        public async Task<IActionResult> ConfirmClose(int id)
+        {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
+
+            Filial model = new Filial();
+            model = (Filial)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Filials/GetFilialByID/{id}").Result.Content.ReadAsStringAsync().Result, typeof(Filial));
+            return PartialView("~/Views/ManageFilials/_ConfirmClose.cshtml", model);
+        }
+
+        public async Task<IActionResult> ConfirmOpen(int id)
+        {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
+
+            Filial model = new Filial();
+            model = (Filial)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Filials/GetFilialByID/{id}").Result.Content.ReadAsStringAsync().Result, typeof(Filial));
+            return PartialView("~/Views/ManageFilials/_ConfirmOpen.cshtml", model);
+        }
+
+        public async Task<IActionResult> AddEditFilial(int id)
+        {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
+
+            Filial model = new Filial();
+            if(id > 0)
+                model = (Filial)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Filials/GetFilialByID/{id}").Result.Content.ReadAsStringAsync().Result, typeof(Filial));
+            return PartialView("~/Views/ManageFilials/_AddEditFilial.cshtml", model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddEditFilialPost(int id, Filial model)
+        {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
+            model.IdFilial = id;
+            if(model.NameFilial == null)
+            {
+                ModelState.AddModelError("NameFilial", "Некорректное наименование филиала");
+                return PartialView("~/Views/ManageFilials/_AddEditFilial.cshtml", model);
+            }
+            if (model.NameFilial.Trim().Length < 3 || model.NameFilial.Trim().Length > 40)
+            {
+                ModelState.AddModelError("NameFilial", "Минимум 3 символа. Максимум 40");
+                return PartialView("~/Views/ManageFilials/_AddEditFilial.cshtml", model);
+            }
+
+            if (model.AddressFilial == null)
+            {
+                ModelState.AddModelError("AddressFilial", "Некорректный адрес филиала");
+                return PartialView("~/Views/ManageFilials/_AddEditFilial.cshtml", model);
+            }
+            if (model.AddressFilial.Trim().Length < 3 || model.AddressFilial.Trim().Length > 150)
+            {
+                ModelState.AddModelError("AddressFilial", "Минимум 3 символа. Максимум 150");
+                return PartialView("~/Views/ManageFilials/_AddEditFilial.cshtml", model);
+            }
+
+            if (model.NameFilial.Contains("/") || model.NameFilial.Contains("\\"))
+            {
+                ModelState.AddModelError("NameFilial", "/ или \\ недопустимы");
+                return PartialView("~/Views/ManageFilials/_AddEditFilial.cshtml", model);
+            }
+            if (model.AddressFilial.Contains("/") || model.AddressFilial.Contains("\\"))
+            {
+                ModelState.AddModelError("AddressFilial", "/ или \\ недопустимы");
+                return PartialView("~/Views/ManageFilials/_AddEditFilial.cshtml", model);
+            }
+
+            if((Boolean)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Filials/CheckExistFilial/{id}/{model.NameFilial}/{model.AddressFilial}").Result.Content.ReadAsStringAsync().Result, typeof(Boolean)) == false)
+            {
+                ModelState.AddModelError("NameFilial", "Филиал с таким адресом/наименование уже существует!");
+                return PartialView("~/Views/ManageFilials/_AddEditFilial.cshtml", model);
+            }
+
+            var a = (Filial)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Filials/AddEditFilial/{id}/{model.NameFilial}/{model.AddressFilial}").Result.Content.ReadAsStringAsync().Result, typeof(Filial));
+
+            return PartialView("~/Views/ManageFilials/_AddEditFilial.cshtml", model);
+        }
     }
 }

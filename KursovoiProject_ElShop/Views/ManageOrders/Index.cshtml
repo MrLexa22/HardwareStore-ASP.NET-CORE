@@ -1,0 +1,164 @@
+﻿@using KursovoiProject_ElShop.Controllers.Validation
+@model IdexPageManageOrders;
+<link rel="stylesheet" href="~/css/styletovarilist.css">
+@{
+    ViewData["Title"] = "Заказы";
+}
+<style>
+    .tabs-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tabs {
+      width: 100%;
+      display: flex;
+      position: relative;
+      background-color: #fff;
+      padding: 0.75rem;
+      justify-content: space-between;
+      border-radius: 99px;
+    }
+    .tabs * {
+      z-index: 2;
+    }
+    .radiobtntabs {
+      display: none;
+    }
+    .tab {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 24px;
+      width: 250px;
+      font-size: 16px;
+      font-weight: 500;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: color 0.15s ease-in;
+    }
+    .notification {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      font-size: 11px;
+      margin-left: 0.75rem;
+      border-radius: 50%;
+      background-color: #e6eef9;
+      transition: 0.15s ease-in;
+    }
+    input[type="radio"]:checked + label {
+      color: white;
+    }
+    input[type="radio"]:checked + label > .notification {
+      background-color: #185ee0;
+      color: #fff;
+    }
+    input[id="radio-0"]:checked ~ .glider {
+      transform: translateX(10%);
+    }
+    input[id="radio-1"]:checked ~ .glider {
+      transform: translateX(148%);
+    }
+    input[id="radio-2"]:checked ~ .glider {
+      transform: translateX(285%);
+    }
+    input[id="radio-3"]:checked ~ .glider {
+      transform: translateX(428%);
+    }
+    .glider {
+      position: absolute;
+      display: flex;
+      height: 24px;
+      width: 200px;
+      background-color: #d75232;
+      z-index: 1;
+      border-radius: 99px;
+      transition: 0.25s ease-out;
+    }
+</style>
+<main class="content-main" style="max-width: 1190px; margin: 0 auto;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    max-width: 1190px;
+    padding: 0 13px;">
+        <div>
+            <div class="filter" style="padding-left: 25px; padding-right: 25px; margin-top: 25px;">
+                <div class="tabs-container">
+	                <div class="tabs">
+		                <input type="radio" id="radio-0" name="tabs" class="radiobtntabs" checked />
+		                <label class="tab" for="radio-0">Ожидает подтвержд.<span class="notification" id="notification0">0</span></label>
+		                <input type="radio" id="radio-1" name="tabs" class="radiobtntabs" />
+		                <label class="tab" for="radio-1">Подтверждённые<span class="notification" id="notification1">0</span></label>
+		                <input type="radio" id="radio-2" name="tabs" class="radiobtntabs" />
+		                <label class="tab" for="radio-2">Собранные<span class="notification" id="notification2">0</span></label>
+                        <input type="radio" id="radio-3" name="tabs" class="radiobtntabs" />
+		                <label class="tab" for="radio-3">Завершённые<span class="notification" id="notification34">0</span></label>
+		                <span class="glider"></span>
+	                </div>
+                </div>
+                <div>
+                    <div class="filter__title">Номер заказа / Фамилия Имя / Номер телефона:</div>
+                    <div class="filter-range-preview">
+				        <input style="margin: 0; text-align: left;" class="filter-range-preview__input" id="searchf">
+			        </div>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <div>
+                        <div class="filter__title">Сортировать по:</div>
+                        <div class="filter-range-preview">
+                            <select id="typesort" name="typesort" style="width: 100%;">
+                              <option value="0">По умолчанию (дате, от старого к новому)</option>
+                              <option value="1">По дате (от нового к старому)</option>
+                              <option value="2">По стоимости (от меньшего к большему)</option>
+                              <option value="3">По стоимости (от большего к меньшему)</option>
+                            </select>
+			            </div>
+                    </div>
+                    <div>
+                        <div class="filter__title">Филиал:</div>
+                         <div class="filter-range-preview">
+                            <select id="filial" class="filialsWork" asp-items="@(new SelectList(Model.filialsWork, nameof(Filial.IdFilial), nameof(Filial.NameFilial)))" style="width: 100%;"></select>
+                            <select id="filials" class="filialsAll" asp-items="@(new SelectList(Model.filialsAll, nameof(Filial.IdFilial), nameof(Filial.NameFilial)))" style="width: 100%; display: none;"></select>
+			            </div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <button id="btn_filters" style="margin-top: 10px;" class="btn btn_outline btn_primary filter__submit">Применить</button>
+                </div>
+        </div>
+        <div style="padding-top: 25px;" id="panel"></div>
+    </div>
+    <script type="text/javascript">
+        function getvaluesToTop(){
+            fetch('@BaseAddresse.Address'+'api/Order/GetCountWithStatus/'+$("#filial").val())
+            .then((response) => {
+              return response.json();
+            })
+            .then((data) => {
+                $('#notification0').text(data[0]);
+                $('#notification1').text(data[1]);
+                $('#notification2').text(data[2]);
+                $('#notification34').text(data[3]);
+            });
+        }
+
+        let urls = '@Url.Action("GetAllOrders", "ManageOrders")?statusOrder=0';
+        $('#panel').load(urls+'&filial='+$("#filial").val());
+        getvaluesToTop();
+
+        $("#btn_filters").click(function(){
+            $('#panel').load(urls+'&search=' + $("#searchf").val() +'&typesort='+$("#typesort").val()+'&filial='+$("#filial").val());
+            getvaluesToTop();
+        });
+
+        $('input[name="tabs"]').click(function(){
+            var statusOrder = $(this).attr('id').slice(6);
+            urls = '@Url.Action("GetAllOrders", "ManageOrders")?statusOrder='+statusOrder;
+            $('#panel').load(urls+'&filial='+$("#filial").val());
+        });
+    </script>
+</main>

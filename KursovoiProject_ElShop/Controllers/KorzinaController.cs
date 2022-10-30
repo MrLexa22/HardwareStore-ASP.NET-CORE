@@ -187,8 +187,8 @@ namespace KursovoiProject_ElShop.Controllers
             //2 - Ожидает выдачи
             //3 - Завершён. Выдан покупателю
             //4 - Завершён. Отменён
-            //5 - Полный возврат
-            //6 - Частичный возврат
+            ////////5 - Полный возврат
+            ////////6 - Частичный возврат
             Order order = new Order();
             order.OrderNumber = nomerZakaz;
             order.DateOrder = DateTime.Now;
