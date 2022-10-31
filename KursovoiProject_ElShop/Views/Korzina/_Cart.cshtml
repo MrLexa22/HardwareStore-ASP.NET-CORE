@@ -28,7 +28,6 @@
                                             {
                                                 <div class="profiles-form__block">
                                                     <div class="form-group profiles-form__input" style="display: flex;">
-                                                        @*<input style="display: none;" asp-for="@Model.list_filial[i].IdFilial">*@
                                                         <input style="height: 100%; margin-right:10px;" checked type="radio" id="gr_@Model.list_filial[i].IdFilial" asp-for="@Model.SelectedFilial" value="@Model.list_filial[i].IdFilial">
                                                         <label for="gr_@Model.list_filial[i].IdFilial"><b>@Model.list_filial[i].NameFilial</b> (<a href="https://yandex.ru/maps/213/moscow/search/@Model.list_filial[i].AddressFilial" target="_blank">@Model.list_filial[i].AddressFilial</a>)</label>
                                                     </div>

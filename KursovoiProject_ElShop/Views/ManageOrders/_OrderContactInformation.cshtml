@@ -1,0 +1,29 @@
+﻿ <div class="profiles-form__section">
+     <div class="profiles-form__block profiles-form__block_wide">
+             <div class="form-group profiles-form__input">
+                 <label class="form-group__label form-group__label_required">
+                     Контактное лицо
+                 </label>
+                <input asp-for="@Model.contacts.Contact_Name" type="text" class="input form-group__input" required="">
+                 <span asp-validation-for="@Model.contacts.Contact_Name" style="color: red;"></span>
+             </div>
+    </div>
+     <div class="profiles-form__block">
+         <div class="form-group profiles-form__input">
+               <label class="form-group__label form-group__label_required">
+                     E-mail
+                 </label>
+                 <input asp-for="@Model.contacts.Contact_Email" type="email" class="input form-group__input" required="">
+                <span asp-validation-for="@Model.contacts.Contact_Email" style="color: red;"></span>
+         </div>
+    </div>
+     <div class="profiles-form__block">
+        <div class="form-group profiles-form__input">
+            <label class="form-group__label form-group__label_required">
+                 Телефон (моб)
+             </label>
+             <input id="telnam" asp-for="@Model.contacts.Contact_Telefon" type="tel" class="input form-group__input">
+             <span asp-validation-for="@Model.contacts.Contact_Telefon" style="color: red;"></span>
+         </div>
+     </div>
+ </div>
