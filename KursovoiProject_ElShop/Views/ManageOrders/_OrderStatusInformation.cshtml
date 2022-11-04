@@ -1,0 +1,171 @@
+﻿@model OrderAboutManageOrders
+<div class="card checkout" style="border-radius: 0px; box-shadow: none; margin: 0;">
+    <div class="checkout__title">
+        <div class="checkout__step">1</div>
+        Статус заказа
+    </div>
+    <div>
+        <div class="profiles-form checkout__profile">
+            <div class="profiles-form__section">
+                @if (Model.StatusOrder != 3 && Model.StatusOrder != 4)
+                {
+                    <div class="basket-submit" style="margin-left: 15px;">
+                        <div id="deleteOrder" style="background-color: gray; border-color: gray; color: #fff; width: fit-content; cursor: pointer; line-height: 1.8;" class="btn btn_primary basket-submit__btn" >Отменить заказ</div>
+                    </div>
+                }
+                <div class="profiles-form__block" style="width:100%;">
+                    <div class="form-group profiles-form__input" style="display: flex; width:100%;">
+                        @if(User.IsInRole("Сотрудник склада магазина") && Model.StatusOrder == 0)
+                        {
+                            <div style="display: flex; align-items: center;">
+                                <div>
+                                    <p class="dostavka" style="max-width: 200px; align-items: center; text-align: center; background: #fff495; font-weight: bold; cursor: default;">Создан. Ожидает подтверждения</p>
+                                </div>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="35" width="35" style="fill: #C62306;" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 223.413 223.413" xml:space="preserve">
+			                            <polygon  style="fill: #C62306;" points="57.179,223.413 51.224,217.276 159.925,111.71 51.224,6.127 57.179,0 172.189,111.71         "/>
+                                    </svg>
+                                </div>
+                                <div style="margin-left: 15px;">
+                                    <div class="basket-submit">
+                                        <div id="NextStatus" style="background-color: #c62306; border-color: #c62306; color: #fff; width: fit-content; cursor: pointer; line-height: 1.8;" class="btn btn_primary basket-submit__btn" >Подтвердить заказ</div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else if(Model.StatusOrder == 0)
+                        {
+                            <div style="display: flex; align-items: center;">
+                                <div>
+                                    <p class="dostavka" style="max-width: 200px; align-items: center; text-align: center; background: #fff495; font-weight: bold; cursor: default;">Создан. Ожидает подтверждения</p>
+                                </div>
+                            </div>
+                        }
+
+                        @if(User.IsInRole("Сотрудник склада магазина") && Model.StatusOrder == 1)
+                        {
+                            <div style="display: flex; align-items: center;">
+                                <div style="margin-right: 15px;">
+                                    <div class="basket-submit">
+                                        <div id="BackStatus" style="background-color: #c62306; border-color: #c62306; color: #fff; width: fit-content; cursor: pointer; line-height: 1.8;" class="btn btn_primary basket-submit__btn" >Вернуть на подтверждение</div>
+                                    </div>
+                                </div>
+                                <div style="margin-right: 15px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="35" width="35" style="fill: #C62306; transform: rotate(180deg);" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 223.413 223.413" xml:space="preserve">
+			                            <polygon  style="fill: #C62306;" points="57.179,223.413 51.224,217.276 159.925,111.71 51.224,6.127 57.179,0 172.189,111.71         "/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="dostavka" style="max-width: 200px; align-items: center; text-align: center; background: #c4daff; font-weight: bold; cursor: default;">Подтверждён. Сборка</p>
+                                </div>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="35" width="35" style="fill: #C62306;" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 223.413 223.413" xml:space="preserve">
+			                            <polygon  style="fill: #C62306;" points="57.179,223.413 51.224,217.276 159.925,111.71 51.224,6.127 57.179,0 172.189,111.71         "/>
+                                    </svg>
+                                </div>
+                                <div style="margin-left: 15px;">
+                                    <div class="basket-submit">
+                                        <div id="NextStatus" style="background-color: #c62306; border-color: #c62306; color: #fff; width: fit-content; cursor: pointer; line-height: 1.8;" class="btn btn_primary basket-submit__btn" >Собрать заказ</div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else if(Model.StatusOrder == 1)
+                        {
+                            <div style="display: flex; align-items: center;">
+                                <div>
+                                    <p class="dostavka" style="max-width: 200px; align-items: center; text-align: center; background: #c4daff; font-weight: bold; cursor: default;">Подтверждён. Сборка</p>
+                                </div>
+                            </div>
+                        }
+
+                        @if(User.IsInRole("Сотрудник отдела продаж") && Model.StatusOrder == 2)
+                        {
+                            <div style="display: flex; align-items: center;">
+                                <div style="margin-right: 15px;">
+                                    <div class="basket-submit">
+                                        <div id="BackStatus" style="background-color: #c62306; border-color: #c62306; color: #fff; width: fit-content; cursor: pointer; line-height: 1.8;" class="btn btn_primary basket-submit__btn" >Вернуть на сборку</div>
+                                    </div>
+                                </div>
+                                <div style="margin-right: 15px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="35" width="35" style="fill: #C62306; transform: rotate(180deg);" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 223.413 223.413" xml:space="preserve">
+			                            <polygon  style="fill: #C62306;" points="57.179,223.413 51.224,217.276 159.925,111.71 51.224,6.127 57.179,0 172.189,111.71         "/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="dostavka" style="max-width: 200px; align-items: center; text-align: center; color: white; background: #2780ff; font-weight: bold; cursor: default;">Ожидает выдачи</p>
+                                </div>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="35" width="35" style="fill: #C62306;" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 223.413 223.413" xml:space="preserve">
+			                            <polygon  style="fill: #C62306;" points="57.179,223.413 51.224,217.276 159.925,111.71 51.224,6.127 57.179,0 172.189,111.71         "/>
+                                    </svg>
+                                </div>
+                                <div style="margin-left: 15px;">
+                                    <div class="basket-submit">
+                                        <div id="NextStatus" style="background-color: #c62306; border-color: #c62306; color: #fff; width: fit-content; cursor: pointer; line-height: 1.8;" class="btn btn_primary basket-submit__btn" >Выдать заказ</div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else if(Model.StatusOrder == 2)
+                        {
+                            <div style="display: flex; align-items: center;">
+                                <div>
+                                    <p class="dostavka" style="max-width: 200px; align-items: center; text-align: center; background: #c4daff; font-weight: bold; cursor: default;">Подтверждён. Сборка</p>
+                                </div>
+                            </div>
+                        }
+
+                        @if(Model.StatusOrder == 3)
+                        {
+                            <p class="dostavka" style="max-width: 200px; align-items: center; color: white; text-align: center; background: #3ebb46; font-weight: bold; cursor: default;">Завершён. Выдан покупателю</p>
+                        }
+                        @if(Model.StatusOrder == 4)
+                        {
+                            <p class="dostavka" style="max-width: 260px; align-items: center; text-align: center; color: white; background: #555054; font-weight: bold; cursor: default; ">Завершён. Отменён</p>
+                        }
+                    </div>
+                </div>
+                <div class="form-group profiles-form__input" style="width:100%;">
+                   @if(Model.DateReadyToExtradition != null)
+                   {
+                       <p style="margin: 0.2rem;"><b>Дата и время сборки заказа:</b> @Model.DateReadyToExtradition</p>
+                       <p style="margin: 0.2rem; margin-bottom: 10px;"><b>Сборщик:</b> @Model.Sborshik</p>
+                   }
+                   @if(Model.DateExtradition != null)
+                   {
+                       <p style="margin: 0.2rem;"><b>Дата и время выдчи заказа:</b> @Model.DateExtradition</p>
+                       <p style="margin: 0.2rem;"><b>Выдал:</b> @Model.Vidal</p>
+                   }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#deleteOrder').click(async function(e) { 
+        let a = await fetch('/api/Order/CancelOrder/@Model.ID_Order', {
+          method: 'DELETE',
+        })
+        .then(res => res.text())
+        .then();
+         $('#status_order').load('@Url.Action("GetOrderStatus", "ManageOrders", new {id = @Model.ID_Order})');
+    });
+
+    $('#NextStatus').click(async function(e) { 
+        let a = await fetch('/api/Order/NextStatus/@Model.ID_Order/@Model.WorkerUserID', {
+          method: 'PUT',
+        })
+        .then(res => res.text())
+        .then();
+         $('#status_order').load('@Url.Action("GetOrderStatus", "ManageOrders", new {id = @Model.ID_Order})');
+    });
+    $('#BackStatus').click(async function(e) { 
+        let a = await fetch('/api/Order/BackStatus/@Model.ID_Order', {
+          method: 'PUT',
+        })
+        .then(res => res.text())
+        .then();
+         $('#status_order').load('@Url.Action("GetOrderStatus", "ManageOrders", new {id = @Model.ID_Order})');
+    });
+</script>

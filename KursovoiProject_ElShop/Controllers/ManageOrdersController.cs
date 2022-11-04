@@ -92,5 +92,25 @@ namespace KursovoiProject_ElShop.Controllers
             model.FilterViewModel = new FilterViewModel_ManageOrders(search, typesort, filial, statusOrder);
             return PartialView("~/Views/ManageOrders/_ListOrders.cshtml", model);
         }
+
+        public async Task<IActionResult> AboutOrderIndex(int id)
+        {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
+
+            OrderAboutManageOrders model = new OrderAboutManageOrders();
+            model = (OrderAboutManageOrders)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Order/GetInformationForIndexPage/{id}").Result.Content.ReadAsStringAsync().Result, typeof(OrderAboutManageOrders));
+            return View(model);
+        }
+
+        public async Task<IActionResult> GetOrderStatus(int id)
+        {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
+
+            OrderAboutManageOrders model = new OrderAboutManageOrders();
+            model = (OrderAboutManageOrders)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Order/GetInformationForOrderPage/{id}/{getEmail()}").Result.Content.ReadAsStringAsync().Result, typeof(OrderAboutManageOrders));
+            return PartialView("~/Views/ManageOrders/_OrderStatusInformation.cshtml", model);
+        }
     }
 }

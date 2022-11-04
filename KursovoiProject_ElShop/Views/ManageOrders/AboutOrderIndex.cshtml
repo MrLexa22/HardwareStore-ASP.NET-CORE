@@ -12,9 +12,10 @@
         <div class="main-div-left">
             <main class="main">
                 <header class="page-header">
-                    <h1>Заказ № @Model.ID_Order </h1>
+                    <h1>Заказ № @Model.ID_Order от @Model.DateOrder</h1>
                 </header>
                         <div class="basket">
+                            <div id="status_order"></div> @*Статус заказа*@
                             <div class="basket__row basket__row_header">
                                 <div class="basket__col basket__col_image-header"></div>
                                 <div class="basket__col basket__col_name">Наименование товара</div>
@@ -23,7 +24,7 @@
                                 <div class="basket__col basket__col_actions-header">Действия</div>
                             </div>
                             <div id="panel_cart"></div> @*Состав заказа*@
-                            <div class="card checkout" style="border-radius: 0px; box-shadow: none;">
+                            <div class="card checkout" style="border-radius: 0px; box-shadow: none; margin:0;">
                                 <div class="checkout__title">
                                     <div class="checkout__step">2</div>
                                     Способ получения
@@ -41,7 +42,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card checkout" style="border-radius: 0px; box-shadow: none;">
+                            <div class="card checkout" style="border-radius: 0px; box-shadow: none; margin:0;">
                                 <div class="checkout__title">
                                     <div class="checkout__step">3</div>
                                     Контактная информация
@@ -56,11 +57,6 @@
                                 </div>
                             </div>
                         </div>
-                    <script>
-                        //$("#telnam").mask('+7(999)999-99-99');
-                        //var urls = '@Url.Action("GetCartTovari", "Korzina")';
-                        //$('#panel_cart').load(urls);
-                    </script>
             </main>
         </div>
     </div>
@@ -68,7 +64,6 @@
 
 <link rel="stylesheet" href="~/css/stylekorzina.css">
 <script>
-    //var urls = '@Url.Action("GetCart", "Korzina")';
-    //$('#panel').load(urls);
+    $('#status_order').load('@Url.Action("GetOrderStatus", "ManageOrders", new {id = @Model.ID_Order})');
 </script>
 

@@ -30,6 +30,7 @@
     public class OrderAboutManageOrders
     {
         public int ID_Order { get; set; }
+        public int WorkerUserID { get; set; }
         public int StatusOrder { get; set; }
         public string FI { get; set; }
         public string PhoneNumber { get; set; }
@@ -42,6 +43,8 @@
         public string FilialAddress { get; set; }
         public int Filial_ID { get; set; }
         public string SummaOrder { get; set; }
+        public string? Sborshik { get; set; }
+        public string? Vidal { get; set; }
         public List<availibleTovari> listTovari { get; set; }
     }
 
