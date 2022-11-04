@@ -112,5 +112,15 @@ namespace KursovoiProject_ElShop.Controllers
             model = (OrderAboutManageOrders)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Order/GetInformationForOrderPage/{id}/{getEmail()}").Result.Content.ReadAsStringAsync().Result, typeof(OrderAboutManageOrders));
             return PartialView("~/Views/ManageOrders/_OrderStatusInformation.cshtml", model);
         }
+
+        public async Task<IActionResult> GetOrderContainer(int id)
+        {
+            if (!CheckAuthentication())
+                return RedirectToAction("Index", "Home");
+
+            OrderAboutManageOrders model = new OrderAboutManageOrders();
+            model = (OrderAboutManageOrders)JsonConvert.DeserializeObject(client.GetAsync(@$"api/Order/GetOrderContainer/{id}").Result.Content.ReadAsStringAsync().Result, typeof(OrderAboutManageOrders));
+            return PartialView("~/Views/ManageOrders/_OrderContainerInformation.cshtml", model);
+        }
     }
 }

@@ -41,6 +41,7 @@
         public string? FI_Extradition { get; set; }
         public string FilialName { get; set; }
         public string FilialAddress { get; set; }
+        public string Email { get; set; }
         public int Filial_ID { get; set; }
         public string SummaOrder { get; set; }
         public string? Sborshik { get; set; }

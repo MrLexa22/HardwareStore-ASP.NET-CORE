@@ -21,9 +21,8 @@
                                 <div class="basket__col basket__col_name">Наименование товара</div>
                                 <div class="basket__col basket__col_quanity-header">Количество</div>
                                 <div class="basket__col basket__col_price-header">Цена</div>
-                                <div class="basket__col basket__col_actions-header">Действия</div>
                             </div>
-                            <div id="panel_cart"></div> @*Состав заказа*@
+                            <div id="panel_cart">@*Состав заказа*@</div> 
                             <div class="card checkout" style="border-radius: 0px; box-shadow: none; margin:0;">
                                 <div class="checkout__title">
                                     <div class="checkout__step">2</div>
@@ -47,13 +46,33 @@
                                     <div class="checkout__step">3</div>
                                     Контактная информация
                                 </div>
-                                <div class="profiles-form checkout__profile" id="contactInformation"></div> @*Контактная информация*@
-                            </div>
-                            <div class="basket__row basket__row_footer">
-                                <div class="basket__col basket__col_footer">
-                                    <div class="basket-submit">
-                                        <input style="background-color: #c62306; border-color: #c62306; color: #fff;" class="btn btn_primary basket-submit__btn" type="submit" value="Оформить заказ">
-                                    </div>
+                                <div class="profiles-form checkout__profile" id="contactInformation"> @*Контактная информация*@
+                                    <div class="profiles-form__section">
+                                         <div class="profiles-form__block profiles-form__block_wide">
+                                                 <div class="form-group profiles-form__input">
+                                                     <label class="form-group__label form-group__label_required">
+                                                         Контактное лицо
+                                                     </label>
+                                                    <input asp-for="@Model.FI" type="text" readonly class="input form-group__input" required="">
+                                                 </div>
+                                        </div>
+                                        <div class="profiles-form__block">
+                                             <div class="form-group profiles-form__input">
+                                                   <label class="form-group__label form-group__label_required">
+                                                         E-mail
+                                                     </label>
+                                                     <input asp-for="@Model.Email" type="email" readonly class="input form-group__input" required="">
+                                             </div>
+                                        </div>
+                                        <div class="profiles-form__block">
+                                            <div class="form-group profiles-form__input">
+                                                <label class="form-group__label form-group__label_required">
+                                                     Телефон (моб)
+                                                 </label>
+                                                 <input id="telnam" asp-for="@Model.PhoneNumber" readonly type="tel" class="input form-group__input">
+                                             </div>
+                                        </div>
+                                     </div>
                                 </div>
                             </div>
                         </div>
@@ -65,5 +84,6 @@
 <link rel="stylesheet" href="~/css/stylekorzina.css">
 <script>
     $('#status_order').load('@Url.Action("GetOrderStatus", "ManageOrders", new {id = @Model.ID_Order})');
+    $('#panel_cart').load('@Url.Action("GetOrderContainer", "ManageOrders", new {id = @Model.ID_Order})');
 </script>
 

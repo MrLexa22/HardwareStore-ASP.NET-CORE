@@ -66,6 +66,9 @@ namespace KursovoiProject_ElShop.Controllers.API
             model.FilialAddress = a.Filial.AddressFilial;
             model.FilialName = a.Filial.NameFilial;
             model.DateOrder = a.DateOrder;
+            model.FI = a.ContactName;
+            model.PhoneNumber = a.ContactTelefon;
+            model.Email = a.ContactEmail;
             return model;
         }
 
@@ -96,10 +99,17 @@ namespace KursovoiProject_ElShop.Controllers.API
         [HttpDelete("CancelOrder/{id}")]
         public async Task<ActionResult> CancelOrder(int id)
         {
-            var Order = await _context.Orders.FindAsync(id);
-            Order.Status = 4;
-            _context.Orders.Update(Order);
-            _context.SaveChanges();
+            var order = await _context.Orders.FindAsync(id);
+            order.Status = 4;
+            _context.Orders.Update(order);
+            var orderContainer = await _context.OrderContainers.Where(p => p.OrderNumberId == id).ToListAsync();
+            foreach(var a in orderContainer)
+            {
+                var h = await _context.GoodsFilials.Where(p => p.GoodsId == a.GoodsId && p.FilialId == order.FilialId).FirstAsync();
+                h.CountSklad = h.CountSklad + a.Count;
+                _context.Update(h);
+            }
+            await _context.SaveChangesAsync();
             return NoContent();
         }
 
@@ -140,6 +150,70 @@ namespace KursovoiProject_ElShop.Controllers.API
             }
             _context.Orders.Update(order);
             await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpGet("GetOrderContainer/{id}")]
+        public async Task<ActionResult<OrderAboutManageOrders>> GetOrderContainer(int id)
+        {
+            OrderAboutManageOrders model = new OrderAboutManageOrders();
+            var order = await _context.Orders.Where(p => p.OrderNumber == id).FirstAsync();
+            var container = await _context.OrderContainers.Include(p=>p.Goods).Include(p=>p.Goods.Manufacture).Where(p => p.OrderNumberId == id).ToListAsync();
+            model.listTovari = new List<availibleTovari>();
+            foreach(var a in container)
+            {
+                availibleTovari h = new availibleTovari();
+                h.costOrder = Convert.ToDouble(a.Price);
+                h.Goods = a.Goods;
+                h.GoodsId = a.GoodsId;
+                h.ContainerID = a.ContainerId;
+                h.Count = a.Count;
+                h.count_filial = _context.GoodsFilials.Where(p => p.FilialId == order.FilialId && p.GoodsId == a.GoodsId).First().CountSklad;
+                if (a.Goods.FtppathImage == null)
+                    h.Goods.FtppathImage = BaseAddresse.Server + "TovariImages/NoImageTovar.jpg";
+                else
+                    h.Goods.FtppathImage = BaseAddresse.Server + "TovariImages/" + h.Goods.FtppathImage;
+                model.listTovari.Add(h);
+            }
+            model.SummaOrder = order.ItogSumma.ToString();
+            model.ID_Order = order.OrderNumber;
+            return model;
+        }
+
+        [HttpGet("UpdateOrder/{idConatiner}/{newKolvo}")]
+        public async Task<ActionResult> UpdateOrder(int idConatiner, int newKolvo)
+        {
+            var container = _context.OrderContainers.Include(p=>p.Goods).Include(p=>p.OrderNumber).Where(p=>p.ContainerId == idConatiner).First();
+            var onSklad = _context.GoodsFilials.Where(p => p.FilialId == container.OrderNumber.FilialId && p.GoodsId == container.GoodsId).First();
+            if(newKolvo > container.Count)
+            {
+                if(onSklad.CountSklad >= newKolvo-container.Count)
+                {
+                    onSklad.CountSklad = onSklad.CountSklad-(newKolvo - container.Count);
+                    _context.Update(onSklad);
+
+                    decimal f = Convert.ToDecimal(container.Price * container.Count);
+                    container.OrderNumber.ItogSumma = container.OrderNumber.ItogSumma - f;
+                    container.OrderNumber.ItogSumma = container.OrderNumber.ItogSumma + (container.Price * newKolvo);
+                    container.Count = newKolvo;
+                    _context.Update(container);
+                    _context.Update(container.OrderNumber);
+                    _context.SaveChanges();
+                }
+            }
+            if (newKolvo < container.Count)
+            {
+                    onSklad.CountSklad = onSklad.CountSklad + (container.Count - newKolvo);
+                    _context.Update(onSklad);
+
+                    decimal f = Convert.ToDecimal(container.Price * container.Count);
+                    container.OrderNumber.ItogSumma = container.OrderNumber.ItogSumma - f;
+                    container.OrderNumber.ItogSumma = container.OrderNumber.ItogSumma + (container.Price * newKolvo);
+                    container.Count = newKolvo;
+                    _context.Update(container);
+                    _context.Update(container.OrderNumber);
+                    _context.SaveChanges();
+            }
             return NoContent();
         }
     }

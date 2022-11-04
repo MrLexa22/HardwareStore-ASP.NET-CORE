@@ -259,16 +259,23 @@ namespace KursovoiProject_ElShop.Controllers
             }
             else
             {
+                var g = _context.Goods.Where(p => p.IdGood == id).First();
+                if (g.FtppathImage != null)
+                    good.FtppathImage = g.FtppathImage;
+                good.FtppathImage = g.FtppathImage;
                 good.IdGood = id;
                 good.CategoriId = model.Category_ID;
                 good.ManufactureId = model.Proizvoditel_ID;
                 good.Name = model.Name_Tovar;
                 good.Description = model.Description;
                 good.Cost = Convert.ToDouble(model.Cost);
-                good.FtppathImage = null;
                 good.IsAvaliable = true;
-                _context.Goods.Update(good);
-                _context.SaveChanges();
+                try
+                {
+                    _context.Goods.Update(good);
+                    _context.SaveChanges();
+                }
+                catch { }
                 var listGoodsFilials = _context.GoodsFilials.Where(p => p.GoodsId == good.IdGood).ToList();
                 foreach (var a in model.Nalichielist)
                 {

@@ -33,7 +33,10 @@ namespace KursovoiProject_ElShop.Models
 
     public class availibleTovari
     {
+        public double costOrder { get; set; }
         public int GoodsId { get; set; }
+        public int FilialID { get; set; }
+        public int ContainerID { get; set; }
         public int Count { get; set; }
         public int count_filial { get; set; }
         public virtual Good Goods { get; set; } = null!;
