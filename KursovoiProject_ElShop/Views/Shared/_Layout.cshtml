@@ -155,6 +155,14 @@
                                 {
                                     <a class="ssilka-lk" asp-controller="ManageOrders" asp-action="Index">Управление заказами</a>
                                 }
+                                @if (User.IsInRole("Администратор") || User.IsInRole("Сотрудник отдела продаж") || User.IsInRole("Рекламщик"))
+                                {
+                                    <a class="ssilka-lk" asp-controller="Statistics" asp-action="Index">Статистика продаж</a>
+                                }
+                                @if (User.IsInRole("Администратор"))
+                                {
+                                    <a class="ssilka-lk" asp-controller="Administration" asp-action="Index">Администрирование БД</a>
+                                }
                                 <a class="ssilka-lk ssred" asp-controller="Home" asp-action="Logout">Выход</a>
                             </div>
                         </div>

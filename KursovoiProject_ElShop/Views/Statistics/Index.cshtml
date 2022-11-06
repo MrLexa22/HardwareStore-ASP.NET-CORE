@@ -1,0 +1,81 @@
+﻿<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+@model StatisticsModels;
+@{
+    ViewData["Title"] = "Статистика заказов по филиалам за текущий год";
+}
+<main class="content-main">
+    <div class="con-man" style="display: block; margin-bottom: 30px;">
+        <canvas id="myChart"></canvas>
+    </div>
+</main>
+
+<script>
+    function getRandomColor() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+
+      const labels = [
+        'Январь',
+        'Февраль',
+        'Март',
+        'Апрель',
+        'Май',
+        'Июнь',
+        'Июль',
+        'Август',
+        'Сентябрь',
+        'Октябрь',
+        'Ноябрь',
+        'Декабрь',
+      ];
+
+      const data = {
+        labels: labels,
+        datasets: [
+        @foreach(var a in Model.list)
+        {
+            <text>
+            {
+              label: "@a.NameFilial.ToString()",
+              backgroundColor: getRandomColor(),
+              borderColor: getRandomColor(),
+              data: [@a.StatistickByYear],
+            },
+           </text>
+        }
+      ]
+      };
+
+      const config = {
+        type: 'line',
+        data: data,
+        options: {
+            plugins: {
+              title: {
+                display: true,
+                text: 'Статистика заказов по филиалам за текущий год',
+              }
+            },
+            scales: {
+                y: {
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function (value) { if (Number.isInteger(value)) { return value; } },
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+      };
+
+      const myChart = new Chart(
+        document.getElementById('myChart'),
+        config
+      );
+</script>

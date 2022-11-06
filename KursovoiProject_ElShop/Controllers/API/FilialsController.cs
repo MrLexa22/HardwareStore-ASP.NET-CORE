@@ -157,5 +157,33 @@ namespace KursovoiProject_ElShop.Controllers.API
             await _context.SaveChangesAsync();
             return NoContent();
         }
+
+        [HttpGet("GetFilialsStatistick")]
+        public async Task<ActionResult<IEnumerable<StatModelFilial>>> GetFilialsStatistick()
+        {
+            List<StatModelFilial> list = new List<StatModelFilial>();
+            var filials = await _context.Filials.ToListAsync();
+            DateTime date = DateTime.Now;
+            foreach(Filial a in filials)
+            {
+                StatModelFilial h = new StatModelFilial();
+                h.NameFilial = a.NameFilial;
+                string M1 = _context.Orders.Where(p => p.FilialId == a.IdFilial && p.DateOrder.Year == date.Year && p.DateOrder.Month == 1).Count().ToString();
+                string M2 = _context.Orders.Where(p => p.FilialId == a.IdFilial && p.DateOrder.Year == date.Year && p.DateOrder.Month == 2).Count().ToString();
+                string M3 = _context.Orders.Where(p => p.FilialId == a.IdFilial && p.DateOrder.Year == date.Year && p.DateOrder.Month == 3).Count().ToString();
+                string M4 = _context.Orders.Where(p => p.FilialId == a.IdFilial && p.DateOrder.Year == date.Year && p.DateOrder.Month == 4).Count().ToString();
+                string M5 = _context.Orders.Where(p => p.FilialId == a.IdFilial && p.DateOrder.Year == date.Year && p.DateOrder.Month == 5).Count().ToString();
+                string M6 = _context.Orders.Where(p => p.FilialId == a.IdFilial && p.DateOrder.Year == date.Year && p.DateOrder.Month == 6).Count().ToString();
+                string M7 = _context.Orders.Where(p => p.FilialId == a.IdFilial && p.DateOrder.Year == date.Year && p.DateOrder.Month == 7).Count().ToString();
+                string M8 = _context.Orders.Where(p => p.FilialId == a.IdFilial && p.DateOrder.Year == date.Year && p.DateOrder.Month == 8).Count().ToString();
+                string M9 = _context.Orders.Where(p => p.FilialId == a.IdFilial && p.DateOrder.Year == date.Year && p.DateOrder.Month == 9).Count().ToString();
+                string M10 = _context.Orders.Where(p => p.FilialId == a.IdFilial && p.DateOrder.Year == date.Year && p.DateOrder.Month == 10).Count().ToString();
+                string M11 = _context.Orders.Where(p => p.FilialId == a.IdFilial && p.DateOrder.Year == date.Year && p.DateOrder.Month == 11).Count().ToString();
+                string M12 = _context.Orders.Where(p => p.FilialId == a.IdFilial && p.DateOrder.Year == date.Year && p.DateOrder.Month == 12).Count().ToString();
+                h.StatistickByYear = M1 + ", " + M2 + ", " + M3 + ", " + M4 + ", " + M5 + ", " + M6 + ", " + M7 + ", " + M8 + ", " + M9 + ", " + M10 + ", " + M11 + ", " + M12;
+                list.Add(h);
+            }
+            return list;
+        }
     }
 }
