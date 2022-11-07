@@ -10,13 +10,6 @@ using System.Text.Unicode;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
-{
-    builder.WithOrigins("http://mrlexao.ru")
-           .AllowAnyMethod()
-           .AllowAnyHeader();
-}));
-
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
@@ -50,7 +43,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseCors("MyPolicy");
 app.UseAuthorization();
 app.UseAuthorization();
 
@@ -58,6 +50,10 @@ app.UseAuthorization();
 app.UseStaticFiles();
 app.UseCookiePolicy();
 app.UseAuthentication();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.MapControllerRoute(
     name: "default",

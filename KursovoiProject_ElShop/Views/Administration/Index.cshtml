@@ -1,11 +1,40 @@
 ﻿@{
     ViewData["Title"] = "Администрирование БД";
 }
-<main class="content-main">
-    <div class="con-man" style="display: block; margin-bottom: 30px;">
-        <canvas id="myChart"></canvas>
+<script src="https://cdn.jsdelivr.net/gh/AmagiTech/JSLoader/amagiloader.js"></script>
+<link rel="stylesheet" href="~/css/styletovarilist.css">
+<main class="content-main" style="height: 55.8vh;">
+    <div class="con-man" style="display: block; margin-bottom: 30px; height: 100%;">
+        <h1 style="text-align: center;">Панель администратора базы данных</h1>
+        <div style="border: solid #c62306 1px; border-radius: 5px;">
+            <div style="display:flex; justify-content: center;">
+                <button id="fullReservnoe" style="margin-top: 10px; margin-bottom: 10px; margin-right: 15px;" class="btn btn_outline btn_primary filter__submit">Резервное копирование БД</button>
+                <button id="NotfullReservnoe"  style="margin-top: 10px; margin-right: 15px;" class="disabledbtn btn btn_outline btn_primary filter__submit">Выгрузка скрипта БД без данных</button>
+                <button id="vosstanovlenie" style="margin-top: 10px; margin-right: 15px;" class="disabledbtn btn btn_outline btn_primary filter__submit">Восстановление базы данных</button>
+                <button id="export" style="margin-top: 10px;" class="disabledbtn btn btn_outline btn_primary filter__submit">Экспорт данных в csv/sql</button>
+            </div>
+        </div>
+        <div id="panel"></div>
     </div>
 </main>
 <script>
-    $('#myChart').load("https://new2.rea.ru/");
+    $("#panel").load('@Url.Action("Reservnoe")');
+    function offAllBtns(){
+        $("#fullReservnoe").addClass("disabledbtn");
+        $("#NotfullReservnoe").addClass("disabledbtn");
+        $("#vosstanovlenie").addClass("disabledbtn");
+        $("#export").addClass("disabledbtn");
+    };
+
+    $("#fullReservnoe").click(function () {
+        offAllBtns();
+        $("#fullReservnoe").removeClass("disabledbtn");
+        $("#panel").load('@Url.Action("Reservnoe")');
+    });
+
+    $("#NotfullReservnoe").click(function () {
+        offAllBtns();
+        $("#NotfullReservnoe").removeClass("disabledbtn");
+        $("#panel").load('@Url.Action("ReservnoeNotFull")');
+    });
 </script>

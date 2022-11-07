@@ -1,0 +1,47 @@
+﻿<div>
+    <p>Вы желаете произвести ЧАСТИЧНОЕ резервное копирование базы данных (только структура, без данных)?</p>
+    <button id="reservnoe" style="margin-top: 10px; margin-right: 15px;" class="btn btn_outline btn_primary filter__submit">Начать частичное резервное копирование</button>
+    <div id="ended" style="display:none;">
+        <p style="color: green;">Частичное резервное копирование от <span id="nowDate"></span> базы данных завершено</p>
+    </div>
+</div>
+<script>
+    function loadEnd(e) {
+        AmagiLoader.hide();
+    }
+    function loadStart(e) {
+        AmagiLoader.show();
+    }
+
+    $("#reservnoe").click(function () {
+        var xhr = new XMLHttpRequest();
+        xhr.addEventListener("loadend", loadEnd, false);
+        xhr.addEventListener("loadstart", loadStart, false);
+        xhr.open("GET", "Administration/downloadReservnoeNotFull", true);
+        xhr.responseType = "blob";
+        xhr.onload = function (e) {
+            if (this.status == 200) {
+                var blob = this.response;
+
+                var filename = "";
+                var disposition = xhr.getResponseHeader('Content-Disposition');
+                if (disposition && disposition.indexOf('attachment') !== -1) {
+                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    var matches = filenameRegex.exec(disposition);
+                    if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                }
+
+                var a = document.createElement('a');
+                a.href = window.URL.createObjectURL(blob);
+                a.download = filename;
+                a.dispatchEvent(new MouseEvent('click'));
+
+                var now = new Date().toLocaleString();
+                $('#nowDate').html(now);
+                $('#reservnoe').hide();
+                $('#ended').show();
+            }
+        }
+        xhr.send();
+    });
+</script>
