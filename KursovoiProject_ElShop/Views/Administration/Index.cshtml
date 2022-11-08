@@ -19,6 +19,16 @@
 </main>
 <script>
     $("#panel").load('@Url.Action("Reservnoe")');
+    @if (ViewData["Message"] != null)
+    {
+        <text>
+            alert("@ViewData["Message"]");
+            $("#panel").load('@Url.Action("Vosstanovlenie")');
+            offAllBtns();
+            $("#vosstanovlenie").removeClass("disabledbtn");
+        </text>
+    }
+
     function offAllBtns(){
         $("#fullReservnoe").addClass("disabledbtn");
         $("#NotfullReservnoe").addClass("disabledbtn");
@@ -36,5 +46,17 @@
         offAllBtns();
         $("#NotfullReservnoe").removeClass("disabledbtn");
         $("#panel").load('@Url.Action("ReservnoeNotFull")');
+    });
+
+    $("#vosstanovlenie").click(function () {
+        offAllBtns();
+        $("#vosstanovlenie").removeClass("disabledbtn");
+        $("#panel").load('@Url.Action("Vosstanovlenie")');
+    });
+
+    $("#export").click(function () {
+        offAllBtns();
+        $("#export").removeClass("disabledbtn");
+        $("#panel").load('@Url.Action("Export")');
     });
 </script>

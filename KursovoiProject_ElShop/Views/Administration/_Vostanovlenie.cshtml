@@ -1,0 +1,10 @@
+﻿@model CreatePostFile;
+<div>
+    <p>Вы желаете произвести восстановление базы данных?</p>
+    <p style="color: red;">УЧТИТЕ, ЧТО ВАМ СЛЕДУЕТ ВЫБРАТЬ ФАЙЛ ПОЛНОГО РЕЗЕРВНОГО КОПИРОВАНИЯ, А НЕ ЧАСТИЧНОГО!</p>
+    <form asp-action="VostanovleniePost" enctype="multipart/form-data">
+        <input asp-for="@Model.MyFile" />
+        <span asp-validation-for="@Model.MyFile" style="color: red;"></span>
+        <input type="submit" />
+    </form>
+</div>

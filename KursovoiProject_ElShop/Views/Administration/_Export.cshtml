@@ -1,0 +1,69 @@
+﻿<div>
+    <p>Выберите, что желаете экспортировать и в каком формате</p>
+    <div style="display: flex;">
+        <p style="margin: 0; line-height: 1.5;">Что экспортировать: </p>
+        <select name="whatexport" id="whatexport">
+            <option value="1" selected="selected">Рекламные блоки</option>
+            <option value="2">Категории</option>
+            <option value="3">Филиалы</option>
+            <option value="4">Товары</option>
+            <option value="5">Наличие товаров на филиалах</option>
+            <option value="6">Корзина</option>
+            <option value="7">Главные категории</option>
+            <option value="8">Производители</option>
+            <option value="9">Состав заказов</option>
+            <option value="10">Заказы</option>
+            <option value="11">Роли</option>
+            <option value="12">Пользователи</option>
+            <option value="13">Роли пользователей</option>
+            <option value="14">Сотрудники</option>
+            <option value="15">Сотрудники филиалов</option>
+        </select>
+    </div>
+    <div style="display: flex; margin-top: 10px;">
+        <p style="margin: 0; line-height: 1.5;">Что экспортировать: </p>
+        <select name="typeexport" id="typeexport">
+            <option value="1" selected="selected">CSV</option>
+            <option value="2">SQL</option>
+        </select>
+    </div>
+    <button id="reservnoe" style="margin-top: 10px; margin-right: 15px;" class="btn btn_outline btn_primary filter__submit">Начать экспорт</button>
+</div>
+<script>
+    function loadEnd(e) {
+        AmagiLoader.hide();
+    }
+    function loadStart(e) {
+        AmagiLoader.show();
+    }
+
+    $("#reservnoe").click(function () {
+        var xhr = new XMLHttpRequest();
+        xhr.addEventListener("loadend", loadEnd, false);
+        xhr.addEventListener("loadstart", loadStart, false);
+        var whatexport = $('select[name="whatexport"]').val();
+        var typeexport = $('select[name="typeexport"]').val();
+        xhr.open("GET", "Administration/downloadExport/?typeexport=" + typeexport + "&whatexport=" + whatexport, true);
+        xhr.responseType = "blob";
+        xhr.onload = function (e) {
+            if (this.status == 200) {
+                var blob = this.response;
+
+                var filename = "";
+                var disposition = xhr.getResponseHeader('Content-Disposition');
+                if (disposition && disposition.indexOf('attachment') !== -1) {
+                    //alert(disposition);
+                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    var matches = filenameRegex.exec(disposition);
+                    if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                }
+
+                var a = document.createElement('a');
+                a.href = window.URL.createObjectURL(blob);
+                a.download = filename;
+                a.dispatchEvent(new MouseEvent('click'));
+            }
+        }
+        xhr.send();
+    });
+</script>
